@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { useState } from 'react'
 
-const useReactBookingForm = ({ defaultForm }) => {
+const useReactBookingForm = ({ defaultForm, resultsPageURL }) => {
   const [form, setForm] = useState(defaultForm)
 
   const convertFormToURLParams = () => {
@@ -15,7 +15,7 @@ const useReactBookingForm = ({ defaultForm }) => {
   }
 
   const goToResultsPage = () => {
-    window.location = `/search?${convertFormToURLParams()}`
+    window.location = `${resultsPageURL}?${convertFormToURLParams()}`
   }
 
   const setFormFields = (formValues) => {

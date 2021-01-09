@@ -4,7 +4,7 @@ import React from 'react'
 const DateInput = ({
   onChange,
   options,
-  dateInputRef,
+  containerRef,
   placeholder,
   inputComponent,
   iconComponent,
@@ -14,7 +14,7 @@ const DateInput = ({
     className={className}
     onChange={onChange}
     options={options}
-    ref={dateInputRef}
+    ref={containerRef}
   >
     {React.cloneElement(inputComponent, {
       'data-input': true,

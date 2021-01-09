@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 
 const GuestsSelect = ({
-  guestsRef,
+  containerRef,
   onChange,
   quantity = 20,
   className,
@@ -14,7 +14,7 @@ const GuestsSelect = ({
       className={className}
       defaultValue="guests"
       onChange={onChange}
-      ref={guestsRef}
+      ref={containerRef}
     >
       <option disabled value="guests">
         {placeholder}
