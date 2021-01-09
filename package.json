@@ -1,10 +1,43 @@
 {
-  "name": "booking-selector",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "react-booking-form",
+  "version": "1.0.1",
+  "main": "dist/index.js",
   "repository": "git@github.com:MaxChu23/hero-selector.git",
-  "author": "MaxMax <mymaksym@gmail.com>",
+  "author": "maxim_chu <mymaksym@gmail.com>",
   "license": "MIT",
   "private": false,
-  "keywords": ["booking", "restaurant", "hotel"]
+  "keywords": [
+    "booking",
+    "restaurant",
+    "hotel"
+  ],
+  "scripts": {
+    "build": "npx babel src --out-dir dist",
+    "start": "npx babel src --watch --out-dir dist"
+  },
+  "peerDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-local-rules": "^0.1.1",
+    "eslint-plugin-lodash": "^7.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.5.0",
+    "prettier": "^2.0.5",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "react-flatpickr": "^3.10.6",
+    "react-select": "^3.1.1"
+  }
 }
