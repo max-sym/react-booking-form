@@ -1,0 +1,108 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true
+  },
+  "plugins": ["react", "prettier", "jsx-a11y", "sort-imports-es6-autofix", "react-hooks", "local-rules", "lodash"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/all",
+    "plugin:import/errors",
+    "prettier",
+    "prettier/react",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    },
+    "react": {
+      "version": "16.5.2"
+    }
+  },
+  "globals": {
+    "Promise": true,
+    "process": true,
+    "module": true
+  },
+  "rules": {
+    "import/namespace": ["error", { "allowComputed": true }],
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "singleQuote": true,
+        "semi": false,
+        "trailingComma": "es5",
+        "bracketSpacing": true,
+        "jsxBracketSameLine": false
+      }
+    ],
+    "no-console": 0,
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "object-shorthand": ["error", "always"],
+    "jsx-a11y/no-autofocus": 0,
+    "max-lines": 2,
+    "lodash/import-scope": [2, "method-package"],
+    "react-hooks/exhaustive-deps": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react/prop-types": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "ignore" }],
+    "react/jsx-handler-names": 0,
+    "react/jsx-max-depth": [2, { "max": 5 }],
+    "react/jsx-no-bind": 2,
+    "react/jsx-no-literals": [
+      2,
+      {
+        "noStrings": false
+      }
+    ],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": false,
+        "shorthandFirst": false,
+        "shorthandLast": false,
+        "ignoreCase": true,
+        "noSortAlphabetically": false,
+        "reservedFirst": false
+      }
+    ],
+    "react/no-set-state": 0,
+    "react/require-optimization": 0,
+    "react/no-multi-comp": 0,
+    "react/forbid-component-props": 0,
+    "react/sort-prop-types": [
+      "error",
+      {
+        "callbacksLast": false,
+        "ignoreCase": true,
+        "requiredFirst": false
+      }
+    ],
+    "sort-imports-es6-autofix/sort-imports-es6": [
+      2,
+      {
+        "ignoreCase": true,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["single", "multiple", "all", "none"]
+      }
+    ],
+    "sort-keys": 0,
+    "sort-vars": ["error", { "ignoreCase": false }],
+    "react/function-component-definition": 0
+  }
+}
