@@ -1,6 +1,6 @@
 {
   "name": "react-booking-form",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/index.js",
   "repository": "git@github.com:MaxChu23/hero-selector.git",
   "author": "maxim_chu <mymaksym@gmail.com>",
@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "npx babel src --out-dir dist",
-    "start": "npx babel src --watch --out-dir dist"
+    "start": "npx babel src --watch --out-dir dist",
+    "lint": "eslint ."
   },
   "peerDependencies": {
     "react": "^17.0.1",
@@ -24,6 +25,8 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.17.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
