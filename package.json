@@ -1,0 +1,10 @@
+{
+  "name": "booking-selector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:MaxChu23/hero-selector.git",
+  "author": "MaxMax <mymaksym@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "keywords": ["booking", "restaurant", "hotel"]
+}
