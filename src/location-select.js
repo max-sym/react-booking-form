@@ -1,5 +1,5 @@
 import debounce from 'debounce-promise'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useMemo } from 'react'
 import Select from 'react-select/async'
 
 const defaultConvertResults = (results) => {
@@ -38,20 +38,21 @@ const defaultStyles = {
 const LocationSelect = ({
   onLocationChange,
   defaultOptions,
-  DropdownIndicator = null,
+  className,
+  searchPlace,
+  dropdownComponent = null,
   name = 'location',
   placeholder = 'Location',
-  className,
   styles = defaultStyles,
   convertResults = defaultConvertResults,
-  searchPlace,
   debounceDelay = 500,
+  value,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const components = useMemo(
     () => ({
-      DropdownIndicator,
+      DropdownIndicator: dropdownComponent,
       IndicatorSeparator: null,
     }),
     []

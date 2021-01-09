@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 const GuestsSelect = ({
   guestsRef,
   onChange,
-  quantity,
+  quantity = 20,
   className,
   placeholder,
 }) => {
