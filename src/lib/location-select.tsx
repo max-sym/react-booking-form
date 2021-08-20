@@ -25,6 +25,19 @@ const defaultStyles = {
   }),
 }
 
+export type LocationSelectProps = {
+  onLocationChange?: any
+  defaultOptions: any
+  className?: string
+  searchPlace?: any
+  dropdownComponent?: any
+  name?: string
+  placeholder?: string
+  styles?: any
+  formatResults?: any
+  debounceDelay?: number
+}
+
 export const LocationSelect = ({
   onLocationChange,
   defaultOptions,
@@ -36,8 +49,7 @@ export const LocationSelect = ({
   styles = defaultStyles,
   formatResults,
   debounceDelay = 500,
-  value,
-}) => {
+}: LocationSelectProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const components = useMemo(

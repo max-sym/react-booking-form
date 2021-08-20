@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import {
+  convertFormToURLParams,
   DateInput,
   GuestsSelect,
   LocationSelect,
@@ -74,8 +75,8 @@ export const Selector = ({}: ButtonProps) => {
   const guestsRef = useRef<any>()
 
   const onSelectionComplete = () => {
-    // window.location.href = `${resultsPageURL}?${convertFormToURLParams()}`
-    console.log("a")
+    const results = convertFormToURLParams({ form })
+    alert(`Redirect to search page: ${results}`)
   }
 
   const {
@@ -145,6 +146,7 @@ export const Selector = ({}: ButtonProps) => {
         <GuestsSelect
           containerRef={guestsRef}
           className="border rounded-full w-full h-full pl-4 hover:text-blue outline-none focus:border-blue-500"
+          onChange={onGuestsSelectChange}
         />
       </InputContainer>
       <InputContainer style={{ flexBasis: "38px", flexShrink: 0, flexGrow: 1 }}>
