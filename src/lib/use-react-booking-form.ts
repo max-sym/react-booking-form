@@ -1,26 +1,17 @@
-import moment from "moment"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export const useReactBookingForm = ({ defaultForm, resultsPageURL }) => {
+export const useReactBookingForm = ({ defaultForm, onSelectionComplete }) => {
   const [form, setForm] = useState(defaultForm)
-
-  const convertFormToURLParams = () => {
-    const parsedForm = {
-      location: form.location.value,
-      dateTo: moment(form.dateTo[0]).format("yyyy-MM-DD"),
-      dateFrom: moment(form.dateFrom[0]).format("yyyy-MM-DD"),
-      guests: form.guests,
-    }
-    return new URLSearchParams(parsedForm).toString()
-  }
-
-  const goToResultsPage = () => {
-    window.location.href = `${resultsPageURL}?${convertFormToURLParams()}`
-  }
 
   const setFormFields = (formValues) => {
     setForm((form) => ({ ...form, ...formValues }))
   }
+
+  useEffect(() => {
+    if (!(form.location && form.dateFrom && form.dateTo)) return
+
+    onSelectionComplete?.()
+  }, [form.guests])
 
   const checkInOptions = {
     minDate: "today",
@@ -36,8 +27,6 @@ export const useReactBookingForm = ({ defaultForm, resultsPageURL }) => {
     form,
     setForm,
     setFormFields,
-    convertFormToURLParams,
-    goToResultsPage,
     checkInOptions,
     checkOutOptions,
   }

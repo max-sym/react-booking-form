@@ -13,13 +13,13 @@ import { cities } from "./dummy-data/cities"
 
 interface ButtonProps {}
 
-const Container = tw.div`rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
+const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const FlatPickrInput = tw.input`border rounded-full w-full hover:text-blue-500 outline-none focus:border-blue-500 pl-4 pr-6`
 const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0`
 
 const SearchIcon = tw(HiOutlineSearch)`text-white w-5 h-5`
 const ButtonText = tw.div`ml-2`
-const MainButton = tw.button`appearance-none border-0 w-full h-full rounded-full flex justify-center items-center bg-blue-500 text-white font-bold px-3`
+const MainButton = tw.button`appearance-none border-0 w-full h-full rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
 const CalendarIconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer`
 
 const DatePicker = ({ ...props }) => (
@@ -73,15 +73,19 @@ export const Selector = ({}: ButtonProps) => {
   const checkOutRef = useRef<any>()
   const guestsRef = useRef<any>()
 
+  const onSelectionComplete = () => {
+    // window.location.href = `${resultsPageURL}?${convertFormToURLParams()}`
+    console.log("a")
+  }
+
   const {
     form,
     setFormFields,
-    goToResultsPage,
     checkInOptions,
     checkOutOptions,
   } = useReactBookingForm({
     defaultForm,
-    resultsPageURL: "/rent",
+    onSelectionComplete,
   })
 
   const onLocationChange = ({ value }) => {
