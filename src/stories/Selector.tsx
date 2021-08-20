@@ -6,9 +6,26 @@ import {
   useReactBookingForm,
 } from "../lib"
 import { FaMapMarkerAlt } from "react-icons/fa"
+import { IoCalendarClear } from "react-icons/io5"
 import { cities } from "./dummy-data/cities"
 
 interface ButtonProps {}
+
+const FlatPickrInput = (props) => (
+  <input
+    className="border rounded-full w-full hover:text-blue-500 outline-none focus:border-blue-500 pl-4 pr-6"
+    {...props}
+  />
+)
+
+const DatePicker = ({ ...props }) => (
+  <DateInput
+    className="relative flex h-full"
+    iconComponent={<IoCalendarClear />}
+    inputComponent={<FlatPickrInput />}
+    {...props}
+  />
+)
 
 const dataProvider = {
   searchPlace: async (queryString) => {
@@ -27,8 +44,10 @@ const dataProvider = {
 }
 
 const defaultOptions = [
-  { value: "lisbon", label: "Lisbon" },
-  { value: "kiev", label: "Kiev" },
+  { value: "barcelona", label: "Barcelona" },
+  { value: "new-york", label: "New York" },
+  { value: "los-angeles", label: "Los Angeles" },
+  { value: "san-francisco", label: "San Francisco" },
 ]
 
 const defaultForm = {
@@ -91,6 +110,12 @@ export const Selector = ({}: ButtonProps) => {
         onLocationChange={onLocationChange}
         placeholder="Location"
         searchPlace={searchPlace}
+      />
+      <DatePicker
+        containerRef={checkInRef}
+        onChange={onCheckInChange}
+        options={checkInOptions}
+        placeholder="Check in"
       />
       <GuestsSelect containerRef={guestsRef} />
     </div>

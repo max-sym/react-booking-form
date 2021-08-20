@@ -4,6 +4,11 @@ import React from "react"
 type DateInputType = {
   onChange?: any
   options?: any
+  containerRef?: any
+  placeholder?: string
+  inputComponent?: any
+  iconComponent?: any
+  className?: string
 }
 
 export const DateInput = ({
@@ -14,7 +19,7 @@ export const DateInput = ({
   inputComponent,
   iconComponent,
   className,
-}) => (
+}: DateInputType) => (
   <Flatpickr
     className={className}
     onChange={onChange}

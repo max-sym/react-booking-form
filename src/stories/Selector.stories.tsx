@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
-
+import "./styles/index.css"
 import { Selector } from "./Selector"
 
 export default {
