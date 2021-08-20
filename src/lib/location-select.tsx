@@ -35,7 +35,7 @@ const defaultStyles = {
   }),
 }
 
-const LocationSelect = ({
+export const LocationSelect = ({
   onLocationChange,
   defaultOptions,
   className,
@@ -92,5 +92,3 @@ const LocationSelect = ({
     />
   )
 }
-
-export default LocationSelect

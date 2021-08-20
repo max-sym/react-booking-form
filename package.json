@@ -16,8 +16,8 @@
     "picker"
   ],
   "scripts": {
-    "build": "npx babel src --out-dir dist",
-    "start": "npx babel src --watch --out-dir dist",
+    "build": "npx babel src/lib --out-dir dist",
+    "start": "",
     "lint": "eslint ."
   },
   "peerDependencies": {

@@ -1,7 +1,7 @@
 import moment from "moment"
 import { useState } from "react"
 
-const useReactBookingForm = ({ defaultForm, resultsPageURL }) => {
+export const useReactBookingForm = ({ defaultForm, resultsPageURL }) => {
   const [form, setForm] = useState(defaultForm)
 
   const convertFormToURLParams = () => {
@@ -42,5 +42,3 @@ const useReactBookingForm = ({ defaultForm, resultsPageURL }) => {
     checkOutOptions,
   }
 }
-
-export default useReactBookingForm

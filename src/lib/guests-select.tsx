@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 
-const GuestsSelect = ({
+export const GuestsSelect = ({
   containerRef,
   onChange,
   quantity = 20,
@@ -25,5 +25,3 @@ const GuestsSelect = ({
     </select>
   )
 }
-
-export default GuestsSelect

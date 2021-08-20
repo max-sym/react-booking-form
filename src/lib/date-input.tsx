@@ -1,7 +1,7 @@
 import Flatpickr from "react-flatpickr"
 import React from "react"
 
-const DateInput = ({
+export const DateInput = ({
   onChange,
   options,
   containerRef,
@@ -27,5 +27,3 @@ const DateInput = ({
     })}
   </Flatpickr>
 )
-
-export default DateInput
