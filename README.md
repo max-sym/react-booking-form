@@ -187,3 +187,6 @@ export const Selector = ({}) => {
 - Develop 🚀;
 
 Whenever finished create a PR for review.
+
+## Licence
+MIT
