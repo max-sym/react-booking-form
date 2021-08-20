@@ -28,6 +28,7 @@ import {
   LocationSelect,
   useReactBookingForm
 } from "react-booking-form"
+import "flatpickr/dist/themes/material_green.css"
 import { FaMapMarkerAlt } from "react-icons/fa"
 import { IoCalendarClear } from "react-icons/io5"
 import { HiOutlineSearch } from "react-icons/hi"
@@ -175,7 +176,6 @@ export const Selector = () => {
     </div>
   )
 }
-
 ```
 
 ## Contribution guide
