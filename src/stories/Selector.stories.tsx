@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
 import "./styles/index.css"
+import "flatpickr/dist/themes/material_green.css"
 import { Selector } from "./Selector"
 
 export default {
