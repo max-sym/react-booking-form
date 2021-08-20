@@ -50,7 +50,7 @@ const dataProvider = {
   },
 }
 
-const defaultOptions = [
+const defaultLocationOptions = [
   { value: "barcelona", label: "Barcelona" },
   { value: "new-york", label: "New York" },
   { value: "los-angeles", label: "Los Angeles" },
@@ -114,7 +114,7 @@ export const Selector = ({}) => {
       <InputContainer>
         <LocationSelect
           className="w-full"
-          defaultOptions={defaultOptions}
+          defaultOptions={defaultLocationOptions}
           dropdownComponent={FaMapMarkerAlt}
           name="location"
           onLocationChange={onLocationChange}
