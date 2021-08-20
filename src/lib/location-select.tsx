@@ -1,16 +1,6 @@
 import debounce from "debounce-promise"
-import React, { useRef, useState, useMemo } from "react"
+import { useRef, useState, useMemo } from "react"
 import Select from "react-select/async"
-
-const defaultConvertResults = (results) => {
-  return results.map((place) => ({
-    value: place.place_id,
-    label:
-      place.structured_formatting.main_text +
-      " | " +
-      place.structured_formatting.secondary_text,
-  }))
-}
 
 const defaultStyles = {
   control: (provided) => ({
@@ -44,7 +34,7 @@ export const LocationSelect = ({
   name = "location",
   placeholder = "Location",
   styles = defaultStyles,
-  convertResults = defaultConvertResults,
+  formatResults,
   debounceDelay = 500,
   value,
 }) => {
@@ -62,7 +52,7 @@ export const LocationSelect = ({
     setIsLoading(true)
     return await searchPlace(queryString).then((results) => {
       setIsLoading(false)
-      return convertResults(results)
+      return formatResults?.(results) || results
     })
   }
 

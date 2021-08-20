@@ -1,12 +1,20 @@
-import React, { useMemo } from "react"
+import { useMemo } from "react"
+
+export type GuestsSelectProps = {
+  containerRef: any
+  onChange?: any
+  quantity?: number
+  className?: string
+  placeholder?: string
+}
 
 export const GuestsSelect = ({
   containerRef,
   onChange,
   quantity = 20,
   className,
-  placeholder,
-}) => {
+  placeholder = "",
+}: GuestsSelectProps) => {
   const options = useMemo(() => [...Array(quantity)].map((_v, i) => i), [])
 
   return (

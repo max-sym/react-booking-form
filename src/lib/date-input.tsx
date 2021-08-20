@@ -1,6 +1,11 @@
 import Flatpickr from "react-flatpickr"
 import React from "react"
 
+type DateInputType = {
+  onChange?: any
+  options?: any
+}
+
 export const DateInput = ({
   onChange,
   options,
