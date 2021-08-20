@@ -189,3 +189,7 @@ Whenever finished, create a PR on a separate branch for review.
 
 ## Licence
 MIT
+
+## Support
+- Buy me a cup of coffee https://www.paypal.com/donate?hosted_button_id=HBNP4H89M4FTC
+
