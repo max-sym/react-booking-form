@@ -1,5 +1,5 @@
-import Flatpickr from 'react-flatpickr'
-import React from 'react'
+import Flatpickr from "react-flatpickr"
+import React from "react"
 
 const DateInput = ({
   onChange,
@@ -17,13 +17,13 @@ const DateInput = ({
     ref={containerRef}
   >
     {React.cloneElement(inputComponent, {
-      'data-input': true,
+      "data-input": true,
       placeholder,
-      type: 'text',
+      type: "text",
     })}
     {React.cloneElement(iconComponent, {
-      'data-toggle': true,
-      title: 'toggle',
+      "data-toggle": true,
+      title: "toggle",
     })}
   </Flatpickr>
 )

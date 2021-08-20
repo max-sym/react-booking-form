@@ -1,13 +1,13 @@
-import debounce from 'debounce-promise'
-import React, { useRef, useState, useMemo } from 'react'
-import Select from 'react-select/async'
+import debounce from "debounce-promise"
+import React, { useRef, useState, useMemo } from "react"
+import Select from "react-select/async"
 
 const defaultConvertResults = (results) => {
   return results.map((place) => ({
     value: place.place_id,
     label:
       place.structured_formatting.main_text +
-      ' | ' +
+      " | " +
       place.structured_formatting.secondary_text,
   }))
 }
@@ -15,23 +15,23 @@ const defaultConvertResults = (results) => {
 const defaultStyles = {
   control: (provided) => ({
     ...provided,
-    cursor: 'pointer',
-    padding: '0 8px',
-    borderRadius: '100px',
+    cursor: "pointer",
+    padding: "0 8px",
+    borderRadius: "100px",
   }),
   menu: (provided) => ({
     ...provided,
-    borderRadius: '24px',
+    borderRadius: "24px",
   }),
   menuList: (provided) => ({
     ...provided,
     padding: 0,
-    borderRadius: '24px',
+    borderRadius: "24px",
   }),
   option: (provided) => ({
     ...provided,
-    padding: '12px 18px',
-    cursor: 'pointer',
+    padding: "12px 18px",
+    cursor: "pointer",
   }),
 }
 
@@ -41,8 +41,8 @@ const LocationSelect = ({
   className,
   searchPlace,
   dropdownComponent = null,
-  name = 'location',
-  placeholder = 'Location',
+  name = "location",
+  placeholder = "Location",
   styles = defaultStyles,
   convertResults = defaultConvertResults,
   debounceDelay = 500,
@@ -67,7 +67,7 @@ const LocationSelect = ({
   }
 
   const onChange = (value, { action }) => {
-    if (action !== 'select-option') return
+    if (action !== "select-option") return
 
     onLocationChange({ value })
   }
