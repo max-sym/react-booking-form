@@ -1,5 +1,5 @@
 import debounce from "debounce-promise"
-import { useRef, useState, useMemo } from "react"
+import React, { useRef, useState, useMemo } from "react"
 import Select from "react-select/async"
 
 const defaultStyles = {

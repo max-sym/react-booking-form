@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import React, { useMemo } from "react"
 
 export type GuestsSelectProps = {
   containerRef: any
