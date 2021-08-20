@@ -180,11 +180,12 @@ export const Selector = () => {
 
 ## Contribution guide
 - Clone the repository to your local machine;
-- Run `yarn`;
-- Run `tw:dev`;
-- Develop 🚀;
+- Run `yarn` in the root
+- Run `tw:dev` (to construct TailwindCSS CSS file)
+- Run `yarn storybook`
+- Develop 🚀
 
-Whenever finished create a PR for review.
+Whenever finished, create a PR on a separate branch for review.
 
 ## Licence
 MIT
