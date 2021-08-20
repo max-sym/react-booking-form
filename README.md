@@ -16,7 +16,7 @@ yarn:
 
 ## Usage
 
-Here's an example using `twin.macro` styling library:
+Here's an example using [TailwindCSS](https://github.com/tailwindlabs/tailwindcss) styling library:
 
 ```jsx
 
@@ -25,45 +25,17 @@ import {
   DateInput,
   GuestsSelect,
   LocationSelect,
-  useReactBookingForm,
-} from "react-booking-lib"
-import tw from "twin.macro"
+  useReactBookingForm
+} from "react-booking-form"
 import { FaMapMarkerAlt } from "react-icons/fa"
 import { IoCalendarClear } from "react-icons/io5"
 import { HiOutlineSearch } from "react-icons/hi"
 
-const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
-const DateInputCore = tw.input`border rounded-full w-full hover:text-blue-500 outline-none focus:border-blue-500 pl-4 pr-6`
-const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0`
-
-const SearchIcon = tw(HiOutlineSearch)`text-white w-5 h-5`
-const ButtonText = tw.div`ml-2`
-const MainButton = tw.button`appearance-none border-0 w-full h-full rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
-const CalendarIconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer`
-
-const cities = [
-  "New York",
-  "Los Angeles",
-  "Barcelona",
-  "Madrid"
-]
-
-const DatePicker = ({ ...props }) => (
-  <DateInput
-    className="relative flex h-full"
-    iconComponent={
-      <CalendarIconContainer>
-        <IoCalendarClear />
-      </CalendarIconContainer>
-    }
-    inputComponent={<DateInputCore />}
-    {...props}
-  />
-)
+const cities = ["New York", "Los Angeles", "Barcelona", "Madrid"]
 
 const dataProvider = {
   searchPlace: async (queryString) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       setTimeout(() => {
         resolve(
           cities
@@ -74,24 +46,48 @@ const dataProvider = {
         )
       }, 100)
     })
-  },
+  }
 }
 
 const defaultLocationOptions = [
   { value: "barcelona", label: "Barcelona" },
   { value: "new-york", label: "New York" },
   { value: "los-angeles", label: "Los Angeles" },
-  { value: "san-francisco", label: "San Francisco" },
+  { value: "san-francisco", label: "San Francisco" }
 ]
 
 const defaultForm = {
   location: null,
   dateFrom: undefined,
   dateTo: undefined,
-  guests: null,
+  guests: null
 }
 
-export const Selector = ({}) => {
+const InputContainer = ({ children }) => (
+  <div className="relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0">
+    {children}
+  </div>
+)
+
+const DatePicker = ({ ...props }) => (
+  <DateInput
+    className="relative flex h-full"
+    iconComponent={
+      <a className="absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer">
+        <IoCalendarClear />
+      </a>
+    }
+    inputComponent={
+      <input className="border rounded-full w-full hover:text-blue-500 outline-none focus:border-blue-500 pl-4 pr-6" />
+    }
+    {...props}
+  />
+)
+
+/**
+ * Primary UI component for user interaction
+ */
+export const Selector = () => {
   const onSelectionComplete = () => {
     const results = convertFormToURLParams({ form })
     alert(`Redirect to search page: ${results}`)
@@ -103,10 +99,10 @@ export const Selector = ({}) => {
     checkInOptions,
     checkOutOptions,
     focusOn,
-    refs,
+    refs
   } = useReactBookingForm({
     defaultForm,
-    onSelectionComplete,
+    onSelectionComplete
   })
 
   const onLocationChange = ({ value }) => {
@@ -134,7 +130,7 @@ export const Selector = ({}) => {
   }
 
   return (
-    <Container>
+    <div className="rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2">
       <InputContainer>
         <LocationSelect
           className="w-full"
@@ -170,14 +166,15 @@ export const Selector = ({}) => {
         />
       </InputContainer>
       <InputContainer style={{ flexBasis: "38px", flexShrink: 0, flexGrow: 1 }}>
-        <MainButton>
-          <SearchIcon />
-          <ButtonText>Search</ButtonText>
-        </MainButton>
+        <button className="appearance-none border-0 w-full h-full rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3">
+          <HiOutlineSearch className="text-white w-5 h-5" />
+          <div className="ml-2">Search</div>
+        </button>
       </InputContainer>
-    </Container>
+    </div>
   )
 }
+
 ```
 
 ## Contribution guide
