@@ -179,3 +179,11 @@ export const Selector = ({}) => {
   )
 }
 ```
+
+## Contribution guide
+- Clone the repository to your local machine;
+- Run `yarn`;
+- Run `tw:dev`;
+- Develop 🚀;
+
+Whenever finished create a PR for review.
