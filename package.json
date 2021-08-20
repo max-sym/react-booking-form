@@ -16,7 +16,7 @@
     "picker"
   ],
   "scripts": {
-    "build": "npx babel src/lib --out-dir dist",
+    "build": "npx babel --extensions '.ts,.tsx' src/lib --out-dir dist",
     "lint": "eslint .",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
@@ -32,6 +32,7 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
+    "@babel/preset-typescript": "^7.15.0",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.7",
     "@storybook/addon-links": "^6.3.7",
