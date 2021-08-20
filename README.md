@@ -2,7 +2,10 @@
 
 Library for your hotel/restaurant rental website that allows users to search and select locations, dates (with time) and any other types of inputs.
 
-# Installation
+## Example
+[Chromatic storybook example](https://www.chromatic.com/component?appId=611f9e606d0396003a654e41&name=Example%2FSelector&buildNumber=1)
+
+## Installation
 npm:
 
 `npm i react-booking-form` 
