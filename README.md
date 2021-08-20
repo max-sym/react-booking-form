@@ -1,6 +1,6 @@
 # React Booking Form
 
-Library for your hotel/restaurant rental website that allows users to search and select locations, dates (with time) and any other types of inputs.
+Library for your hotel/restaurant website that allows users to search and select locations, dates (with time) and other types of inputs.
 
 ## Example
 [Chromatic storybook example](https://www.chromatic.com/component?appId=611f9e606d0396003a654e41&name=Example%2FSelector&buildNumber=1)
@@ -16,7 +16,7 @@ yarn:
 
 ## Usage
 
-Here's an example of usage:
+Here's an example using `twin.macro` styling library:
 
 ```jsx
 
