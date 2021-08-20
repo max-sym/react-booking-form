@@ -12,8 +12,6 @@ import { IoCalendarClear } from "react-icons/io5"
 import { HiOutlineSearch } from "react-icons/hi"
 import { cities } from "./dummy-data/cities"
 
-interface ButtonProps {}
-
 const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const FlatPickrInput = tw.input`border rounded-full w-full hover:text-blue-500 outline-none focus:border-blue-500 pl-4 pr-6`
 const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0`
@@ -69,11 +67,7 @@ const defaultForm = {
 /**
  * Primary UI component for user interaction
  */
-export const Selector = ({}: ButtonProps) => {
-  const checkInRef = useRef<any>()
-  const checkOutRef = useRef<any>()
-  const guestsRef = useRef<any>()
-
+export const Selector = ({}) => {
   const onSelectionComplete = () => {
     const results = convertFormToURLParams({ form })
     alert(`Redirect to search page: ${results}`)
@@ -84,6 +78,8 @@ export const Selector = ({}: ButtonProps) => {
     setFormFields,
     checkInOptions,
     checkOutOptions,
+    focusOn,
+    refs,
   } = useReactBookingForm({
     defaultForm,
     onSelectionComplete,
@@ -91,17 +87,17 @@ export const Selector = ({}: ButtonProps) => {
 
   const onLocationChange = ({ value }) => {
     setFormFields({ location: value })
-    checkInRef.current.node.childNodes[0].focus()
+    focusOn("checkIn")
   }
 
   const onCheckInChange = (value) => {
     setFormFields({ dateFrom: value })
-    checkOutRef.current.node.childNodes[0].focus()
+    focusOn("checkOut")
   }
 
   const onCheckOutChange = (value) => {
     setFormFields({ dateTo: value })
-    guestsRef.current.focus()
+    focusOn("guests")
   }
 
   const onGuestsSelectChange = (event) => {
@@ -128,7 +124,7 @@ export const Selector = ({}: ButtonProps) => {
       </InputContainer>
       <InputContainer>
         <DatePicker
-          containerRef={checkInRef}
+          containerRef={refs.checkIn}
           onChange={onCheckInChange}
           options={checkInOptions}
           placeholder="Check in"
@@ -136,7 +132,7 @@ export const Selector = ({}: ButtonProps) => {
       </InputContainer>
       <InputContainer>
         <DatePicker
-          containerRef={checkOutRef}
+          containerRef={refs.checkOut}
           onChange={onCheckOutChange}
           options={checkOutOptions}
           placeholder="Check out"
@@ -144,7 +140,7 @@ export const Selector = ({}: ButtonProps) => {
       </InputContainer>
       <InputContainer>
         <GuestsSelect
-          containerRef={guestsRef}
+          containerRef={refs.guests}
           className="border rounded-full w-full h-full pl-4 hover:text-blue outline-none focus:border-blue-500"
           onChange={onGuestsSelectChange}
         />
