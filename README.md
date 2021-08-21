@@ -11,10 +11,10 @@ Styling-agnostic react library for your hotel/restaurant website that allows use
 ![Imgur](https://i.imgur.com/seQEe1i.gif)
 
 ## Features
-✅ Debounced location search
-✅ Instant focus on the next elements after selections
-✅ Included utility function to use with Google Places API
-✅ Included utility function to convert the values to URL parameters for the search page (if you have one)
+✅ Debounced location search\
+✅ Instant focus on the next elements after selections\
+✅ Included utility function to use with Google Places API\
+✅ Included utility function to convert the values to URL parameters for the search page (if you have one)\
 ✅ Styling-framework-agnostic
 
 ## Installation
