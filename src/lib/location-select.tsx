@@ -1,13 +1,18 @@
 import debounce from "debounce-promise"
-import React, { useRef, useState, useMemo } from "react"
-import Select from "react-select/async"
+import React, { useRef, useState } from "react"
+import AsyncSelect from "react-select/async"
+import { BookingForm } from "./use-react-booking-form"
 
 const defaultStyles = {
   control: (provided) => ({
     ...provided,
-    cursor: "pointer",
-    padding: "0 8px",
-    borderRadius: "100px",
+    border: "none",
+    borderRadius: "0px",
+    borderColor: "transparent",
+    boxShadow: "none",
+    "&:hover": {
+      borderColor: "transparent",
+    },
   }),
   menu: (provided) => ({
     ...provided,
@@ -25,44 +30,33 @@ const defaultStyles = {
   }),
 }
 
-export type LocationSelectProps = {
+export type LocationSelectProps = AsyncSelect & {
   onLocationChange?: any
-  defaultOptions: any
-  className?: string
   searchPlace?: any
-  dropdownComponent?: any
-  name?: string
-  placeholder?: string
-  styles?: any
   formatResults?: any
   debounceDelay?: number
+  form: BookingForm
+  name: string
 }
 
 export const LocationSelect = ({
-  onLocationChange,
-  defaultOptions,
-  className,
-  searchPlace,
-  dropdownComponent = null,
-  name = "location",
-  placeholder = "Location",
-  styles = defaultStyles,
   formatResults,
   debounceDelay = 500,
+  styles,
+  name,
+  form,
+  ...props
 }: LocationSelectProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const components = useMemo(
-    () => ({
-      DropdownIndicator: dropdownComponent,
-      IndicatorSeparator: null,
-    }),
-    []
-  )
+  const formItem = form?.data?.[name]
 
   const getPlaces = async (queryString) => {
+    const options = formItem?.options
+    if (!options?.searchPlace) return
+
     setIsLoading(true)
-    return await searchPlace(queryString).then((results) => {
+    return await options.searchPlace(queryString).then((results) => {
       setIsLoading(false)
       return formatResults?.(results) || results
     })
@@ -71,7 +65,8 @@ export const LocationSelect = ({
   const onChange = (value, { action }) => {
     if (action !== "select-option") return
 
-    onLocationChange({ value })
+    form.setFieldValue(name, value)
+    form.focusOn(formItem.focusOnNext)
   }
 
   const loadOptionsDebounce = useRef(
@@ -80,17 +75,16 @@ export const LocationSelect = ({
 
   const loadOptions = useRef((input) => loadOptionsDebounce.current(input))
 
+  if (!formItem) return null
+
   return (
-    <Select
-      className={className}
-      components={components}
-      defaultOptions={defaultOptions}
+    <AsyncSelect
       isLoading={isLoading}
       loadOptions={loadOptions.current}
-      name={name}
       onChange={onChange}
-      placeholder={placeholder}
-      styles={styles}
+      styles={{ ...defaultStyles, ...styles }}
+      defaultOptions={formItem?.options?.defaultLocationOptions}
+      {...props}
     />
   )
 }

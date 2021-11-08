@@ -1,39 +1,39 @@
 import Flatpickr from "react-flatpickr"
 import React from "react"
+import { BookingForm } from "lib"
 
 type DateInputType = {
-  onChange?: any
-  options?: any
-  containerRef?: any
   placeholder?: string
   inputComponent?: any
-  iconComponent?: any
   className?: string
+  form: BookingForm
+  name: string
 }
 
 export const DateInput = ({
-  onChange,
-  options,
-  containerRef,
   placeholder,
   inputComponent,
-  iconComponent,
   className,
-}: DateInputType) => (
-  <Flatpickr
-    className={className}
-    onChange={onChange}
-    options={options}
-    ref={containerRef}
-  >
-    {React.cloneElement(inputComponent, {
-      "data-input": true,
-      placeholder,
-      type: "text",
-    })}
-    {React.cloneElement(iconComponent, {
-      "data-toggle": true,
-      title: "toggle",
-    })}
-  </Flatpickr>
-)
+  name,
+  form,
+}: DateInputType) => {
+  const onChange = (value) => {
+    form.setFieldValue(name, value)
+    form.focusOn(form.data[name].focusOnNext)
+  }
+
+  return (
+    <Flatpickr
+      className={className}
+      onChange={onChange}
+      options={form.data[name].options}
+      ref={form.refs[name]}
+    >
+      {React.cloneElement(inputComponent, {
+        "data-input": true,
+        placeholder,
+        type: "text",
+      })}
+    </Flatpickr>
+  )
+}

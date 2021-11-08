@@ -1,55 +1,62 @@
-import { useEffect, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+
+export type LocationItem = {
+  label: string
+  value: string
+}
+
+export type FormSchema = {
+  [key: string]: {
+    type: "location" | "date" | "datetime" | "peopleCount"
+    focusOnNext?: string
+    options?: {
+      defaultLocationOptions?: LocationItem[]
+      searchPlace?: (queryString: string) => Promise<any>
+    }
+  }
+}
+
+export type BookingForm = ReturnType<typeof useReactBookingForm>
+// get refs type from const refs useMemo return below
+export type RefsType = {
+  [key: string]: React.RefObject<any>
+}
 
 export const useReactBookingForm = ({
-  defaultForm,
-  onSelectionComplete,
-  autoFinish = true,
+  formSchema,
+}: {
+  formSchema: FormSchema
 }) => {
-  const [form, setForm] = useState(defaultForm)
-  const checkIn = useRef<any>()
-  const checkOut = useRef<any>()
-  const guests = useRef<any>()
+  const [data, setData] = useState<FormSchema>(formSchema)
 
-  const refs = {
-    checkIn,
-    checkOut,
-    guests,
-  }
+  const refs: RefsType = useMemo(() => {
+    return Object.keys(formSchema).reduce((acc, key) => {
+      acc[key] = React.createRef<any>()
+      return acc
+    }, {})
+  }, [])
 
-  const focusOn = (refKey) => {
-    if (refKey === "guests") {
-      return refs.guests.current.focus()
-    }
-    refs[refKey].current.node.childNodes[0].focus()
-  }
+  const focusOn = useCallback(
+    (name?: string) => {
+      if (!name || !refs?.[name]?.current?.node) return
 
-  const setFormFields = (formValues) => {
-    setForm((form) => ({ ...form, ...formValues }))
-  }
+      refs[name].current?.node?.childNodes?.[0]?.focus?.()
+    },
+    [refs]
+  )
 
-  useEffect(() => {
-    if (!autoFinish || !(form.location && form.dateFrom && form.dateTo)) return
+  const setFieldValue = useCallback((key: string, value: any) => {
+    setData((data) => ({ ...data, [key]: { ...data[key], value } }))
+  }, [])
 
-    onSelectionComplete?.()
-  }, [form.guests])
-
-  const checkInOptions = {
-    minDate: "today",
-    wrap: true,
-  }
-
-  const checkOutOptions = {
-    minDate: form.dateFrom ? form.dateFrom[0] : undefined,
-    wrap: true,
-  }
-
-  return {
-    form,
-    setForm,
-    setFormFields,
-    checkInOptions,
-    checkOutOptions,
-    refs,
-    focusOn,
-  }
+  return useMemo(
+    () => ({
+      data,
+      setData,
+      setFieldValue,
+      refs,
+      focusOn,
+    }),
+    [data, refs, setData, setFieldValue, focusOn]
+  )
 }

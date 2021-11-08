@@ -1,17 +1,17 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react"
 import "./styles/index.css"
 import "flatpickr/dist/themes/material_green.css"
-import { Selector } from "./Selector"
+import { BookingForm } from "./BookingForm"
 
 export default {
-  title: "Example/Selector",
-  component: Selector,
+  title: "Example/BookingForm",
+  component: BookingForm,
   argTypes: {
     backgroundColor: { control: "color" },
   },
-} as ComponentMeta<typeof Selector>
+} as ComponentMeta<typeof BookingForm>
 
-const Template: ComponentStory<typeof Selector> = (args) => (
+const Template: ComponentStory<typeof BookingForm> = (args) => (
   <div className="">
     <div className="w-full h-96 relative">
       <img
@@ -29,12 +29,12 @@ const Template: ComponentStory<typeof Selector> = (args) => (
       </h3>
     </div>
     <div className="absolute top-0 left-0 right-0 mt-64 mx-8 z-10">
-      <Selector {...args} />
+      <BookingForm {...args} />
     </div>
   </div>
 )
 
 export const Basic = Template.bind({})
 Basic.args = {
-  label: "Selector",
+  label: "BookingForm",
 }
