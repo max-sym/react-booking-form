@@ -1,9 +1,9 @@
 import debounce from "debounce-promise"
 import React, { useRef, useState } from "react"
-import AsyncSelect from "react-select/async"
+import { Portal } from "./portal"
 import { BookingForm } from "./use-react-booking-form"
 
-export type LocationSelectProps = AsyncSelect & {
+export type LocationSelectProps = {
   onLocationChange?: any
   searchPlace?: any
   formatResults?: any
@@ -12,12 +12,44 @@ export type LocationSelectProps = AsyncSelect & {
   name: string
 }
 
+const AsyncSelect = ({ components }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const onClick = () => {
+    setIsOpen((isOpen) => !isOpen)
+  }
+
+  return (
+    <div>
+      {React.cloneElement(components.control, { onClick })}
+      <Portal id="select-menu-portal">
+        {React.cloneElement(
+          components.menu,
+          {
+            style: {
+              position: "absolute",
+              top: "100px",
+              left: "100px",
+            },
+          },
+          React.cloneElement(components.option)
+        )}
+      </Portal>
+    </div>
+  )
+}
+
+const components = {
+  menu: <div className="bg-white w-10 h-10" />,
+  option: <div />,
+  control: <div className="w-full bg-red-300 h-10" />,
+}
+
 export const LocationSelect = ({
   formatResults,
   debounceDelay = 500,
   name,
   form,
-  ...props
 }: LocationSelectProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,7 +89,7 @@ export const LocationSelect = ({
       ref={form.refs[name]}
       openMenuOnFocus
       defaultOptions={formItem?.options?.defaultLocationOptions}
-      {...props}
+      components={components}
     />
   )
 }
