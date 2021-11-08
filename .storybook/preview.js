@@ -1,4 +1,7 @@
 export const parameters = {
+  darkMode: {
+    current: "dark",
+  },
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
     matchers: {
