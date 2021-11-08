@@ -1,35 +1,45 @@
 import React, { useMemo } from "react"
+import Select from "react-select"
+import { BookingForm } from "./use-react-booking-form"
 
 export type GuestsSelectProps = {
-  containerRef: any
-  onChange?: any
   quantity?: number
   className?: string
   placeholder?: string
+  form: BookingForm
+  components?: any
+  name: string
 }
 
 export const GuestsSelect = ({
-  containerRef,
-  onChange,
-  quantity = 20,
+  form,
+  name,
   className,
-  placeholder = "",
+  components,
+  placeholder = "Guests count",
+  ...props
 }: GuestsSelectProps) => {
-  const options = useMemo(() => [...Array(quantity)].map((_v, i) => i), [])
+  const item = form.data[name]
+
+  const options = useMemo(
+    () =>
+      [...Array(item.options.max)].map((_v, i) => ({
+        value: i,
+        label: `${i}`,
+      })),
+    [item]
+  )
 
   return (
-    <select
+    <Select
       className={className}
       defaultValue="guests"
-      onChange={onChange}
-      ref={containerRef}
-    >
-      <option disabled value="guests">
-        {placeholder}
-      </option>
-      {options.map((option, index) => (
-        <option key={index}>{index}</option>
-      ))}
-    </select>
+      options={options}
+      ref={form.refs[name]}
+      components={components}
+      openMenuOnFocus
+      placeholder={placeholder}
+      {...props}
+    />
   )
 }

@@ -38,9 +38,15 @@ export const useReactBookingForm = ({
 
   const focusOn = useCallback(
     (name?: string) => {
-      if (!name || !refs?.[name]?.current?.node) return
+      if (!name) return
 
-      refs[name].current?.node?.childNodes?.[0]?.focus?.()
+      if (data[name]?.type === "date") {
+        if (!refs?.[name]?.current?.node) return
+        refs[name].current?.node?.childNodes?.[0]?.focus?.()
+      }
+
+      if (!refs[name].current?.focus) return
+      refs[name].current?.focus?.()
     },
     [refs]
   )

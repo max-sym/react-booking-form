@@ -9,9 +9,8 @@ import {
 import tw from "twin.macro"
 import { FaMapMarkerAlt, FaCalendarAlt, FaSearch } from "react-icons/fa"
 import { cities } from "./dummy-data/cities"
-import moment from "moment"
 
-const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
+const Container = tw.div`rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const DateInputCore = tw.input`border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500`
 const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0`
 
@@ -76,46 +75,50 @@ const formSchema: FormSchema = {
     options: { minDate: "today", wrap: true },
   },
   checkOut: { type: "date", focusOnNext: "guests", options: { wrap: true } },
-  guests: { type: "peopleCount" },
-}
-
-export const convertFormToURLParams = ({ form }) => {
-  const parsedForm = {
-    location: form.location.value,
-    dateTo: moment(form.dateTo[0]).format("yyyy-MM-DD"),
-    dateFrom: moment(form.dateFrom[0]).format("yyyy-MM-DD"),
-    guests: form.guests,
-  }
-  return new URLSearchParams(parsedForm).toString()
+  guests: {
+    type: "peopleCount",
+    options: {
+      min: 1,
+      max: 10,
+    },
+  },
 }
 
 export const BookingForm = ({}) => {
-  // const onSelectionComplete = () => {
-  //   const results = convertFormToURLParams({ form })
-  //   alert(`Redirect to search page: ${results}`)
-  // }
-
   const form = useReactBookingForm({ formSchema })
+
+  const components = {
+    DropdownIndicator: () => <FaMapMarkerAlt className="text-gray-500" />,
+    IndicatorSeparator: null,
+    Control: React.forwardRef(({ children, innerProps }: any, ref) => (
+      <div
+        className="border cursor-pointer rounded-full w-full outline-none transition focus:border-green-500 hover:border-green-500 flex"
+        {...innerProps}
+        ref={ref}
+      >
+        {children}
+      </div>
+    )),
+  }
+
+  const styles = {
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "20px",
+      overflow: "hidden",
+      cursor: "pointer",
+    }),
+  }
 
   return (
     <Container>
       <InputContainer>
         <LocationSelect
-          className="w-full"
           form={form}
-          components={{
-            DropdownIndicator: () => (
-              <FaMapMarkerAlt className="text-gray-500" />
-            ),
-            IndicatorSeparator: null,
-            Control: React.forwardRef(({ children, innerProps }: any, ref) => (
-              <div className="w-full flex" {...innerProps} ref={ref}>
-                {children}
-              </div>
-            )),
-          }}
+          components={components}
           name="location"
           placeholder="Type Location..."
+          styles={styles}
         />
       </InputContainer>
       <InputContainer>
@@ -124,13 +127,18 @@ export const BookingForm = ({}) => {
       <InputContainer>
         <DatePicker placeholder="Check Out" form={form} name={"checkOut"} />
       </InputContainer>
-      {/* <InputContainer>
-        <GuestsSelect className="border rounded-full w-full h-full pl-4 hover:text-blue outline-none cursor-pointer" />
-      </InputContainer> */}
-      <InputContainer style={{ flexBasis: "38px", flexShrink: 0, flexGrow: 1 }}>
+      <InputContainer>
+        <GuestsSelect
+          styles={styles}
+          form={form}
+          components={components}
+          name={"guests"}
+        />
+      </InputContainer>
+      <InputContainer>
         <MainButton>
           <FaSearch className="text-white w-3 h-3" />
-          <ButtonText>Search</ButtonText>
+          <ButtonText>{"Search"}</ButtonText>
         </MainButton>
       </InputContainer>
     </Container>

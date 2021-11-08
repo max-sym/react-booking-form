@@ -3,33 +3,6 @@ import React, { useRef, useState } from "react"
 import AsyncSelect from "react-select/async"
 import { BookingForm } from "./use-react-booking-form"
 
-const defaultStyles = {
-  control: (provided) => ({
-    ...provided,
-    border: "none",
-    borderRadius: "0px",
-    borderColor: "transparent",
-    boxShadow: "none",
-    "&:hover": {
-      borderColor: "transparent",
-    },
-  }),
-  menu: (provided) => ({
-    ...provided,
-    borderRadius: "24px",
-  }),
-  menuList: (provided) => ({
-    ...provided,
-    padding: 0,
-    borderRadius: "24px",
-  }),
-  option: (provided) => ({
-    ...provided,
-    padding: "12px 18px",
-    cursor: "pointer",
-  }),
-}
-
 export type LocationSelectProps = AsyncSelect & {
   onLocationChange?: any
   searchPlace?: any
@@ -42,7 +15,6 @@ export type LocationSelectProps = AsyncSelect & {
 export const LocationSelect = ({
   formatResults,
   debounceDelay = 500,
-  styles,
   name,
   form,
   ...props
@@ -82,7 +54,8 @@ export const LocationSelect = ({
       isLoading={isLoading}
       loadOptions={loadOptions.current}
       onChange={onChange}
-      styles={{ ...defaultStyles, ...styles }}
+      ref={form.refs[name]}
+      openMenuOnFocus
       defaultOptions={formItem?.options?.defaultLocationOptions}
       {...props}
     />
