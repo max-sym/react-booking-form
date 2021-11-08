@@ -1,21 +1,20 @@
 # React Booking Form
 
-Styling-agnostic react library for your hotel/restaurant website that allows users to select locations, dates (with time) and other types of inputs.
-
-## Example
-- [Chromatic storybook example](https://www.chromatic.com/component?appId=611f9e606d0396003a654e41&name=Example%2FSelector&buildNumber=1)
-- [CodeSandbox playground](https://codesandbox.io/s/optimistic-currying-9z489)
+React library for creating booking input forms such as hotel, restaurant, transport booking etc.
 
 ## Preview
 
 ![Imgur](https://i.imgur.com/seQEe1i.gif)
 
+## Example
+- [Chromatic storybook example](https://www.chromatic.com/component?appId=611f9e606d0396003a654e41&name=Example%2FSelector&buildNumber=1)
+- [CodeSandbox playground](https://codesandbox.io/s/optimistic-currying-9z489)
+
 ## Features
-✅ Debounced location search\
-✅ Instant focus on the next elements after selections\
+✅ Debounced location search using [react-select](https://github.com/JedWatson/react-select) library\
+✅ Easily focus on the next elements after selections\
 ✅ Included utility function to use with Google Places API\
 ✅ Included utility function to convert the values to URL parameters for the search page (if you have one)\
-✅ Styling-framework-agnostic
 
 ## Installation
 npm:
