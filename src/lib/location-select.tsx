@@ -70,7 +70,7 @@ export type LocationSelectProps = {
   menuContainer: any
   optionContainer: any
   inputComponent: any
-}
+} & HTMLInputElement
 
 export const LocationSelect = ({
   formatResults,
@@ -80,6 +80,8 @@ export const LocationSelect = ({
   menuContainer,
   optionContainer,
   inputComponent: InputComponent,
+  value,
+  type = "text",
   ...props
 }: LocationSelectProps) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -98,7 +100,8 @@ export const LocationSelect = ({
     setIsLoading(true)
     return await options.searchPlace(queryString).then((results) => {
       setIsLoading(false)
-      return formatResults?.(results) || results
+      const options = formatResults?.(results) || results
+      setOptions(options)
     })
   }
 
@@ -126,6 +129,7 @@ export const LocationSelect = ({
   }
 
   const onChange = (event) => {
+    loadOptions.current(event.target.value)
     form.setFieldState(name, { value: event.target.value, isOpen: true })
   }
 
@@ -143,8 +147,8 @@ export const LocationSelect = ({
         autoCapitalize="none"
         autoComplete="off"
         autoCorrect="off"
-        type="text"
         spellCheck="false"
+        isLoading={isLoading}
         {...props}
       />
       <Portal id="location-menu-portal">
