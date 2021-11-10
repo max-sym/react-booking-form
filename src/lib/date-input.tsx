@@ -12,7 +12,7 @@ type DateInputType = {
 
 export const DateInput = ({
   placeholder,
-  inputComponent,
+  inputComponent: InputComponent,
   className,
   name,
   form,
@@ -26,14 +26,10 @@ export const DateInput = ({
     <Flatpickr
       className={className}
       onChange={onChange}
-      options={form.data[name].options}
+      options={{ ...form.data[name].options }}
       ref={form.refs[name]}
     >
-      {React.cloneElement(inputComponent, {
-        "data-input": true,
-        placeholder,
-        type: "text",
-      })}
+      <InputComponent placeholder={placeholder} />
     </Flatpickr>
   )
 }

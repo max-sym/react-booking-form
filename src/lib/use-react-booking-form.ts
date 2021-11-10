@@ -12,7 +12,7 @@ export type FormSchema = {
     options?: {
       defaultLocationOptions?: LocationItem[]
       searchPlace?: (queryString: string) => Promise<any>
-    }
+    } & any
   }
 }
 
