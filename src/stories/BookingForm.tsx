@@ -18,15 +18,15 @@ import styled from "@emotion/styled/macro"
 
 const Container = tw.div`rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const InputCore = tw.input`border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
-const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0`
-const Label = tw.div`text-sm font-bold mb-1 text-gray-500`
+const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 flex flex-col justify-center items-center md:border-l pl-2 first:border-l-0`
+const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
 const ButtonText = tw.div`ml-2`
-const MainButton = tw.button`appearance-none border-0 w-full h-full rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
+const MainButton = tw.button`appearance-none border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500`
 
 const DatePickerInput = ({ placeholder }) => (
-  <div className="relative flex group h-10">
+  <div className="relative flex group h-10 w-full">
     <InputCore type="input" data-input placeholder={placeholder} />
     <IconContainer title="toggle" data-toggle>
       <FaCalendarAlt className="w-4 h-4" />
@@ -35,7 +35,7 @@ const DatePickerInput = ({ placeholder }) => (
 )
 
 const InputComponent = ({ form, name, isLoading, ...props }) => (
-  <div className="relative flex group h-10">
+  <div className="relative flex group h-10 w-full">
     <InputCore
       className="outline-none focus:outline-none"
       ref={form.refs[name]}
@@ -52,7 +52,7 @@ const InputComponent = ({ form, name, isLoading, ...props }) => (
 )
 
 const DatePicker = (props) => (
-  <DateInput inputComponent={DatePickerInput} {...props} />
+  <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
 )
 
 const searchPlace = async (queryString) => {
@@ -115,7 +115,9 @@ export const BookingForm = () => {
           optionContainer={OptionContainer}
           inputComponent={InputComponent}
           name="location"
-          placeholder="Type location..."
+          inputProps={{
+            placeholder: "Where are you going?",
+          }}
         />
       </InputContainer>
       <InputContainer>

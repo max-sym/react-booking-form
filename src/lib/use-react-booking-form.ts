@@ -81,7 +81,7 @@ export const useReactBookingForm = ({
     setState((field) => ({ ...field, [key]: { ...field[key], ...state } }))
   }, [])
 
-  return useMemo<BookingForm>(
+  const bookingForm = useMemo<BookingForm>(
     () => ({
       formSchema,
       state,
@@ -93,4 +93,5 @@ export const useReactBookingForm = ({
     }),
     [formSchema, state, setState, refs, setFieldValue, focusOn, setFieldState]
   )
+  return bookingForm
 }

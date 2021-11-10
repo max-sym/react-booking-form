@@ -1,66 +1,8 @@
 import debounce from "debounce-promise"
-import React, { useMemo, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
+import { Menu } from "./menu"
 import { Portal } from "./portal"
 import { BookingForm } from "./use-react-booking-form"
-
-const Option = ({
-  optionContainer: OptionContainer,
-  option,
-  form,
-  name,
-}: {
-  optionContainer: any
-  option: any
-  form: BookingForm
-  name: string
-}) => {
-  const selectOption = () => {
-    form.focusOn(form.formSchema[name].focusOnNext)
-    form.setFieldState(name, { value: option, isOpen: false })
-  }
-
-  return (
-    <OptionContainer tabIndex={-1} onClick={selectOption} option={option}>
-      {option.label}
-    </OptionContainer>
-  )
-}
-
-const Menu = ({
-  menuContainer: MenuContainer,
-  optionContainer,
-  options,
-  isOpen,
-  form,
-  name,
-  menuContainerRef,
-}) => {
-  const position = useMemo(
-    () => form.refs[name]?.current?.getBoundingClientRect?.(),
-    [isOpen]
-  )
-
-  return (
-    <MenuContainer
-      isOpen={isOpen}
-      style={{
-        position: "absolute",
-        top: position?.y,
-        left: position?.x,
-      }}
-      ref={menuContainerRef}
-    >
-      {options.map((option) => (
-        <Option
-          form={form}
-          name={name}
-          option={option}
-          optionContainer={optionContainer}
-        />
-      ))}
-    </MenuContainer>
-  )
-}
 
 export type LocationSelectProps = {
   formatResults?: any
@@ -70,7 +12,8 @@ export type LocationSelectProps = {
   menuContainer: any
   optionContainer: any
   inputComponent: any
-} & HTMLInputElement
+  inputProps: Partial<HTMLInputElement>
+}
 
 export const LocationSelect = ({
   formatResults,
@@ -80,9 +23,7 @@ export const LocationSelect = ({
   menuContainer,
   optionContainer,
   inputComponent: InputComponent,
-  value,
-  type = "text",
-  ...props
+  inputProps,
 }: LocationSelectProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -149,7 +90,8 @@ export const LocationSelect = ({
         autoCorrect="off"
         spellCheck="false"
         isLoading={isLoading}
-        {...props}
+        type="text"
+        {...inputProps}
       />
       <Portal id="location-menu-portal">
         <Menu
