@@ -19,7 +19,7 @@ export const GuestsSelect = ({
   placeholder = "Guests count",
   ...props
 }: GuestsSelectProps) => {
-  const item = form.data[name]
+  const item = form.formSchema[name]
 
   const options = useMemo(
     () =>
@@ -30,16 +30,5 @@ export const GuestsSelect = ({
     [item]
   )
 
-  return (
-    <Select
-      className={className}
-      defaultValue="guests"
-      options={options}
-      ref={form.refs[name]}
-      components={components}
-      openMenuOnFocus
-      placeholder={placeholder}
-      {...props}
-    />
-  )
+  return <div />
 }

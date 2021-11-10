@@ -9,11 +9,12 @@ import {
 import tw from "twin.macro"
 import { FaMapMarkerAlt, FaCalendarAlt, FaSearch } from "react-icons/fa"
 import { cities } from "./dummy-data/cities"
+import styled from "@emotion/styled/macro"
 
 const Container = tw.div`rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const DateInputCore = tw.input`border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500`
 const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 md:border-l pl-2 first:border-l-0`
-const Label = tw.div`text-sm font-bold mb-1`
+const Label = tw.div`text-sm font-bold mb-1 text-gray-500`
 
 const ButtonText = tw.div`ml-2`
 const MainButton = tw.button`appearance-none border-0 w-full h-full rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
@@ -81,6 +82,25 @@ const formSchema: FormSchema = {
   },
 }
 
+const MenuContainer = styled.div<any>(({ isOpen }) => [
+  tw`w-64 h-64 border z-10 mt-12 transform transition ease-in-out bg-white rounded-xl overflow-hidden`,
+  isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
+])
+
+const OptionContainer = tw.div`hover:bg-gray-300 cursor-pointer`
+
+const InputComponent = ({ form, name, ...props }) => {
+  return (
+    <div>
+      <input
+        className="outline-none focus:outline-none"
+        ref={form.refs[name]}
+        {...props}
+      />
+    </div>
+  )
+}
+
 export const BookingForm = ({}) => {
   const form = useReactBookingForm({ formSchema })
 
@@ -113,25 +133,27 @@ export const BookingForm = ({}) => {
         <Label>{"Location"}</Label>
         <LocationSelect
           form={form}
-          components={components}
+          menuContainer={MenuContainer}
+          optionContainer={OptionContainer}
+          inputComponent={InputComponent}
           name="location"
-          placeholder="Type Location..."
-          styles={styles}
+          placeholder="Type location..."
         />
       </InputContainer>
       <InputContainer>
-        <Label>{"Location"}</Label>
-        <DatePicker placeholder="Check In" form={form} name={"checkIn"} />
+        <Label>{"Check in"}</Label>
+        <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
       </InputContainer>
       <InputContainer>
-        <Label>{"Location"}</Label>
-        <DatePicker placeholder="Check Out" form={form} name={"checkOut"} />
+        <Label>{"Check out"}</Label>
+        <DatePicker placeholder="Add date" form={form} name={"checkOut"} />
       </InputContainer>
       <InputContainer>
-        <Label>{"Location"}</Label>
+        <Label>{"Guests"}</Label>
         <GuestsSelect
           styles={styles}
           form={form}
+          placeholder="Add guests"
           components={components}
           name={"guests"}
         />

@@ -1,15 +1,75 @@
 import debounce from "debounce-promise"
-import React, { useRef, useState } from "react"
-import AsyncSelect from "react-select/async"
+import React, { useMemo, useRef, useState } from "react"
+import { Portal } from "./portal"
 import { BookingForm } from "./use-react-booking-form"
 
-export type LocationSelectProps = AsyncSelect & {
-  onLocationChange?: any
-  searchPlace?: any
+const Option = ({
+  optionContainer: OptionContainer,
+  option,
+  form,
+  name,
+}: {
+  optionContainer: any
+  option: any
+  form: BookingForm
+  name: string
+}) => {
+  const selectOption = () => {
+    form.focusOn(form.formSchema[name].focusOnNext)
+    form.setFieldState(name, { value: option, isOpen: false })
+  }
+
+  return (
+    <OptionContainer tabIndex={-1} onClick={selectOption} option={option}>
+      {option.label}
+    </OptionContainer>
+  )
+}
+
+const Menu = ({
+  menuContainer: MenuContainer,
+  optionContainer,
+  options,
+  isOpen,
+  form,
+  name,
+  menuContainerRef,
+}) => {
+  const position = useMemo(
+    () => form.refs[name]?.current?.getBoundingClientRect?.(),
+    [isOpen]
+  )
+
+  return (
+    <MenuContainer
+      isOpen={isOpen}
+      style={{
+        position: "absolute",
+        top: position?.y,
+        left: position?.x,
+      }}
+      ref={menuContainerRef}
+    >
+      {options.map((option) => (
+        <Option
+          form={form}
+          name={name}
+          option={option}
+          optionContainer={optionContainer}
+        />
+      ))}
+    </MenuContainer>
+  )
+}
+
+export type LocationSelectProps = {
   formatResults?: any
   debounceDelay?: number
   form: BookingForm
   name: string
+  menuContainer: any
+  optionContainer: any
+  inputComponent: any
 }
 
 export const LocationSelect = ({
@@ -17,14 +77,22 @@ export const LocationSelect = ({
   debounceDelay = 500,
   name,
   form,
+  menuContainer,
+  optionContainer,
+  inputComponent: InputComponent,
   ...props
 }: LocationSelectProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const formItem = form?.data?.[name]
+  const formStateItem = form?.state?.[name]
+  const formSchemaItem = form?.formSchema?.[name]
+
+  const [options, setOptions] = useState(
+    formSchemaItem.options.defaultLocationOptions
+  )
 
   const getPlaces = async (queryString) => {
-    const options = formItem?.options
+    const options = formSchemaItem?.options
     if (!options?.searchPlace) return
 
     setIsLoading(true)
@@ -34,30 +102,62 @@ export const LocationSelect = ({
     })
   }
 
-  const onChange = (value, { action }) => {
-    if (action !== "select-option") return
-
-    form.setFieldValue(name, value)
-    form.focusOn(formItem.focusOnNext)
-  }
-
   const loadOptionsDebounce = useRef(
     debounce(getPlaces, debounceDelay, { leading: false })
   )
 
   const loadOptions = useRef((input) => loadOptionsDebounce.current(input))
 
-  if (!formItem) return null
+  const onFocus = () => {
+    form.setFieldState(name, { isOpen: true })
+  }
+
+  const menuContainerRef = useRef<HTMLElement>(null)
+
+  const onBlur = () => {
+    setTimeout(() => {
+      if (menuContainerRef.current?.contains?.(document.activeElement)) {
+        form.refs[name].current.focus()
+        return
+      }
+
+      form.setFieldState(name, { isOpen: false })
+    }, 10)
+  }
+
+  const onChange = (event) => {
+    form.setFieldState(name, { value: event.target.value, isOpen: true })
+  }
+
+  if (!formStateItem) return null
 
   return (
-    <AsyncSelect
-      isLoading={isLoading}
-      loadOptions={loadOptions.current}
-      onChange={onChange}
-      ref={form.refs[name]}
-      openMenuOnFocus
-      defaultOptions={formItem?.options?.defaultLocationOptions}
-      {...props}
-    />
+    <>
+      <InputComponent
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onChange={onChange}
+        form={form}
+        name={name}
+        value={formStateItem.value?.label || formStateItem.value || ""}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
+        type="text"
+        spellCheck="false"
+        {...props}
+      />
+      <Portal id="location-menu-portal">
+        <Menu
+          options={options}
+          optionContainer={optionContainer}
+          menuContainer={menuContainer}
+          isOpen={formStateItem?.isOpen}
+          form={form}
+          name={name}
+          menuContainerRef={menuContainerRef}
+        />
+      </Portal>
+    </>
   )
 }

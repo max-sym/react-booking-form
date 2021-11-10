@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 
 export type LocationItem = {
   label: string
@@ -9,6 +9,7 @@ export type FormSchema = {
   [key: string]: {
     type: "location" | "date" | "datetime" | "peopleCount"
     focusOnNext?: string
+    defaultValue?: any
     options?: {
       defaultLocationOptions?: LocationItem[]
       searchPlace?: (queryString: string) => Promise<any>
@@ -16,10 +17,22 @@ export type FormSchema = {
   }
 }
 
-export type BookingForm = ReturnType<typeof useReactBookingForm>
-// get refs type from const refs useMemo return below
+export type BookingForm = {
+  formSchema: FormSchema
+  state: FormState
+  setState: (state: FormState) => void
+  setFieldValue: (key: string, value: any) => void
+  setFieldState: (key: string, state: any) => void
+  refs: RefsType
+  focusOn: (key?: string) => void
+}
+
 export type RefsType = {
   [key: string]: React.RefObject<any>
+}
+
+export type FormState = {
+  [key: string]: { type: string; value: any; isOpen?: boolean }
 }
 
 export const useReactBookingForm = ({
@@ -27,7 +40,14 @@ export const useReactBookingForm = ({
 }: {
   formSchema: FormSchema
 }) => {
-  const [data, setData] = useState<FormSchema>(formSchema)
+  const [state, setState] = useState<FormState>(() => {
+    const result = {}
+    Object.keys(formSchema).forEach((key) => {
+      const field = formSchema[key]
+      result[key] = { type: field.type, value: field.defaultValue }
+    })
+    return result
+  })
 
   const refs: RefsType = useMemo(() => {
     return Object.keys(formSchema).reduce((acc, key) => {
@@ -40,9 +60,11 @@ export const useReactBookingForm = ({
     (name?: string) => {
       if (!name) return
 
-      if (data[name]?.type === "date") {
+      // This is here because flatpickr requires current.node to be focused on
+      if (state[name]?.type === "date") {
         if (!refs?.[name]?.current?.node) return
-        refs[name].current?.node?.childNodes?.[0]?.focus?.()
+        refs[name].current.node.querySelector("[data-input]")?.focus?.()
+        return
       }
 
       if (!refs[name].current?.focus) return
@@ -52,17 +74,23 @@ export const useReactBookingForm = ({
   )
 
   const setFieldValue = useCallback((key: string, value: any) => {
-    setData((data) => ({ ...data, [key]: { ...data[key], value } }))
+    setState((field) => ({ ...field, [key]: { ...field[key], value } }))
   }, [])
 
-  return useMemo(
+  const setFieldState = useCallback((key: string, state: any) => {
+    setState((field) => ({ ...field, [key]: { ...field[key], ...state } }))
+  }, [])
+
+  return useMemo<BookingForm>(
     () => ({
-      data,
-      setData,
+      formSchema,
+      state,
+      setState,
       setFieldValue,
+      setFieldState,
       refs,
       focusOn,
     }),
-    [data, refs, setData, setFieldValue, focusOn]
+    [formSchema, state, setState, refs, setFieldValue, focusOn, setFieldState]
   )
 }

@@ -19,14 +19,14 @@ export const DateInput = ({
 }: DateInputType) => {
   const onChange = (value) => {
     form.setFieldValue(name, value)
-    form.focusOn(form.data[name].focusOnNext)
+    form.focusOn(form.formSchema[name].focusOnNext)
   }
 
   return (
     <Flatpickr
       className={className}
       onChange={onChange}
-      options={{ ...form.data[name].options }}
+      options={{ ...form.formSchema[name].options }}
       ref={form.refs[name]}
     >
       <InputComponent placeholder={placeholder} />
