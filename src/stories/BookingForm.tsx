@@ -25,6 +25,12 @@ const ButtonText = tw.div`ml-2`
 const MainButton = tw.button`appearance-none border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500`
 
+const MenuContainer = styled.div<any>(({ isOpen }) => [
+  tw`w-64 h-64 border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-hidden`,
+  isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
+])
+const OptionContainer = tw.div`cursor-pointer p-2 hover:bg-green-100 transition ease-in-out`
+
 const DatePickerInput = ({ placeholder }) => (
   <div className="relative flex group h-10 w-full">
     <InputCore type="input" data-input placeholder={placeholder} />
@@ -55,19 +61,15 @@ const DatePicker = (props) => (
   <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
 )
 
-const searchPlace = async (queryString) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(
-        cities
-          .filter((city) =>
-            city.toLowerCase().includes(queryString.toLowerCase())
-          )
-          .map((city) => ({ value: city.toLowerCase(), label: city }))
-      )
-    }, 1000)
+const filterAndMapCiies = (query) =>
+  cities
+    .filter((city) => city.toLowerCase().includes(query.toLowerCase()))
+    .map((city) => ({ value: city.toLowerCase(), label: city }))
+
+const searchPlace = async (query) =>
+  new Promise((resolve, _reject) => {
+    setTimeout(() => resolve(filterAndMapCiies(query)), 600)
   })
-}
 
 const defaultLocationOptions = [
   { value: "new-york", label: "New York" },
@@ -96,12 +98,6 @@ const formSchema: FormSchema = {
   },
 }
 
-const MenuContainer = styled.div<any>(({ isOpen }) => [
-  tw`w-64 h-64 border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-hidden`,
-  isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
-])
-const OptionContainer = tw.div`cursor-pointer p-2 hover:bg-green-100 transition ease-in-out`
-
 export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
 
@@ -115,9 +111,7 @@ export const BookingForm = () => {
           optionContainer={OptionContainer}
           inputComponent={InputComponent}
           name="location"
-          inputProps={{
-            placeholder: "Where are you going?",
-          }}
+          inputProps={{ placeholder: "Where are you going?" }}
         />
       </InputContainer>
       <InputContainer>
