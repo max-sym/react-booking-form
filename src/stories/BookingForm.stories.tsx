@@ -16,17 +16,17 @@ const Template: ComponentStory<typeof BookingForm> = () => (
   <div className="">
     <div className="w-full h-96 relative">
       <img
-        src="https://picsum.photos/id/1039/1200/630"
+        src="https://source.unsplash.com/78A265wPiO4/1920x1080"
         className="w-full h-full object-cover"
       />
-      <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-b from-transparent to-black"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-l from-transparent to-black opacity-50"></div>
     </div>
     <div className="absolute top-32 text-center w-full">
-      <h1 className="uppercase bold text-4xl text-white leading-wide">
-        {"Book your holidays!"}
+      <h1 className="uppercase font-bold text-3xl text-white tracking-widest font-title">
+        {"Book your trip"}
       </h1>
-      <h3 className="text-xl text-green-400">
-        {"Best holidays ever only on this website 🌴"}
+      <h3 className="text-xl text-white mt-2">
+        {"🌳 Choose your destination 🌳"}
       </h3>
     </div>
     <div className="absolute top-0 left-0 right-0 mt-64 mx-8 z-10">
