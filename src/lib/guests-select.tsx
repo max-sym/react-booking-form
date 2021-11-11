@@ -46,7 +46,7 @@ export const GuestsSelect = ({
         onChange={onChange}
         form={form}
         name={name}
-        value={formStateItem.value?.label || formStateItem.value || ""}
+        value={formStateItem.value || ""}
         autoCapitalize="none"
         autoComplete="off"
         autoCorrect="off"
@@ -56,7 +56,7 @@ export const GuestsSelect = ({
       />
       <Portal id="react-booking-form-menu-portal">
         <Menu
-          options={options}
+          options={options as any}
           optionComponent={optionComponent}
           menuContainer={menuContainer}
           isOpen={!!formStateItem?.isOpen}

@@ -27,9 +27,8 @@ export const DateInput = ({
       className={className}
       onChange={onChange}
       options={{ ...form.formSchema[name].options }}
-      ref={form.refs[name]}
     >
-      <InputComponent placeholder={placeholder} />
+      <InputComponent placeholder={placeholder} inputRef={form.refs[name]} />
     </Flatpickr>
   )
 }

@@ -13,7 +13,7 @@ export default {
 } as ComponentMeta<typeof BookingForm>
 
 const Template: ComponentStory<typeof BookingForm> = () => (
-  <div className="">
+  <div style={{ height: "2000px" }}>
     <div className="w-full h-96 relative">
       <img
         src="https://source.unsplash.com/78A265wPiO4/1920x1080"

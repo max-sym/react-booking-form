@@ -1,17 +1,23 @@
 import { useMemo, useRef, useState } from "react"
 import debounce from "debounce-promise"
+import { BookingForm } from "lib"
 
 export const useLocationData = ({
   form,
   name,
   debounceDelay,
   formatResults,
+}: {
+  form: BookingForm
+  name: string
+  debounceDelay: number
+  formatResults: (results: any) => any
 }) => {
   const formSchemaItem = form?.formSchema?.[name]
 
   const [isLoading, setIsLoading] = useState(false)
   const [options, setOptions] = useState(
-    formSchemaItem.options.defaultLocationOptions
+    formSchemaItem?.options?.defaultLocationOptions || []
   )
 
   const getPlaces = async (queryString) => {

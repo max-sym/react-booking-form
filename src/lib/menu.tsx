@@ -1,3 +1,4 @@
+import { BookingForm, GuestOption, LocationOption } from "lib"
 import React from "react"
 import { useMemo } from "react"
 import { Option } from "./option"
@@ -14,15 +15,15 @@ export const Menu = ({
 }: {
   menuContainer: React.ComponentType<any>
   optionContainer?: React.ComponentType<any>
-  options: any
+  options: GuestOption[] | LocationOption[]
   isOpen: boolean
-  form: any
+  form: BookingForm
   name: string
   menuContainerRef: any
   optionComponent?: React.ComponentType<any>
 }) => {
   const position = useMemo(
-    () => form.refs[name]?.current?.getBoundingClientRect?.(),
+    () => form.refs[name]?.current?.getBoundingClientRect(),
     [isOpen]
   )
 
@@ -46,6 +47,7 @@ export const Menu = ({
           name={name}
           option={option}
           optionContainer={optionContainer}
+          key={option.name || option.value}
         />
       ))}
     </MenuContainer>

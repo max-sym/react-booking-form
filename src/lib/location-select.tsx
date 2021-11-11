@@ -47,6 +47,9 @@ export const LocationSelect = ({
 
   if (!formStateItem) return null
 
+  // @ts-ignore
+  const value = formStateItem.value?.label || formStateItem.value || ""
+
   return (
     <>
       <InputComponent
@@ -55,7 +58,7 @@ export const LocationSelect = ({
         onChange={onChange}
         form={form}
         name={name}
-        value={formStateItem.value?.label || formStateItem.value || ""}
+        value={value}
         autoCapitalize="none"
         autoComplete="off"
         autoCorrect="off"

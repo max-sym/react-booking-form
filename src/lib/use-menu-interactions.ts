@@ -1,6 +1,13 @@
+import { BookingForm } from "lib"
 import React, { useMemo, useRef } from "react"
 
-export const useMenuInteractions = ({ form, name }) => {
+export const useMenuInteractions = ({
+  form,
+  name,
+}: {
+  form: BookingForm
+  name: string
+}) => {
   const menuContainerRef = useRef<HTMLElement>(null)
 
   const onFocus = () => {
@@ -10,7 +17,7 @@ export const useMenuInteractions = ({ form, name }) => {
   const onBlur = () => {
     setTimeout(() => {
       if (menuContainerRef.current?.contains?.(document.activeElement)) {
-        form.refs[name].current.focus()
+        form.refs[name]?.current?.focus()
         return
       }
 

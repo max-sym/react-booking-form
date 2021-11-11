@@ -1,29 +1,33 @@
 import React, { useCallback, useMemo, useState } from "react"
 
-export type LocationItem = {
+export type LocationOption = {
   label: string
   value: string
 }
+
+export type FieldValue = LocationOption | GuestOption[] | string
 
 export type FormSchema = {
   [key: string]: {
     type: "location" | "date" | "datetime" | "peopleCount"
     focusOnNext?: string
-    defaultValue?: GuestOption[] | any
+    defaultValue?: FieldValue
     options?: {
-      defaultLocationOptions?: LocationItem[]
+      defaultLocationOptions?: LocationOption[]
       searchPlace?: (queryString: string) => Promise<any>
-    } & any
+      [key: string]: any
+    }
   }
 }
 
 export type GuestOption = {
   label: string
   value: number
-  totalCount: number
+  totalCount?: number
   name: string
   min: number
   max: number
+  [key: string]: any
 }
 
 const getGuestTotalCount = (guestOptions: GuestOption[]) =>
@@ -41,13 +45,13 @@ export type BookingForm = {
 }
 
 export type RefsType = {
-  [key: string]: React.RefObject<any>
+  [key: string]: React.RefObject<HTMLElement>
 }
 
 export type FormState = {
   [key: string]: {
     type: string
-    value: GuestOption[] | any
+    value: FieldValue
     isOpen?: boolean
     totalCount?: number
   }
@@ -67,7 +71,7 @@ export const useReactBookingForm = ({
         value: field.defaultValue,
         totalCount:
           field.type === "peopleCount"
-            ? getGuestTotalCount(field.defaultValue)
+            ? getGuestTotalCount(field.defaultValue as GuestOption[])
             : undefined,
       }
     })
@@ -85,13 +89,6 @@ export const useReactBookingForm = ({
     (name?: string) => {
       if (!name) return
 
-      // This is here because flatpickr requires current.node to be focused on
-      if (state[name]?.type === "date") {
-        if (!refs?.[name]?.current?.node) return
-        refs[name].current.node.querySelector("[data-input]")?.focus?.()
-        return
-      }
-
       if (!refs[name].current?.focus) return
       refs[name].current?.focus?.()
     },
@@ -107,8 +104,8 @@ export const useReactBookingForm = ({
   }, [])
 
   const setGuestOptionValue = useCallback(
-    (key: string, option: any, value: any) => {
-      const newStateItemValue = [...state[key].value]
+    (key: string, option: GuestOption, value: number) => {
+      const newStateItemValue = [...(state[key].value as GuestOption[])]
       const optionIndex = newStateItemValue.findIndex(
         (stateItemValue) => option.name === stateItemValue.name
       )

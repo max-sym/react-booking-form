@@ -30,16 +30,21 @@ const ButtonText = tw.div`ml-2`
 const MainButton = tw.button`appearance-none mt-5 border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500`
 
-const MenuContainer = styled.div<any>(({ isOpen }) => [
+const MenuContainer = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
   tw`w-64 max-h-[240px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden`,
   isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
 ])
 const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
 const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
-const DatePickerInput = ({ placeholder }) => (
+const DatePickerInput = ({ placeholder, inputRef }) => (
   <div className="relative flex group h-10 w-full">
-    <InputCore type="input" data-input placeholder={placeholder} />
+    <InputCore
+      ref={inputRef}
+      type="input"
+      data-input
+      placeholder={placeholder}
+    />
     <IconContainer title="toggle" data-toggle>
       <FaCalendarAlt className="w-4 h-4" />
     </IconContainer>
@@ -78,7 +83,7 @@ const ControlComponent = ({
     <div className="relative flex group h-10 w-full">
       <ControlCore
         className="outline-none focus:outline-none"
-        ref={form.refs[name]}
+        ref={form.refs[name] as any}
         tabIndex={-1}
         {...props}
       >
