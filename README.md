@@ -336,8 +336,28 @@ const DatePicker = (props) => (
 ```
 
 </details>
+  
+<details>
+  <summary>Schema configuration</summary>
 
+## Schema
+		
+| Name         	| Type                                        	| Required 	| Description                                                                                                                                                                                          	| Example                                                                                                                          	|
+|--------------	|---------------------------------------------	|----------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|----------------------------------------------------------------------------------------------------------------------------------	|
+| type         	| `"location" \| "date" \| "peopleCount"`     	| ✅         | The type of the field                                                                                                                                                                                	| "location"                                                                                                                       	|
+| focusOnNext  	| `string`                                    	|          	| The key of some form schema object item to focus upon after selecting this field                                                                                                                     	| "checkIn" (if checkIn key exists in the `formSchema` object)                                                                     	|
+| defaultValue 	| `LocationOption \| GuestOption[] \| string` 	|          	| Default value of the field. In case of the type of the form field being "location", it should be of LocationOption type. Should be an array of `GuestOption`'s in case of "peopleCount" respectively 	| Location example: ``` {   label: "New York",   value: "new-york" } ```  Guest Example:  ``` {   value: 1,   name: "adults" } ``` 	|
+| options      	| `Options`                                   	|          	| Options object. Refer to its schema (defined below)                                                                                                                                                  	|                                                                                                                                  	|		
 
+## Options
+
+| Name                     	| Type                                   	| Description                                                                                                                                          	|
+|--------------------------	|----------------------------------------	|------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| `defaultLocationOptions` 	| `LocationOption[]`                     	| If the field type is "location" then it accepts these locations as default values                                                                    	|
+| `searchPlace`            	| `(queryString:string) => Promise<any>` 	| A function that fetches the location data. Refer to the TypeScript example in the repo documentation.                                                	|
+| `[key: string]`          	| `any`                                  	| **Parameters that will be passed down to the flatpickr React component. [Here's a list of options you can pass](https://flatpickr.js.org/options/)** 	|
+
+</details>
 
 ## Contribution Guide
 - Clone the repository to your local machine;
