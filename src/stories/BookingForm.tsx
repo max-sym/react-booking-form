@@ -27,7 +27,7 @@ const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 flex flex-col 
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
 const ButtonText = tw.div`ml-2`
-const MainButton = tw.button`appearance-none border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
+const MainButton = tw.button`appearance-none mt-5 border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500`
 
 const MenuContainer = styled.div<any>(({ isOpen }) => [
