@@ -1,3 +1,4 @@
+import React from "react"
 import Flatpickr from "react-flatpickr"
 import { BookingForm } from "lib"
 
