@@ -38,6 +38,10 @@ yarn:
 
 ## Usage
 
+<details>
+
+<summary>TypeScript example</summary>
+
 Import core library components:
 ```js
 import {
@@ -330,6 +334,8 @@ const DatePicker = (props) => (
   <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
 )
 ```
+
+</details>
 
 
 
