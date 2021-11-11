@@ -1,6 +1,6 @@
-# React Booking Form
+# React Booking Form 🔥
 
-React library for creating booking input forms such as hotel, restaurant, transport booking etc.
+Flexible React library for creating booking forms such as on hotel, restaurant, transport and such websites with location search, calendar inputs, guest fields and much more.
 
 ## Preview
 
@@ -11,10 +11,15 @@ React library for creating booking input forms such as hotel, restaurant, transp
 - [CodeSandbox playground](https://codesandbox.io/s/optimistic-currying-9z489)
 
 ## Features
-✅ Debounced location search using [react-select](https://github.com/JedWatson/react-select) library\
+✅ Style agnostic: style your components however you want and just give them callbacks from the library for logic 💫\
+✅ Debounced location search\
 ✅ Easily focus on the next elements after selections\
-✅ Included utility function to use with Google Places API\
-✅ Included utility function to convert the values to URL parameters for the search page (if you have one)\
+✅ No dependencies except a very light (and amazing) calendar library [flatpickr](https://github.com/flatpickr/flatpickr)\
+✅ Flexible form schema\
+✅ Guest count selection by person group\
+
+### Notes
+- The library styling is very flexible, however the calendar component styling requires including a theme css file from [flatpickr](https://github.com/flatpickr/flatpickr). We made it so you can fully control it by including it yourself or creating your own theme without any dependency on the `react-booking-form`;
 
 ## Installation
 npm:
