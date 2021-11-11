@@ -183,6 +183,7 @@ const formSchema: FormSchema = {
     type: "date",
     focusOnNext: "guests",
     options: {
+      minDateFrom: "checkIn",
       altInput: true,
       altFormat: "M j, Y",
       dateFormat: "Y-m-d",

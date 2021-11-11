@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import Flatpickr from "react-flatpickr"
 import { BookingForm } from "lib"
 
@@ -17,17 +17,26 @@ export const DateInput = ({
   name,
   form,
 }: DateInputType) => {
+  const item = form.formSchema[name]
+
   const onChange = (value) => {
     form.setFieldValue(name, value)
-    form.focusOn(form.formSchema[name].focusOnNext)
+    form.focusOn(item.focusOnNext)
   }
 
+  const options = useMemo(() => {
+    const minDateFrom = item?.options?.minDateFrom
+    if (!minDateFrom) return { ...item.options }
+    const minDate = minDateFrom ? form.state[minDateFrom].value?.[0] : null
+
+    return {
+      ...item.options,
+      minDate: minDate || undefined,
+    }
+  }, [form.state])
+
   return (
-    <Flatpickr
-      className={className}
-      onChange={onChange}
-      options={{ ...form.formSchema[name].options }}
-    >
+    <Flatpickr className={className} onChange={onChange} options={options}>
       <InputComponent placeholder={placeholder} inputRef={form.refs[name]} />
     </Flatpickr>
   )
