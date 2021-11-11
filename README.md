@@ -310,7 +310,7 @@ const DatePicker = (props) => (
 
 
 
-## Contribution guide
+## Contribution Guide
 - Clone the repository to your local machine;
 - Run `yarn` in the root
 - Run `tw:dev` (to construct TailwindCSS CSS file)
@@ -319,7 +319,7 @@ const DatePicker = (props) => (
 
 Whenever finished, create a PR on a separate branch for review.
 
-## Licence
+## License
 MIT
 
 ## Support
