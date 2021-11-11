@@ -38,6 +38,9 @@ yarn:
 
 ## Usage
 
+To quickly catch up go to codesandbox playground first.\
+Then read the example below + schema explanation. Good luck 🚀
+
 <details>
 
 <summary>TypeScript example</summary>
