@@ -4,7 +4,7 @@ React library for creating booking input forms such as hotel, restaurant, transp
 
 ## Preview
 
-![Imgur](https://i.imgur.com/seQEe1i.gif)
+![Imgur](https://i.imgur.com/JsZdqht.gif)
 
 ## Example
 - [Chromatic storybook example](https://www.chromatic.com/component?appId=611f9e606d0396003a654e41&name=Example%2FSelector&buildNumber=1)
