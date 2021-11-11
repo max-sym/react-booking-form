@@ -4,6 +4,7 @@ import {
   GuestsSelect,
   LocationSelect,
   useReactBookingForm,
+  BookingForm as BookingFormType,
 } from "../lib"
 import tw from "twin.macro"
 import {
@@ -11,6 +12,8 @@ import {
   FaCalendarAlt,
   FaSearch,
   FaSpinner,
+  FaPlus,
+  FaMinus,
 } from "react-icons/fa"
 import { cities } from "./dummy-data/cities"
 import styled from "@emotion/styled/macro"
@@ -27,10 +30,11 @@ const MainButton = tw.button`appearance-none border-0 w-full h-10 rounded-full f
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500`
 
 const MenuContainer = styled.div<any>(({ isOpen }) => [
-  tw`w-64 max-h-[200px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden`,
+  tw`w-64 max-h-[240px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden`,
   isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
 ])
-const OptionContainer = tw.div`cursor-pointer p-2 hover:bg-green-100 transition ease-in-out`
+const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
+const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
 const DatePickerInput = ({ placeholder }) => (
   <div className="relative flex group h-10 w-full">
@@ -78,6 +82,51 @@ const ControlComponent = ({ form, name, isLoading, placeholder, ...props }) => (
   </div>
 )
 
+const GuestButton = tw.button`appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-gray-500 text-gray-500 hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50`
+
+const OptionComponent = ({
+  form,
+  name,
+  option,
+}: {
+  form: BookingFormType
+  name: string
+  option: any
+}) => {
+  const onPlusClick = () => {
+    form.setGuestOptionValue(name, option, option.value + 1)
+  }
+
+  const onMinusClick = () => {
+    form.setGuestOptionValue(name, option, option.value - 1)
+  }
+
+  return (
+    <OptionBase className="flex justify-between items-center">
+      <div>
+        <p className="font-title font-bold text-sm text-gray-700">
+          {option.label}
+        </p>
+        <p className="text-gray-500 text-sm">{option.description}</p>
+      </div>
+      <div className="flex justify-center items-center gap-x-2">
+        <GuestButton
+          onClick={onPlusClick}
+          disabled={option.value >= (option.max || 100)}
+        >
+          <FaPlus className="w-3 h-3" />
+        </GuestButton>
+        <p className="font-title font-bold text-sm text-gray-700">
+          {option.value}
+        </p>
+        <GuestButton onClick={onMinusClick} disabled={option.value === 0}>
+          <FaMinus className="w-3 h-3" />
+        </GuestButton>
+      </div>
+    </OptionBase>
+  )
+}
+
 const DatePicker = (props) => (
   <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
 )
@@ -110,7 +159,35 @@ const formSchema: FormSchema = {
     options: { minDate: "today", wrap: true },
   },
   checkOut: { type: "date", focusOnNext: "guests", options: { wrap: true } },
-  guests: { type: "peopleCount", options: { min: 1, max: 10 } },
+  guests: {
+    type: "peopleCount",
+    defaultValue: [
+      {
+        name: "adults",
+        label: "Adults",
+        description: "Ages 13+",
+        value: 1,
+        min: 0,
+        max: 10,
+      },
+      {
+        name: "children",
+        label: "Children",
+        description: "Ages 4-12",
+        value: 0,
+        min: 0,
+        max: 10,
+      },
+      {
+        name: "infants",
+        label: "Infants",
+        description: "Under 4 years old",
+        value: 0,
+        min: 0,
+        max: 10,
+      },
+    ],
+  },
 }
 
 export const BookingForm = () => {
@@ -142,7 +219,7 @@ export const BookingForm = () => {
         <GuestsSelect
           form={form}
           menuContainer={MenuContainer}
-          optionContainer={OptionContainer}
+          optionComponent={OptionComponent}
           controlComponent={ControlComponent}
           controlProps={{ placeholder: "Add guests" }}
           name={"guests"}

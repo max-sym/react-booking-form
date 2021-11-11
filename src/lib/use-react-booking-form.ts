@@ -25,6 +25,7 @@ export type BookingForm = {
   setFieldState: (key: string, state: any) => void
   refs: RefsType
   focusOn: (key?: string) => void
+  setGuestOptionValue: (key: string, option: any, value: any) => void
 }
 
 export type RefsType = {
@@ -81,6 +82,18 @@ export const useReactBookingForm = ({
     setState((field) => ({ ...field, [key]: { ...field[key], ...state } }))
   }, [])
 
+  const setGuestOptionValue = useCallback(
+    (key: string, option: any, value: any) => {
+      const newStateItemValue = [...state[key].value]
+      const optionIndex = newStateItemValue.findIndex(
+        (stateItemValue) => option.name === stateItemValue.name
+      )
+      newStateItemValue[optionIndex].value = value
+      setFieldValue(key, newStateItemValue)
+    },
+    []
+  )
+
   const bookingForm = useMemo<BookingForm>(
     () => ({
       formSchema,
@@ -90,6 +103,7 @@ export const useReactBookingForm = ({
       setFieldState,
       refs,
       focusOn,
+      setGuestOptionValue,
     }),
     [formSchema, state, setState, refs, setFieldValue, focusOn, setFieldState]
   )

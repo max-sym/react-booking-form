@@ -1,4 +1,3 @@
-import { useLocationData } from "./use-location-data"
 import { useMenuInteractions } from "./use-menu-interactions"
 import { Menu } from "./menu"
 import { Portal } from "./portal"
@@ -10,7 +9,7 @@ export type GuestsSelectProps = {
   form: BookingForm
   name: string
   menuContainer: any
-  optionContainer: any
+  optionComponent: any
   controlComponent: any
   controlProps: any
 }
@@ -19,13 +18,13 @@ export const GuestsSelect = ({
   name,
   form,
   menuContainer,
-  optionContainer,
+  optionComponent,
   controlComponent: ControlComponent,
   controlProps,
 }: GuestsSelectProps) => {
   const formStateItem = form?.state?.[name]
 
-  const options = []
+  const options = form.state?.[name]?.value || []
 
   const { onFocus, onBlur, menuContainerRef } = useMenuInteractions({
     form,
@@ -57,9 +56,9 @@ export const GuestsSelect = ({
       <Portal id="react-booking-form-menu-portal">
         <Menu
           options={options}
-          optionContainer={optionContainer}
+          optionComponent={optionComponent}
           menuContainer={menuContainer}
-          isOpen={formStateItem?.isOpen}
+          isOpen={!!formStateItem?.isOpen}
           form={form}
           name={name}
           menuContainerRef={menuContainerRef}

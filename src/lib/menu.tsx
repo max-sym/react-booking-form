@@ -9,11 +9,25 @@ export const Menu = ({
   form,
   name,
   menuContainerRef,
+  optionComponent: OptionComponent,
+}: {
+  menuContainer: React.ComponentType<any>
+  optionContainer?: React.ComponentType<any>
+  options: any
+  isOpen: boolean
+  form: any
+  name: string
+  menuContainerRef: any
+  optionComponent?: React.ComponentType<any>
 }) => {
   const position = useMemo(
     () => form.refs[name]?.current?.getBoundingClientRect?.(),
     [isOpen]
   )
+
+  const RealOptionContainer = useMemo(() => OptionComponent || Option, [
+    OptionComponent,
+  ])
 
   return (
     <MenuContainer
@@ -26,7 +40,7 @@ export const Menu = ({
       ref={menuContainerRef}
     >
       {options.map((option) => (
-        <Option
+        <RealOptionContainer
           form={form}
           name={name}
           option={option}
