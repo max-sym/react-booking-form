@@ -1,4 +1,3 @@
-import React from "react"
 import {
   DateInput,
   FormSchema,
@@ -17,7 +16,9 @@ import { cities } from "./dummy-data/cities"
 import styled from "@emotion/styled/macro"
 
 const Container = tw.div`rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
-const InputCore = tw.input`border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
+const InputCore = tw.input`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
+const ControlCore = tw.div`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer flex items-center`
+const Placeholder = tw.div`text-gray-400`
 const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 flex flex-col justify-center items-center md:border-l pl-2 first:border-l-0`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
@@ -26,7 +27,7 @@ const MainButton = tw.button`appearance-none border-0 w-full h-10 rounded-full f
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500`
 
 const MenuContainer = styled.div<any>(({ isOpen }) => [
-  tw`w-64 h-64 border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-hidden`,
+  tw`w-64 max-h-[200px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden`,
   isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
 ])
 const OptionContainer = tw.div`cursor-pointer p-2 hover:bg-green-100 transition ease-in-out`
@@ -47,6 +48,26 @@ const InputComponent = ({ form, name, isLoading, ...props }) => (
       ref={form.refs[name]}
       {...props}
     />
+    <IconContainer>
+      {isLoading ? (
+        <FaSpinner className="w-4 h-4 animate-spin" />
+      ) : (
+        <FaMapMarkerAlt className="w-4 h-4" />
+      )}
+    </IconContainer>
+  </div>
+)
+
+const ControlComponent = ({ form, name, isLoading, placeholder, ...props }) => (
+  <div className="relative flex group h-10 w-full">
+    <ControlCore
+      className="outline-none focus:outline-none"
+      ref={form.refs[name]}
+      tabIndex={-1}
+      {...props}
+    >
+      <Placeholder>{placeholder}</Placeholder>
+    </ControlCore>
     <IconContainer>
       {isLoading ? (
         <FaSpinner className="w-4 h-4 animate-spin" />
@@ -89,13 +110,7 @@ const formSchema: FormSchema = {
     options: { minDate: "today", wrap: true },
   },
   checkOut: { type: "date", focusOnNext: "guests", options: { wrap: true } },
-  guests: {
-    type: "peopleCount",
-    options: {
-      min: 1,
-      max: 10,
-    },
-  },
+  guests: { type: "peopleCount", options: { min: 1, max: 10 } },
 }
 
 export const BookingForm = () => {
@@ -124,7 +139,14 @@ export const BookingForm = () => {
       </InputContainer>
       <InputContainer>
         <Label>{"Guests"}</Label>
-        <GuestsSelect form={form} placeholder="Add guests" name={"guests"} />
+        <GuestsSelect
+          form={form}
+          menuContainer={MenuContainer}
+          optionContainer={OptionContainer}
+          controlComponent={ControlComponent}
+          controlProps={{ placeholder: "Add guests" }}
+          name={"guests"}
+        />
       </InputContainer>
       <InputContainer>
         <MainButton>

@@ -1,34 +1,70 @@
-import React, { useMemo } from "react"
-import Select from "react-select"
+import { useLocationData } from "./use-location-data"
+import { useMenuInteractions } from "./use-menu-interactions"
+import { Menu } from "./menu"
+import { Portal } from "./portal"
 import { BookingForm } from "./use-react-booking-form"
 
 export type GuestsSelectProps = {
-  quantity?: number
-  className?: string
-  placeholder?: string
+  formatResults?: any
+  debounceDelay?: number
   form: BookingForm
-  components?: any
   name: string
+  menuContainer: any
+  optionContainer: any
+  controlComponent: any
+  controlProps: any
 }
 
 export const GuestsSelect = ({
-  form,
   name,
-  className,
-  components,
-  placeholder = "Guests count",
-  ...props
+  form,
+  menuContainer,
+  optionContainer,
+  controlComponent: ControlComponent,
+  controlProps,
 }: GuestsSelectProps) => {
-  const item = form.formSchema[name]
+  const formStateItem = form?.state?.[name]
 
-  const options = useMemo(
-    () =>
-      [...Array(item.options.max)].map((_v, i) => ({
-        value: i,
-        label: `${i}`,
-      })),
-    [item]
+  const options = []
+
+  const { onFocus, onBlur, menuContainerRef } = useMenuInteractions({
+    form,
+    name,
+  })
+
+  const onChange = (event) => {
+    form.setFieldState(name, { value: event.target.value, isOpen: true })
+  }
+
+  if (!formStateItem) return null
+
+  return (
+    <>
+      <ControlComponent
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onChange={onChange}
+        form={form}
+        name={name}
+        value={formStateItem.value?.label || formStateItem.value || ""}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck="false"
+        type="text"
+        {...controlProps}
+      />
+      <Portal id="react-booking-form-menu-portal">
+        <Menu
+          options={options}
+          optionContainer={optionContainer}
+          menuContainer={menuContainer}
+          isOpen={formStateItem?.isOpen}
+          form={form}
+          name={name}
+          menuContainerRef={menuContainerRef}
+        />
+      </Portal>
+    </>
   )
-
-  return <div />
 }

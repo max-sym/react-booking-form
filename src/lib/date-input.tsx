@@ -1,5 +1,4 @@
 import Flatpickr from "react-flatpickr"
-import React from "react"
 import { BookingForm } from "lib"
 
 type DateInputType = {

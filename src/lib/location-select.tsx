@@ -1,5 +1,5 @@
-import debounce from "debounce-promise"
-import React, { useRef, useState } from "react"
+import { useLocationData } from "./use-location-data"
+import { useMenuInteractions } from "./use-menu-interactions"
 import { Menu } from "./menu"
 import { Portal } from "./portal"
 import { BookingForm } from "./use-react-booking-form"
@@ -25,49 +25,19 @@ export const LocationSelect = ({
   inputComponent: InputComponent,
   inputProps,
 }: LocationSelectProps) => {
-  const [isLoading, setIsLoading] = useState(false)
-
   const formStateItem = form?.state?.[name]
-  const formSchemaItem = form?.formSchema?.[name]
 
-  const [options, setOptions] = useState(
-    formSchemaItem.options.defaultLocationOptions
-  )
+  const { loadOptions, isLoading, options } = useLocationData({
+    debounceDelay,
+    formatResults,
+    name,
+    form,
+  })
 
-  const getPlaces = async (queryString) => {
-    const options = formSchemaItem?.options
-    if (!options?.searchPlace) return
-
-    setIsLoading(true)
-    return await options.searchPlace(queryString).then((results) => {
-      setIsLoading(false)
-      const options = formatResults?.(results) || results
-      setOptions(options)
-    })
-  }
-
-  const loadOptionsDebounce = useRef(
-    debounce(getPlaces, debounceDelay, { leading: false })
-  )
-
-  const loadOptions = useRef((input) => loadOptionsDebounce.current(input))
-
-  const onFocus = () => {
-    form.setFieldState(name, { isOpen: true })
-  }
-
-  const menuContainerRef = useRef<HTMLElement>(null)
-
-  const onBlur = () => {
-    setTimeout(() => {
-      if (menuContainerRef.current?.contains?.(document.activeElement)) {
-        form.refs[name].current.focus()
-        return
-      }
-
-      form.setFieldState(name, { isOpen: false })
-    }, 10)
-  }
+  const { onFocus, onBlur, menuContainerRef } = useMenuInteractions({
+    form,
+    name,
+  })
 
   const onChange = (event) => {
     loadOptions.current(event.target.value)
@@ -93,7 +63,7 @@ export const LocationSelect = ({
         type="text"
         {...inputProps}
       />
-      <Portal id="location-menu-portal">
+      <Portal id="react-booking-form-menu-portal">
         <Menu
           options={options}
           optionContainer={optionContainer}
