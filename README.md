@@ -7,8 +7,6 @@
 
 Flexible React library for creating booking forms such as on hotel, restaurant, transport and such websites with location search, calendar inputs, guest fields and much more.
 
-## Preview
-
 ![Imgur](https://i.imgur.com/JsZdqht.gif)
 
 ## Live example
