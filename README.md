@@ -43,7 +43,7 @@ Then read the example below + schema explanation. Good luck 🚀
 
 <details>
 
-<summary>TypeScript example</summary>
+<summary>TypeScript + TailwindCSS example</summary>
 
 Import core library components:
 ```js
