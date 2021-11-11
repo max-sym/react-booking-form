@@ -83,7 +83,7 @@ const defaultLocationOptions = [
 ]
 ```
 
-Define your form schema:
+Define your form schema \( [view definition](#schema) \):
 
 ```js
 const formSchema: FormSchema = {
@@ -342,6 +342,10 @@ const DatePicker = (props) => (
   
 <details>
   <summary>Schema configuration</summary>
+
+	
+	()[#schema]
+
 
 ## Schema
 		
