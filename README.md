@@ -13,13 +13,16 @@ Customizable React library for creating booking forms such as on hotel, restaura
 - [CodeSandbox playground](https://codesandbox.io/s/react-booking-form-example-9z489)
 - [Storybook example](https://611f9e606d0396003a654e41-zxstavlflj.chromatic.com/?path=/story/example-bookingform--basic)
 
-## Features
-✅ Style agnostic: style your components however you want and just give them callbacks from the library for logic\
+## Features included
+✅ Style agnostic: style your components however you want and just give them callbacks and data from the library\
 ✅ Debounced location search\
-✅ Easily focus on the next elements after selections\
-✅ No dependencies except a very light (and amazing) calendar library [flatpickr](https://github.com/flatpickr/flatpickr)\
-✅ Flexible form schema\
+✅ Focus on the next form fields after selections easily\
+✅ Date calendar also allows choosing time!\
+✅ Make a datetime field not allow to select date prior to another's datetime field value (e.g., so users can't specify check-in date before the check-out date) \
+✅ No dependencies except a very light (and amazing) datetime library [flatpickr](https://github.com/flatpickr/flatpickr)\
 ✅ Guest count selection by person group\
+✅ Allows human readable datetime format (configuration option provided by [flatpickr](https://github.com/flatpickr/flatpickr))\
+✅ Flexible form schema
 
 ### Notes
 - The library styling is very flexible, however the calendar component styling requires including a theme css file from [flatpickr](https://github.com/flatpickr/flatpickr). We made it so you can fully control it by including it yourself or creating your own theme without any dependency on the `react-booking-form`;
@@ -81,9 +84,25 @@ const formSchema: FormSchema = {
   checkIn: {
     type: "date",
     focusOnNext: "checkOut",
-    options: { minDate: "today", wrap: true },
+    options: {
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      wrap: true,
+    },
   },
-  checkOut: { type: "date", focusOnNext: "guests", options: { wrap: true } },
+  checkOut: {
+    type: "date",
+    focusOnNext: "guests",
+    options: {
+      minDateFrom: "checkIn",
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      wrap: true,
+    },
+  },
   guests: {
     type: "peopleCount",
     defaultValue: [
