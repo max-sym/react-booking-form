@@ -1,3 +1,8 @@
+![GitHub last commit](https://img.shields.io/github/last-commit/MaxChu23/react-booking-form)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-booking-form)
+![npm bundle size](https://img.shields.io/bundlephobia/min/react-booking-form)
+![GitHub](https://img.shields.io/github/license/MaxChu23/react-booking-form)
+
 # React Booking Form 🔥
 
 Flexible React library for creating booking forms such as on hotel, restaurant, transport and such websites with location search, calendar inputs, guest fields and much more.
@@ -318,4 +323,3 @@ MIT
 
 ## Support
 - Buy me a cup of coffee https://www.paypal.com/donate?hosted_button_id=HBNP4H89M4FTC
-
