@@ -10,8 +10,8 @@ Flexible React library for creating booking forms such as on hotel, restaurant, 
 ![Imgur](https://i.imgur.com/JsZdqht.gif)
 
 ## Live example
-- [Chromatic storybook example](https://611f9e606d0396003a654e41-zxstavlflj.chromatic.com/?path=/story/example-bookingform--basic)
-- [CodeSandbox playground](https://codesandbox.io/s/optimistic-currying-9z489)
+- [CodeSandbox playground](https://codesandbox.io/s/react-booking-form-example-9z489)
+- [Storybook example](https://611f9e606d0396003a654e41-zxstavlflj.chromatic.com/?path=/story/example-bookingform--basic)
 
 ## Features
 ✅ Style agnostic: style your components however you want and just give them callbacks from the library for logic 💫\
