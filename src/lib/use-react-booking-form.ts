@@ -9,13 +9,25 @@ export type FormSchema = {
   [key: string]: {
     type: "location" | "date" | "datetime" | "peopleCount"
     focusOnNext?: string
-    defaultValue?: any
+    defaultValue?: GuestOption[] | any
     options?: {
       defaultLocationOptions?: LocationItem[]
       searchPlace?: (queryString: string) => Promise<any>
     } & any
   }
 }
+
+export type GuestOption = {
+  label: string
+  value: number
+  totalCount: number
+  name: string
+  min: number
+  max: number
+}
+
+const getGuestTotalCount = (guestOptions: GuestOption[]) =>
+  guestOptions.reduce((acc, guestOption) => acc + guestOption.value, 0)
 
 export type BookingForm = {
   formSchema: FormSchema
@@ -33,7 +45,12 @@ export type RefsType = {
 }
 
 export type FormState = {
-  [key: string]: { type: string; value: any; isOpen?: boolean }
+  [key: string]: {
+    type: string
+    value: GuestOption[] | any
+    isOpen?: boolean
+    totalCount?: number
+  }
 }
 
 export const useReactBookingForm = ({
@@ -45,7 +62,14 @@ export const useReactBookingForm = ({
     const result = {}
     Object.keys(formSchema).forEach((key) => {
       const field = formSchema[key]
-      result[key] = { type: field.type, value: field.defaultValue }
+      result[key] = {
+        type: field.type,
+        value: field.defaultValue,
+        totalCount:
+          field.type === "peopleCount"
+            ? getGuestTotalCount(field.defaultValue)
+            : undefined,
+      }
     })
     return result
   })
@@ -89,7 +113,10 @@ export const useReactBookingForm = ({
         (stateItemValue) => option.name === stateItemValue.name
       )
       newStateItemValue[optionIndex].value = value
-      setFieldValue(key, newStateItemValue)
+      setFieldState(key, {
+        value: newStateItemValue,
+        totalCount: getGuestTotalCount(newStateItemValue),
+      })
     },
     []
   )

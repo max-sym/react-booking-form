@@ -14,6 +14,7 @@ import {
   FaSpinner,
   FaPlus,
   FaMinus,
+  FaUser,
 } from "react-icons/fa"
 import { cities } from "./dummy-data/cities"
 import styled from "@emotion/styled/macro"
@@ -21,7 +22,7 @@ import styled from "@emotion/styled/macro"
 const Container = tw.div`rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const InputCore = tw.input`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const ControlCore = tw.div`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer flex items-center`
-const Placeholder = tw.div`text-gray-400`
+const Placeholder = tw.div`text-gray-400 select-none`
 const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 flex flex-col justify-center items-center md:border-l pl-2 first:border-l-0`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
@@ -62,25 +63,34 @@ const InputComponent = ({ form, name, isLoading, ...props }) => (
   </div>
 )
 
-const ControlComponent = ({ form, name, isLoading, placeholder, ...props }) => (
-  <div className="relative flex group h-10 w-full">
-    <ControlCore
-      className="outline-none focus:outline-none"
-      ref={form.refs[name]}
-      tabIndex={-1}
-      {...props}
-    >
-      <Placeholder>{placeholder}</Placeholder>
-    </ControlCore>
-    <IconContainer>
-      {isLoading ? (
-        <FaSpinner className="w-4 h-4 animate-spin" />
-      ) : (
-        <FaMapMarkerAlt className="w-4 h-4" />
-      )}
-    </IconContainer>
-  </div>
-)
+const ControlComponent = ({
+  form,
+  name,
+  placeholder,
+  ...props
+}: {
+  form: BookingFormType
+  name: string
+  placeholder?: string
+}) => {
+  const count = form.state[name].totalCount
+  return (
+    <div className="relative flex group h-10 w-full">
+      <ControlCore
+        className="outline-none focus:outline-none"
+        ref={form.refs[name]}
+        tabIndex={-1}
+        {...props}
+      >
+        <p>{count ? `${count} guest${count > 1 ? "s" : ""}` : ""} </p>
+        <Placeholder>{count ? "" : placeholder}</Placeholder>
+      </ControlCore>
+      <IconContainer>
+        <FaUser className="w-4 h-4" />
+      </IconContainer>
+    </div>
+  )
+}
 
 const GuestButton = tw.button`appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-gray-500 text-gray-500 hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50`
 

@@ -12,7 +12,7 @@ export default {
   },
 } as ComponentMeta<typeof BookingForm>
 
-const Template: ComponentStory<typeof BookingForm> = (args) => (
+const Template: ComponentStory<typeof BookingForm> = () => (
   <div className="">
     <div className="w-full h-96 relative">
       <img
@@ -30,7 +30,7 @@ const Template: ComponentStory<typeof BookingForm> = (args) => (
       </h3>
     </div>
     <div className="absolute top-0 left-0 right-0 mt-64 mx-8 z-10">
-      <BookingForm {...args} />
+      <BookingForm />
     </div>
   </div>
 )
