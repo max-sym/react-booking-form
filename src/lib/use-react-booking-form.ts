@@ -89,6 +89,19 @@ export const useReactBookingForm = ({
     (name?: string) => {
       if (!name) return
 
+      if (state[name].type === "date") {
+        const child = refs[name].current?.querySelector("[data-input]")
+        /**
+         * This is created to avoid not focusing on the input when the datepicker has altInput + altFormat prop
+         * The prop makes it so that the input is not accessible and is visually replaced by another input.
+         */
+        if (child?.getAttribute("type") === "hidden") {
+          // @ts-ignore
+          refs[name].current?.querySelector(".form-control.input")?.focus()
+        }
+        return
+      }
+
       if (!refs[name].current?.focus) return
       refs[name].current?.focus?.()
     },

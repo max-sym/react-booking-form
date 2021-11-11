@@ -38,7 +38,7 @@ const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
 const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
 const DatePickerInput = ({ placeholder, inputRef }) => (
-  <div className="relative flex group h-10 w-full">
+  <div className="relative flex group h-10 w-full" ref={inputRef}>
     <InputCore
       ref={inputRef}
       type="input"
@@ -171,9 +171,24 @@ const formSchema: FormSchema = {
   checkIn: {
     type: "date",
     focusOnNext: "checkOut",
-    options: { minDate: "today", wrap: true },
+    options: {
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      wrap: true,
+    },
   },
-  checkOut: { type: "date", focusOnNext: "guests", options: { wrap: true } },
+  checkOut: {
+    type: "date",
+    focusOnNext: "guests",
+    options: {
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      wrap: true,
+    },
+  },
   guests: {
     type: "peopleCount",
     defaultValue: [

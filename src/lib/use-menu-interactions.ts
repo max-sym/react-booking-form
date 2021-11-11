@@ -8,7 +8,7 @@ export const useMenuInteractions = ({
   form: BookingForm
   name: string
 }) => {
-  const menuContainerRef = useRef<HTMLElement>(null)
+  const menuContainerRef = useRef<HTMLDivElement>(null)
 
   const onFocus = () => {
     form.setFieldState(name, { isOpen: true })
