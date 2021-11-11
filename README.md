@@ -14,7 +14,7 @@ Flexible React library for creating booking forms such as on hotel, restaurant, 
 - [Storybook example](https://611f9e606d0396003a654e41-zxstavlflj.chromatic.com/?path=/story/example-bookingform--basic)
 
 ## Features
-✅ Style agnostic: style your components however you want and just give them callbacks from the library for logic 💫\
+✅ Style agnostic: style your components however you want and just give them callbacks from the library for logic\
 ✅ Debounced location search\
 ✅ Easily focus on the next elements after selections\
 ✅ No dependencies except a very light (and amazing) calendar library [flatpickr](https://github.com/flatpickr/flatpickr)\
