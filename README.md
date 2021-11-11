@@ -53,9 +53,9 @@ import {
 import "flatpickr/dist/themes/material_green.css"
 ```
 
-Define your form schema:
-```js
+Prepare some helper functions and city data for the location selector:
 
+```js
 // This is mocking a call to API that would return location search results
 // whenever user types in the location input field.
 const searchPlace = async (query) =>
@@ -74,7 +74,11 @@ const defaultLocationOptions = [
   { value: "barcelona", label: "Barcelona" },
   { value: "los-angeles", label: "Los Angeles" },
 ]
+```
 
+Define your form schema:
+
+```js
 const formSchema: FormSchema = {
   location: {
     type: "location",
