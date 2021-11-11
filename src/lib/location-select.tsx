@@ -1,15 +1,18 @@
-import debounce from "debounce-promise"
-import React, { useRef, useState } from "react"
-import AsyncSelect from "react-select/async"
+import { useLocationData } from "./use-location-data"
+import { useMenuInteractions } from "./use-menu-interactions"
+import { Menu } from "./menu"
+import { Portal } from "./portal"
 import { BookingForm } from "./use-react-booking-form"
 
-export type LocationSelectProps = AsyncSelect & {
-  onLocationChange?: any
-  searchPlace?: any
+export type LocationSelectProps = {
   formatResults?: any
   debounceDelay?: number
   form: BookingForm
   name: string
+  menuContainer: any
+  optionContainer: any
+  inputComponent: any
+  inputProps: Partial<HTMLInputElement>
 }
 
 export const LocationSelect = ({
@@ -17,47 +20,60 @@ export const LocationSelect = ({
   debounceDelay = 500,
   name,
   form,
-  ...props
+  menuContainer,
+  optionContainer,
+  inputComponent: InputComponent,
+  inputProps,
 }: LocationSelectProps) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const formStateItem = form?.state?.[name]
 
-  const formItem = form?.data?.[name]
+  const { loadOptions, isLoading, options } = useLocationData({
+    debounceDelay,
+    formatResults,
+    name,
+    form,
+  })
 
-  const getPlaces = async (queryString) => {
-    const options = formItem?.options
-    if (!options?.searchPlace) return
+  const { onFocus, onBlur, menuContainerRef } = useMenuInteractions({
+    form,
+    name,
+  })
 
-    setIsLoading(true)
-    return await options.searchPlace(queryString).then((results) => {
-      setIsLoading(false)
-      return formatResults?.(results) || results
-    })
+  const onChange = (event) => {
+    loadOptions.current(event.target.value)
+    form.setFieldState(name, { value: event.target.value, isOpen: true })
   }
 
-  const onChange = (value, { action }) => {
-    if (action !== "select-option") return
-
-    form.setFieldValue(name, value)
-    form.focusOn(formItem.focusOnNext)
-  }
-
-  const loadOptionsDebounce = useRef(
-    debounce(getPlaces, debounceDelay, { leading: false })
-  )
-
-  const loadOptions = useRef((input) => loadOptionsDebounce.current(input))
-
-  if (!formItem) return null
+  if (!formStateItem) return null
 
   return (
-    <AsyncSelect
-      isLoading={isLoading}
-      loadOptions={loadOptions.current}
-      onChange={onChange}
-      ref={form.refs[name]}
-      openMenuOnFocus
-      defaultOptions={formItem?.options?.defaultLocationOptions}
-      {...props}
-    />
+    <>
+      <InputComponent
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onChange={onChange}
+        form={form}
+        name={name}
+        value={formStateItem.value?.label || formStateItem.value || ""}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck="false"
+        isLoading={isLoading}
+        type="text"
+        {...inputProps}
+      />
+      <Portal id="react-booking-form-menu-portal">
+        <Menu
+          options={options}
+          optionContainer={optionContainer}
+          menuContainer={menuContainer}
+          isOpen={!!formStateItem?.isOpen}
+          form={form}
+          name={name}
+          menuContainerRef={menuContainerRef}
+        />
+      </Portal>
+    </>
   )
 }
