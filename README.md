@@ -45,6 +45,9 @@ import {
   useReactBookingForm,
   BookingForm as BookingFormType,
 } from "react-booking-form"
+
+// This is needed for calendar styling. Read more on flatpickr website
+import "flatpickr/dist/themes/material_green.css"
 ```
 
 Define your form schema:
