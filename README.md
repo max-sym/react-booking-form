@@ -491,7 +491,7 @@ The `form` that's returned in the example above is an object that can be used to
 
 This is the `form` type:
 
-```
+```ts
 export type BookingForm = {
   /**
    * Form schema provided by the user.
@@ -532,7 +532,7 @@ export type BookingForm = {
 
 ## Form state object
 
-```js
+```ts
 export type FormState = {
   [key: string]: {
     type: FieldType
