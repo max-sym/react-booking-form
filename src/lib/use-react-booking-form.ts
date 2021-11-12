@@ -7,9 +7,11 @@ export type LocationOption = {
 
 export type FieldValue = LocationOption | GuestOption[] | string
 
+export type FieldType = "location" | "date" | "datetime" | "peopleCount"
+
 export type FormSchema = {
   [key: string]: {
-    type: "location" | "date" | "datetime" | "peopleCount"
+    type: FieldType
     focusOnNext?: string
     defaultValue?: FieldValue
     options?: {
@@ -34,13 +36,39 @@ const getGuestTotalCount = (guestOptions: GuestOption[]) =>
   guestOptions.reduce((acc, guestOption) => acc + guestOption.value, 0)
 
 export type BookingForm = {
+  /**
+   * Form schema provided by the user.
+   */
   formSchema: FormSchema
+  /**
+   * Current form state.
+   */
   state: FormState
   setState: (state: FormState) => void
+  /**
+   * Helper that sets the particular field value in the form.
+   */
   setFieldValue: (key: string, value: any) => void
+  /**
+   * Helper that sets the particular field state in the form.
+   */
   setFieldState: (key: string, state: any) => void
+  /**
+   * An array of references to the form fields.
+   * This can be used to focus on a particular field and do other relevant actions.
+   */
   refs: RefsType
+  /**
+   * Helper that allows to focus on a particular field just by passing field key to it.
+   */
   focusOn: (key?: string) => void
+  /**
+   * This is a helper that allows to change a particular option item state.
+   * For example, if you want to increment the number of "adults", you can use this helper as:
+   * ```
+   * form.setGuestOptionValue(name, option, option.value + 1)
+   * ```
+   */
   setGuestOptionValue: (key: string, option: any, value: any) => void
 }
 
@@ -50,9 +78,15 @@ export type RefsType = {
 
 export type FormState = {
   [key: string]: {
-    type: string
+    type: FieldType
     value: FieldValue
+    /**
+     * Used for menus in location and guest selector.
+     */
     isOpen?: boolean
+    /**
+     * Used to know total number of guests in guest selector.
+     */
     totalCount?: number
   }
 }
