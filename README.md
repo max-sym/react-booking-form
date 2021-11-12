@@ -63,12 +63,16 @@ import "flatpickr/dist/themes/material_green.css"
 Prepare some helper functions and city data for the location selector:
 
 ```js
+// cities is an array of strings such as ["New York", "Alabama", ...]
+import { cities } from "./dummy-data/cities"
+
 // This is mocking a call to API that would return location search results
-// whenever user types in the location input field.
+// whenever user types into the location input field.
 const searchPlace = async (query) =>
   new Promise((resolve, _reject) => {
     setTimeout(() => resolve(filterAndMapCiies(query)), 600)
   })
+
 // This is what might happen on the backend in real-life application: it would search for the city and return the results in correct format `{value: string, label: string}`.
 const filterAndMapCiies = (query) =>
   cities
@@ -96,6 +100,7 @@ const formSchema: FormSchema = {
     type: "date",
     focusOnNext: "checkOut",
     options: {
+	// These are entirely flatpickr options
       altInput: true,
       altFormat: "M j, Y",
       dateFormat: "Y-m-d",
@@ -107,6 +112,7 @@ const formSchema: FormSchema = {
     type: "date",
     focusOnNext: "guests",
     options: {
+	// These are entirely flatpickr options
       minDateFrom: "checkIn",
       altInput: true,
       altFormat: "M j, Y",
@@ -197,7 +203,20 @@ export const BookingForm = () => {
 }
 ```
 
+Now style your custom components:
+
 ```jsx
+import tw from "twin.macro"
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaSearch,
+  FaSpinner,
+  FaPlus,
+  FaMinus,
+  FaUser,
+} from "react-icons/fa"
+
 // Form main container that wraps everything.
 const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 // Styled input component for location and datetime picker main input fields.
@@ -376,4 +395,5 @@ Whenever finished, create a PR on a separate branch for review.
 MIT
 
 ## Support
-- Buy me a cup of coffee https://www.paypal.com/donate?hosted_button_id=HBNP4H89M4FTC
+- [Buy me a cup of coffee](https://www.paypal.com/donate?hosted_button_id=HBNP4H89M4FTC)
+
