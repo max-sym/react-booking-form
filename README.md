@@ -362,8 +362,216 @@ const DatePicker = (props) => (
 <details>
   <summary>Schema configuration</summary>
 
+## Basic
+
+This is an example of schema:
+
+```js
+const formSchema: FormSchema = {
+  location: {
+    type: "location",
+    focusOnNext: "checkIn",
+    options: { defaultLocationOptions, searchPlace },
+  },
+  checkIn: {
+    type: "date",
+    focusOnNext: "checkOut",
+    options: {
+	// These are entirely flatpickr options
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      wrap: true,
+    },
+  },
+  checkOut: {
+    type: "date",
+    focusOnNext: "guests",
+    options: {
+	// These are entirely flatpickr options
+      minDateFrom: "checkIn",
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      wrap: true,
+    },
+  },
+  guests: {
+    type: "peopleCount",
+    defaultValue: [
+      {
+        name: "adults",
+        label: "Adults",
+        description: "Ages 13+",
+        value: 1,
+        min: 0,
+        max: 10,
+      },
+      {
+        name: "children",
+        label: "Children",
+        description: "Ages 4-12",
+        value: 0,
+        min: 0,
+        max: 10,
+      },
+      {
+        name: "infants",
+        label: "Infants",
+        description: "Under 4 years old",
+        value: 0,
+        min: 0,
+        max: 10,
+      },
+    ],
+  },
+}
+```
+
+It should be used by `useReactBookingForm` as:
+
+```js
+const form = useReactBookingForm({ formSchema })
+```
+
+And later the form can be passed down to the form as:
+
+```jsx
+export const BookingForm = () => {
+  const form = useReactBookingForm({ formSchema })
+
+  return (
+    <Container>
+      <InputContainer>
+        <Label>{"Location"}</Label>
+        <LocationSelect
+          form={form}
+          menuContainer={MenuContainer}
+          optionContainer={OptionContainer}
+          inputComponent={InputComponent}
+          name="location"
+          inputProps={{ placeholder: "Where are you going?" }}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Label>{"Check in"}</Label>
+        <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
+      </InputContainer>
+      <InputContainer>
+        <Label>{"Check out"}</Label>
+        <DatePicker placeholder="Add date" form={form} name={"checkOut"} />
+      </InputContainer>
+      <InputContainer>
+        <Label>{"Guests"}</Label>
+        <GuestsSelect
+          form={form}
+          menuContainer={MenuContainer}
+          optionComponent={OptionComponent}
+          controlComponent={ControlComponent}
+          controlProps={{ placeholder: "Add guests" }}
+          name={"guests"}
+        />
+      </InputContainer>
+      <InputContainer>
+        <MainButton>
+          <FaSearch className="text-white w-3 h-3" />
+          <ButtonText>{"Search"}</ButtonText>
+        </MainButton>
+      </InputContainer>
+    </Container>
+  )
+}
+```
+
+## Form object
 	
-## Schema
+The `form` that's returned in the example above is an object that can be used to read current form state
+	as well as call different callbacks on form input fields and much more.
+
+This is the `form` type:
+
+```
+export type BookingForm = {
+  /**
+   * Form schema provided by the user.
+   */
+  formSchema: FormSchema
+  /**
+   * Current form state.
+   */
+  state: FormState
+  setState: (state: FormState) => void
+  /**
+   * Helper that sets the particular field value in the form.
+   */
+  setFieldValue: (key: string, value: any) => void
+  /**
+   * Helper that sets the particular field state in the form.
+   */
+  setFieldState: (key: string, state: any) => void
+  /**
+   * An array of references to the form fields.
+   * This can be used to focus on a particular field and do other relevant actions.
+   */
+  refs: RefsType
+  /**
+   * Helper that allows to focus on a particular field just by passing field key to it.
+   */
+  focusOn: (key?: string) => void
+  /**
+   * This is a helper that allows to change a particular option item state.
+   * For example, if you want to increment the number of "adults", you can use this helper as:
+   * ```
+   * form.setGuestOptionValue(name, option, option.value + 1)
+   * ```
+   */
+  setGuestOptionValue: (key: string, option: any, value: any) => void
+}
+```
+
+## Form state object
+
+```js
+export type FormState = {
+  [key: string]: {
+    type: FieldType
+    value: FieldValue
+    /**
+     * Used for menus in location and guest selector.
+     */
+    isOpen?: boolean
+    /**
+     * Used to know total number of guests in guest selector.
+     */
+    totalCount?: number
+  }
+}
+```
+
+The form state object can be used to extract relevant data from the form when submitting the form.\
+For example:
+
+```jsx
+
+export const BookingForm = () => {
+  const form = useReactBookingForm({ formSchema })
+
+  const onSubmit = () => {
+    submitToAPI(form.state)
+  }
+
+  return (
+    <Container>
+      {/*... Here are your form input fields nicely styled ...*/}
+      <SubmitButton onClick={onSubmit}>{"Search"}</SubmitButton>
+    </Container>
+  )
+}
+
+```
+	
+## Schema object
 		
 | Name         	| Type                                        	| Required 	| Description                                                                                                                                                                                          	| Example                                                                                                                          	|
 |--------------	|---------------------------------------------	|----------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|----------------------------------------------------------------------------------------------------------------------------------	|
