@@ -38,8 +38,8 @@ yarn:
 
 ## Usage
 
-To quickly catch up go to codesandbox playground first.\
-Then read the example below + schema explanation. Good luck 🚀
+To quickly catch up go to the CodeSandbox playground first.\
+Then read the example below + configuration docs. Good luck 🚀
 
 <details>
 
@@ -360,7 +360,7 @@ const DatePicker = (props) => (
 </details>
   
 <details>
-  <summary>Schema configuration</summary>
+  <summary>Configuration</summary>
 
 ## Basic
 
