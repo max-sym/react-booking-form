@@ -39,8 +39,8 @@ const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
 const DatePickerInput = ({ placeholder, inputRef }) => (
   <div className="relative flex group h-10 w-full" ref={inputRef}>
-    <InputCore
-      ref={inputRef}
+    <input
+      className="appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer"
       type="input"
       data-input
       placeholder={placeholder}
