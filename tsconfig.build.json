@@ -10,14 +10,15 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
+    "emitDeclarationOnly": true,
+    "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "baseUrl": "src",
     "jsx": "react-jsx",
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["src"]
+  "include": ["src/lib"]
 }
