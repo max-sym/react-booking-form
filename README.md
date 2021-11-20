@@ -247,8 +247,8 @@ const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
 const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
 // That will be shown as a date selector input on the form
-const DatePickerInput = ({ placeholder }) => (
-  <div className="relative flex group h-10 w-full">
+const DatePickerInput = ({ placeholder, inputRef }) => (
+  <div className="relative flex group h-10 w-full" ref={inputRef} >
     <InputCore type="input" data-input placeholder={placeholder} />
     <IconContainer title="toggle" data-toggle>
       <FaCalendarAlt className="w-4 h-4" />
@@ -360,7 +360,7 @@ const DatePicker = (props) => (
 </details>
   
 <details>
-  <summary>Configuration</summary>
+  <summary>Documentation</summary>
 
 ## Basic
 
