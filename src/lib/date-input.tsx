@@ -27,12 +27,10 @@ export const DateInput = ({
   const options = useMemo(() => {
     const minDateFrom = item?.options?.minDateFrom
     if (!minDateFrom) return { ...item.options }
+
     const minDate = minDateFrom ? form.state[minDateFrom].value?.[0] : null
 
-    return {
-      ...item.options,
-      minDate: minDate || undefined,
-    }
+    return { ...item.options, minDate: minDate || undefined }
   }, [form.state])
 
   return (
