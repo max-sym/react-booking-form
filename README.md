@@ -42,10 +42,10 @@ To quickly catch up go to the CodeSandbox playground first.\
 Then read the example below + configuration docs. Good luck 🚀
 
 <details>
+<summary> 👉 TypeScript + TailwindCSS example</summary>
 
-<summary>TypeScript + TailwindCSS example</summary>
+### Import the library:
 
-Import core library components:
 ```js
 import {
   DateInput,
@@ -55,12 +55,14 @@ import {
   useReactBookingForm,
   BookingForm as BookingFormType,
 } from "react-booking-form"
-
-// This is needed for calendar styling. Read more on flatpickr website
 import "flatpickr/dist/themes/material_green.css"
 ```
+	
+Note: You can import other CSS themes for calendar (flatpickr import above ^) or create your own. Read more on flatpickr themes [here](https://flatpickr.js.org/themes/)
 
-Prepare some helper functions and city data for the location selector:
+### Prepare some helper functions:
+
+Here's some helpers that represent something similar to how we would fetch city data in the real-world application for the location selector:
 
 ```js
 // cities is an array of strings such as ["New York", "Alabama", ...]
@@ -87,7 +89,7 @@ const defaultLocationOptions = [
 ]
 ```
 
-Define your form schema:
+### Define your form schema:
 
 ```js
 const formSchema: FormSchema = {
@@ -152,9 +154,9 @@ const formSchema: FormSchema = {
 }
 ```
 
-Create your booking form JSX. The form would include some of the components that we imported
-previously from  the `react-booking-form` and your own components. Here's the form JSX and below
-are the components used (styled by TailwindCSS + twin.macro, but you can use anything for that).
+### Create your booking form JSX
+
+The form would include some of the components that we imported previously from the `react-booking-form` and your own components:
 
 ```jsx
 export const BookingForm = () => {
@@ -203,7 +205,9 @@ export const BookingForm = () => {
 }
 ```
 
-Now style your custom components:
+### Styled components
+	
+Below are our own custom components (styled by TailwindCSS + twin.macro, but you can use anything for styling).
 
 ```jsx
 import tw from "twin.macro"
@@ -246,7 +250,7 @@ const MenuContainer = styled.div<any>(({ isOpen }) => [
 const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
 const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
-// That will be shown as a date selector input on the form
+// That will be shown as a date selector input on the form. Make sure you pass input ref to the enclosing div, otherwise it won't be able to focus on the input!
 const DatePickerInput = ({ placeholder, inputRef }) => (
   <div className="relative flex group h-10 w-full" ref={inputRef} >
     <InputCore type="input" data-input placeholder={placeholder} />
@@ -360,11 +364,11 @@ const DatePicker = (props) => (
 </details>
   
 <details>
-  <summary>Documentation</summary>
+  <summary> 👉 Documentation</summary>
 
 ## Basic
 
-This is an example of schema:
+Here's the form schema object. This is our main configuration:
 
 ```js
 const formSchema: FormSchema = {
