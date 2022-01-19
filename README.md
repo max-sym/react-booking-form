@@ -208,6 +208,324 @@ export const BookingForm = () => {
 
 ### Styled components
 	
+Below are our own custom components (styled by TailwindCSS but you can use anything for styling).
+
+```jsx
+const InputCore = React.forwardRef((props, ref) => (
+  <input
+    {...props}
+    ref={ref}
+    className="appearance-none border rounded-full w-full outline-none focus:outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer bg-transparent text-white"
+  />
+))
+
+const InputContainer = ({ children, ...props }) => (
+  <div
+    className="relative w-full md:w-1/3 flex flex-col justify-center items-center pl-2"
+    {...props}
+  >
+    {children}
+  </div>
+)
+
+const Label = ({ children }) => (
+  <div className="text-sm w-full font-bold mb-1 text-white">{children}</div>
+)
+
+const GuestButton = ({ children, ...props }) => (
+  <button
+    className="appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-white text-white hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50"
+    {...props}
+  >
+    {children}
+  </button>
+)
+
+const MenuContainer = React.forwardRef(
+  ({ children, style, isOpen, ...props }, ref) => (
+    <div
+      className={`w-64 border z-10 mt-20 transform transition ease-in-out bg-black bg-opacity-40 rounded-3xl overflow-y-auto overflow-x-hidden backdrop-filter backdrop-blur
+			${isOpen ? "opacity-100" : "opacity-0 -translate-y-4 pointer-events-none"}
+		`}
+      style={{
+        ...style,
+        maxHeight: "240px",
+      }}
+      {...props}
+      ref={ref}
+    >
+      {children}
+    </div>
+  ),
+)
+
+const OptionContainer = ({ children, ...props }) => (
+  <div
+    className="transition ease-in-out relative py-2 px-4 hover:text-green-500 text-white cursor-pointer"
+    {...props}
+  >
+    {children}
+  </div>
+)
+
+const DatePickerInput = ({ placeholder, inputRef }) => (
+  <div className="relative flex group h-10 w-full" ref={inputRef}>
+    <InputCore type="input" data-input placeholder={placeholder} />
+  </div>
+)
+
+const InputComponent = ({ form, name, isLoading, ...props }) => (
+  <div className="relative flex group h-10 w-full">
+    <InputCore ref={form.refs[name]} {...props} />
+  </div>
+)
+
+const ControlComponent = ({
+  form,
+  name,
+  placeholder,
+  ...props
+}: {
+  form: BookingFormType
+  name: string
+  placeholder?: string
+}) => {
+  const count = form.state[name].totalCount
+  return (
+    <div className="relative flex group h-10 w-full">
+      <div
+        className="outline-none focus:outline-none appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer flex items-center"
+        ref={form.refs[name]}
+        tabIndex={-1}
+        {...props}
+      >
+        <p className="text-white">
+          {count ? `${count} guest${count > 1 ? "s" : ""}` : ""}{" "}
+        </p>
+        <div className="text-gray-400 select-none">
+          {count ? "" : placeholder}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const OptionComponent = ({
+  form,
+  name,
+  option,
+}: {
+  form: BookingFormType
+  name: string
+  option: any
+}) => {
+  const onPlusClick = () => {
+    form.setGuestOptionValue(name, option, option.value + 1)
+  }
+
+  const onMinusClick = () => {
+    form.setGuestOptionValue(name, option, option.value - 1)
+  }
+
+  return (
+    <div className="flex justify-between items-center transition ease-in-out relative py-2 px-4">
+      <div>
+        <p className="font-title font-bold text-sm text-white">
+          {option.label}
+        </p>
+        <p className="text-gray-300 text-sm">{option.description}</p>
+      </div>
+      <div className="flex justify-center items-center gap-x-2">
+        <GuestButton
+          onClick={onPlusClick}
+          disabled={option.value >= (option.max || 100)}
+        >
+          <FaPlus className="w-3 h-3" />
+        </GuestButton>
+        <p className="font-title font-bold text-sm text-white">
+          {option.value}
+        </p>
+        <GuestButton onClick={onMinusClick} disabled={option.value === 0}>
+          <FaMinus className="w-3 h-3" />
+        </GuestButton>
+      </div>
+    </div>
+  )
+}
+
+const DatePicker = (props) => (
+  <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
+)
+```
+	
+</details>
+
+<details>
+<summary> 👉 TypeScript + TailwindCSS example (with <a href="https://github.com/ben-rogerson/twin.macro">twin.macro</a>)</summary>
+
+### Import the library:
+
+```js
+import {
+  DateInput,
+  FormSchema,
+  GuestsSelect,
+  LocationSelect,
+  useReactBookingForm,
+  BookingForm as BookingFormType,
+} from "react-booking-form"
+import "flatpickr/dist/themes/material_green.css"
+```
+	
+Note: You can import other CSS themes for calendar (flatpickr import above ^) or create your own. Read more on flatpickr themes [here](https://flatpickr.js.org/themes/)
+
+### Prepare some helper functions:
+
+Here's some helpers that represent something similar to how we would fetch city data in the real-world application for the location selector:
+
+```js
+// cities is an array of strings such as ["New York", "Alabama", ...]
+import { cities } from "./dummy-data/cities"
+
+// This is mocking a call to API that would return location search results
+// whenever user types into the location input field.
+const searchPlace = async (query) =>
+  new Promise((resolve, _reject) => {
+    setTimeout(() => resolve(filterAndMapCiies(query)), 600)
+  })
+
+// This is what might happen on the backend in real-life application: it would search for the city and return the results in correct format `{value: string, label: string}`.
+const filterAndMapCiies = (query) =>
+  cities
+    .filter((city) => city.toLowerCase().includes(query.toLowerCase()))
+    .map((city) => ({ value: city.toLowerCase(), label: city }))
+
+// This is intended to be loaded into the location input field by default
+const defaultLocationOptions = [
+  { value: "new-york", label: "New York" },
+  { value: "barcelona", label: "Barcelona" },
+  { value: "los-angeles", label: "Los Angeles" },
+]
+```
+
+### Define your form schema:
+
+```js
+const formSchema: FormSchema = {
+  location: {
+    type: "location",
+    focusOnNext: "checkIn",
+    options: { defaultLocationOptions, searchPlace },
+  },
+  checkIn: {
+    type: "date",
+    focusOnNext: "checkOut",
+    options: {
+	// These are entirely flatpickr options
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      wrap: true,
+    },
+  },
+  checkOut: {
+    type: "date",
+    focusOnNext: "guests",
+    options: {
+	// These are entirely flatpickr options
+      minDateFrom: "checkIn",
+      altInput: true,
+      altFormat: "M j, Y",
+      dateFormat: "Y-m-d",
+      wrap: true,
+    },
+  },
+  guests: {
+    type: "peopleCount",
+    defaultValue: [
+      {
+        name: "adults",
+        label: "Adults",
+        description: "Ages 13+",
+        value: 1,
+        min: 0,
+        max: 10,
+      },
+      {
+        name: "children",
+        label: "Children",
+        description: "Ages 4-12",
+        value: 0,
+        min: 0,
+        max: 10,
+      },
+      {
+        name: "infants",
+        label: "Infants",
+        description: "Under 4 years old",
+        value: 0,
+        min: 0,
+        max: 10,
+      },
+    ],
+  },
+}
+```
+
+### Create your booking form JSX
+
+The form would include some of the components that we imported previously from the `react-booking-form` and your own components:
+
+```jsx
+export const BookingForm = () => {
+  const form = useReactBookingForm({ formSchema })
+
+  return (
+    <Container>
+      <InputContainer>
+        <Label>{"Location"}</Label>
+        <LocationSelect
+          form={form}
+          menuContainer={MenuContainer}
+          optionContainer={OptionContainer}
+          inputComponent={InputComponent}
+          name="location"
+          inputProps={{ placeholder: "Where are you going?" }}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Label>{"Check in"}</Label>
+        <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
+      </InputContainer>
+      <InputContainer>
+        <Label>{"Check out"}</Label>
+        <DatePicker placeholder="Add date" form={form} name={"checkOut"} />
+      </InputContainer>
+      <InputContainer>
+        <Label>{"Guests"}</Label>
+        <GuestsSelect
+          form={form}
+          menuContainer={MenuContainer}
+          optionComponent={OptionComponent}
+          controlComponent={ControlComponent}
+          controlProps={{ placeholder: "Add guests" }}
+          name={"guests"}
+        />
+      </InputContainer>
+      <InputContainer>
+        <MainButton>
+          <FaSearch/>
+          <ButtonText>{"Search"}</ButtonText>
+        </MainButton>
+      </InputContainer>
+    </Container>
+  )
+}
+```
+
+### Styled components
+	
 Below are our own custom components (styled by TailwindCSS + twin.macro, but you can use anything for styling).
 
 ```jsx
