@@ -6,7 +6,7 @@ import {
   useReactBookingForm,
   BookingForm as BookingFormType,
 } from "../lib"
-import tw from "twin.macro"
+import tw from "tailwind-styled-components"
 import {
   FaMapMarkerAlt,
   FaCalendarAlt,
@@ -17,7 +17,6 @@ import {
   FaUser,
 } from "react-icons/fa"
 import { cities } from "./dummy-data/cities"
-import styled from "@emotion/styled/macro"
 
 const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const InputCore = tw.input`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
@@ -30,17 +29,19 @@ const ButtonText = tw.div`ml-2`
 const MainButton = tw.button`appearance-none mt-5 border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
 const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500 group-hover:text-green-400 transition`
 
-const MenuContainer = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
-  tw`w-64 max-h-[240px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden`,
-  isOpen ? tw`opacity-100` : tw`opacity-0 -translate-y-4 pointer-events-none`,
-])
+const MenuContainer = tw.div<{ isOpen: boolean }>`
+  w-64 max-h-[240px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden
+  ${({ isOpen }) =>
+    isOpen ? "opacity-100" : "opacity-0 -translate-y-4 pointer-events-none"}
+`
+
 const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
 const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
 
 const DatePickerInput = ({ placeholder, inputRef }) => (
-  <div className="relative flex group h-10 w-full" ref={inputRef}>
+  <div className="relative flex w-full h-10 group" ref={inputRef}>
     <input
-      className="appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer"
+      className="w-full pl-4 pr-6 transition border rounded-full outline-none appearance-none cursor-pointer group-hover:border-green-500 focus:border-green-500"
       type="input"
       data-input
       placeholder={placeholder}
@@ -52,7 +53,7 @@ const DatePickerInput = ({ placeholder, inputRef }) => (
 )
 
 const InputComponent = ({ form, name, isLoading, ...props }) => (
-  <div className="relative flex group h-10 w-full">
+  <div className="relative flex w-full h-10 group">
     <InputCore
       className="outline-none focus:outline-none"
       ref={form.refs[name]}
@@ -79,8 +80,9 @@ const ControlComponent = ({
   placeholder?: string
 }) => {
   const count = form.state[name].totalCount
+
   return (
-    <div className="relative flex group h-10 w-full">
+    <div className="relative flex w-full h-10 group">
       <ControlCore
         className="outline-none focus:outline-none"
         ref={form.refs[name] as any}
@@ -117,21 +119,21 @@ const OptionComponent = ({
   }
 
   return (
-    <OptionBase className="flex justify-between items-center">
+    <OptionBase className="flex items-center justify-between">
       <div>
-        <p className="font-title font-bold text-sm text-gray-700">
+        <p className="text-sm font-bold text-gray-700 font-title">
           {option.label}
         </p>
-        <p className="text-gray-500 text-sm">{option.description}</p>
+        <p className="text-sm text-gray-500">{option.description}</p>
       </div>
-      <div className="flex justify-center items-center gap-x-2">
+      <div className="flex items-center justify-center gap-x-2">
         <GuestButton
           onClick={onPlusClick}
           disabled={option.value >= (option.max || 100)}
         >
           <FaPlus className="w-3 h-3" />
         </GuestButton>
-        <p className="font-title font-bold text-sm text-gray-700">
+        <p className="text-sm font-bold text-gray-700 font-title">
           {option.value}
         </p>
         <GuestButton onClick={onMinusClick} disabled={option.value === 0}>
@@ -224,6 +226,10 @@ const formSchema: FormSchema = {
 export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
 
+  const onBookButtonClick = () => {
+    alert(`⚡️ Booked! ${JSON.stringify(form.state)}`)
+  }
+
   return (
     <Container>
       <InputContainer>
@@ -257,8 +263,8 @@ export const BookingForm = () => {
         />
       </InputContainer>
       <InputContainer>
-        <MainButton>
-          <FaSearch className="text-white w-3 h-3" />
+        <MainButton onClick={onBookButtonClick}>
+          <FaSearch className="w-3 h-3 text-white" />
           <ButtonText>{"Search"}</ButtonText>
         </MainButton>
       </InputContainer>
