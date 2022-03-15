@@ -5,10 +5,11 @@
 
 # React Booking Form 🔥
 
-Customizable light library for creating booking forms such as on hotel, restaurant, transport services websites with location, calendar, and guest fields + much more.
+Customizable light library for creating booking forms for websites with purposes such as hotel, restaurant, transport services booking and similar.\
+Includes location, calendar, and guest selectors logic (style agnostic) and much more.
 
-![Imgur](https://i.imgur.com/JsZdqht.gif)
-![Imgur](https://i.imgur.com/GGwYIiu.gif)
+<img src="https://i.imgur.com/JsZdqht.gif" width="100%" />
+<img src="https://i.imgur.com/GGwYIiu.gif" width="100%" />
 
 ## Live example
 - [CodeSandbox playground](https://codesandbox.io/s/react-booking-form-example-9z489)
