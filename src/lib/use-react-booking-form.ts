@@ -81,10 +81,6 @@ export type FormState = {
     type: FieldType
     value: FieldValue
     /**
-     * Used for menus in location and guest selector.
-     */
-    isOpen?: boolean
-    /**
      * Used to know total number of guests in guest selector.
      */
     totalCount?: number

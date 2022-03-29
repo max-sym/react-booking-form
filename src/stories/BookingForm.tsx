@@ -5,6 +5,7 @@ import {
   LocationSelect,
   useReactBookingForm,
   BookingForm as BookingFormType,
+  LocationOption,
 } from "../lib"
 import tw from "tailwind-styled-components"
 import {
@@ -17,26 +18,31 @@ import {
   FaUser,
 } from "react-icons/fa"
 import { cities } from "./dummy-data/cities"
+import React from "react"
 
 const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
 const InputCore = tw.input`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const ControlCore = tw.div`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer flex items-center`
 const Placeholder = tw.div`text-gray-400 select-none`
-const InputContainer = tw.div`relative w-full md:w-1/3 border-l-0 flex flex-col justify-center items-center md:border-l pl-2 first:border-l-0`
+const InputContainer = tw.div`relative w-full md:w-1/3 flex flex-col justify-center items-center pl-2`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
 const ButtonText = tw.div`ml-2`
 const MainButton = tw.button`appearance-none mt-5 border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
-const IconContainer = tw.a`absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500 group-hover:text-green-400 transition`
+const IconContainer = tw.button`z-20 absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500 transition`
 
-const MenuContainer = tw.div<{ isOpen: boolean }>`
-  w-64 max-h-[240px] border z-10 mt-12 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden
-  ${({ isOpen }) =>
-    isOpen ? "opacity-100" : "opacity-0 -translate-y-4 pointer-events-none"}
+const MenuContainer = tw.div`z-20`
+const Menu = tw.ul<{ open: boolean }>`
+  w-64 max-h-[240px] border z-20 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden
+  ${({ open }) => (open ? "" : "opacity-0 -translate-y-4 pointer-events-none")}
 `
 
 const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
-const OptionContainer = tw(OptionBase)`hover:bg-green-100 cursor-pointer`
+const OptionContainer = tw(OptionBase)<{
+  $active?: boolean
+  $selected?: boolean
+}>`cursor-pointer transition ${({ $active, $selected }) =>
+  $active || $selected ? "bg-green-100" : ""}`
 
 const DatePickerInput = ({ placeholder, inputRef }) => (
   <div className="relative flex w-full h-10 group" ref={inputRef}>
@@ -52,22 +58,9 @@ const DatePickerInput = ({ placeholder, inputRef }) => (
   </div>
 )
 
-const InputComponent = ({ form, name, isLoading, ...props }) => (
-  <div className="relative flex w-full h-10 group">
-    <InputCore
-      className="outline-none focus:outline-none"
-      ref={form.refs[name]}
-      {...props}
-    />
-    <IconContainer>
-      {isLoading ? (
-        <FaSpinner className="w-4 h-4 animate-spin" />
-      ) : (
-        <FaMapMarkerAlt className="w-4 h-4" />
-      )}
-    </IconContainer>
-  </div>
-)
+const InputComponent = tw(
+  InputCore
+)`relative flex w-full h-10 outline-none focus:outline-none`
 
 const ControlComponent = ({
   form,
@@ -158,11 +151,9 @@ const searchPlace = async (query) =>
     setTimeout(() => resolve(filterAndMapCiies(query)), 600)
   })
 
-const defaultLocationOptions = [
-  { value: "new-york", label: "New York" },
-  { value: "barcelona", label: "Barcelona" },
-  { value: "los-angeles", label: "Los Angeles" },
-]
+const defaultLocationOptions: LocationOption[] = cities
+  .slice(0, 5)
+  .map((city) => ({ value: city.toLowerCase(), label: city }))
 
 const formSchema: FormSchema = {
   location: {
@@ -223,11 +214,29 @@ const formSchema: FormSchema = {
   },
 }
 
+interface FancyButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+  isLoading?: boolean
+}
+
+const ButtonComp = React.forwardRef<HTMLButtonElement, FancyButtonProps>(
+  ({ isLoading, ...props }, ref) => (
+    <IconContainer ref={ref} {...props}>
+      {isLoading ? (
+        <FaSpinner className="w-4 h-4 animate-spin" />
+      ) : (
+        <FaMapMarkerAlt className="w-4 h-4" />
+      )}
+    </IconContainer>
+  )
+)
+
+// const EmptyOption = () => <div>{"Nothing was found :("}</div>
+
 export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
 
   const onBookButtonClick = () => {
-    alert(`⚡️ Booked! ${JSON.stringify(form.state)}`)
+    alert(`⚡️ Booked! ${JSON.stringify(form.state, null, 2)}`)
   }
 
   return (
@@ -236,14 +245,18 @@ export const BookingForm = () => {
         <Label>{"Location"}</Label>
         <LocationSelect
           form={form}
+          menu={Menu}
           menuContainer={MenuContainer}
-          optionContainer={OptionContainer}
+          option={OptionContainer}
+          button={ButtonComp}
           inputComponent={InputComponent}
           name="location"
-          inputProps={{ placeholder: "Where are you going?" }}
+          emptyOption={"Nothing was found :("}
+          // emptyOption="Nothing was found :("
+          placeholder="Where are you going?"
         />
       </InputContainer>
-      <InputContainer>
+      {/* <InputContainer>
         <Label>{"Check in"}</Label>
         <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
       </InputContainer>
@@ -267,7 +280,7 @@ export const BookingForm = () => {
           <FaSearch className="w-3 h-3 text-white" />
           <ButtonText>{"Search"}</ButtonText>
         </MainButton>
-      </InputContainer>
+      </InputContainer> */}
     </Container>
   )
 }

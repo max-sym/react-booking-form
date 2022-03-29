@@ -22,32 +22,12 @@ export const Menu = ({
   menuContainerRef: React.RefObject<HTMLDivElement>
   optionComponent?: React.ComponentType<any>
 }) => {
-  const position = useMemo(() => {
-    const ref = form.refs[name].current
-    if (!ref) return {}
-
-    const inputPosition = ref.getBoundingClientRect()
-
-    return {
-      x: window.pageXOffset + inputPosition.left,
-      y: window.pageYOffset + inputPosition.top,
-    }
-  }, [isOpen])
-
   const RealOptionContainer = useMemo(() => OptionComponent || Option, [
     OptionComponent,
   ])
 
   return (
-    <MenuContainer
-      isOpen={isOpen}
-      style={{
-        position: "absolute",
-        top: position.y || 0,
-        left: position.x || 0,
-      }}
-      ref={menuContainerRef}
-    >
+    <MenuContainer isOpen={isOpen} ref={menuContainerRef}>
       {options.map((option) => (
         <RealOptionContainer
           form={form}
