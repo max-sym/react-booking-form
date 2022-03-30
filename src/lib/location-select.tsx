@@ -1,16 +1,9 @@
-import React, { useMemo, useRef, useState } from "react"
-// import { InputCore, Text, Card, Transition } from "components"
+import React, { useEffect, useRef, useState } from "react"
 import { Combobox, Portal } from "@headlessui/react"
-import { usePopper } from "react-popper"
 import { BookingForm } from "./use-react-booking-form"
 import { useLocationData } from "./use-location-data"
-
-export type OptionType = {
-  name: string
-  value: any
-}
-
-export type OffsetType = [number, number]
+import { useSelectPopper } from "./use-select-popper"
+import { OffsetType, OptionType } from "./guest-select"
 
 export type SelectType = {
   formatResults?: any
@@ -23,35 +16,14 @@ export type SelectType = {
   placeholder?: string
   inputComponent: React.ElementType<any & { isLoading?: boolean }>
   emptyOption?: any
+  selectOnClick?: boolean
+  autoComplete?: string
   option: React.ElementType<{
     $active?: boolean
     $selected?: boolean
     $disabled?: boolean
   }>
   offset?: OffsetType
-}
-
-const useSelectPopper = ({ offset = [0, 10] }: { offset?: OffsetType }) => {
-  const [button, setButton] = useState<HTMLButtonElement | null>(null)
-  const [popper, setPopper] = useState<HTMLUListElement | null>(null)
-
-  const { styles, attributes } = usePopper(button, popper, {
-    placement: "bottom",
-    strategy: "fixed",
-    modifiers: [{ name: "offset", options: { offset } }],
-  })
-
-  return useMemo(
-    () => ({
-      button,
-      setButton,
-      popper,
-      setPopper,
-      styles,
-      attributes,
-    }),
-    [button, setButton, popper, setPopper, styles, attributes]
-  )
 }
 
 export const LocationSelect = ({
@@ -63,13 +35,15 @@ export const LocationSelect = ({
   inputComponent: InputComponent,
   emptyOption,
   debounceDelay = 500,
+  selectOnClick = true,
   name,
   formatResults,
+  autoComplete = "off",
   placeholder,
   offset,
 }: SelectType) => {
   const formStateItem = form?.state?.[name]
-  const { setButton, setPopper, styles, attributes } = useSelectPopper({
+  const { button, setButton, setPopper, styles, attributes } = useSelectPopper({
     offset,
   })
 
@@ -86,12 +60,73 @@ export const LocationSelect = ({
     loadOptions.current(event.target.value)
   }
 
+  // const onSelect = (option, p) => {
+  //   form.setFieldState(name, { value: option })
+  //   setTimeout(() => {
+  //     form.focusOn(form.formSchema[name].focusOnNext)
+  //   }, 200)
+  // }
+
   const onSelect = (option) => {
     form.setFieldState(name, { value: option })
+    setTimeout(() => {
+      const focusOnNext = form.formSchema[name].focusOnNext
+      if (!focusOnNext) return
+
+      const formItem = form.formSchema[focusOnNext]
+      if (formItem.type === "location")
+        return form.refs[focusOnNext]?.current?.click()
+
+      form.focusOn(focusOnNext)
+    }, 50)
   }
 
-  const onInputClick = () => {
+  const onClick = () => {
+    // if (isOpen) {
+    // setIsOpen(false)
+    // }
     btn?.current?.click?.()
+    // if (selectOnClick) {
+    //   button?.select?.()
+    // }
+  }
+
+  const onFocus = (event) => {
+    // console.log("focus-" + name, open)
+    // btn?.current?.click?.()
+    // setIsOpen((i) => !i)
+    if (selectOnClick) {
+      button?.select?.()
+    }
+  }
+
+  const onOptionClick = (open) => () => {
+    // console.log("oc-" + name, open)
+  }
+
+  useEffect(() => {
+    //@ts-ignore
+    form.refs[name].current = button
+  }, [button])
+
+  const RealOption = ({ active, selected, option, onClick, btn, ...props }) => {
+    // const realOnClick = () => {
+    //   form.setFieldState(name, { value: option })
+    //   onClick()
+    //   // form.focusOn(form.formSchema[name].focusOnNext)
+    //   // btn?.current?.click?.()
+    // }
+
+    return (
+      <Option
+        $active={active}
+        $selected={selected}
+        onClick={onClick}
+        {...props}
+      >
+        {option.label}
+      </Option>
+    )
   }
 
   return (
@@ -101,12 +136,14 @@ export const LocationSelect = ({
           <>
             <Combobox.Button as={Button} isLoading={isLoading} ref={btn} />
             <Combobox.Input
+              onClick={onClick}
+              onFocus={onFocus}
               displayValue={(v: any) => v.label}
               onChange={onChange}
-              onClick={onInputClick}
               ref={setButton}
               as={InputComponent}
               placeholder={placeholder}
+              autoComplete={autoComplete}
             />
             <Portal>
               <Combobox.Options
@@ -130,9 +167,13 @@ export const LocationSelect = ({
                       as={React.Fragment}
                     >
                       {({ active, selected }) => (
-                        <Option $active={active} $selected={selected}>
+                        <RealOption
+                          $active={active}
+                          $selected={selected}
+                          option={option}
+                        >
                           {option.label}
-                        </Option>
+                        </RealOption>
                       )}
                     </Combobox.Option>
                   ))}

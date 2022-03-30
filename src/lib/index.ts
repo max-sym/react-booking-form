@@ -1,5 +1,5 @@
 export * from "./use-react-booking-form"
 export * from "./date-input"
-export * from "./guests-select"
+export * from "./guest-select"
 export * from "./location-select"
 export * from "./utils"

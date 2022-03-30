@@ -1,7 +1,8 @@
 import {
   DateInput,
   FormSchema,
-  GuestsSelect,
+  GuestSelect,
+  GuestOption,
   LocationSelect,
   useReactBookingForm,
   BookingForm as BookingFormType,
@@ -43,15 +44,11 @@ const OptionContainer = tw(OptionBase)<{
   $selected?: boolean
 }>`cursor-pointer transition ${({ $active, $selected }) =>
   $active || $selected ? "bg-green-100" : ""}`
+const GuestButton = tw.button`appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-gray-500 text-gray-500 hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50`
 
 const DatePickerInput = ({ placeholder, inputRef }) => (
   <div className="relative flex w-full h-10 group" ref={inputRef}>
-    <input
-      className="w-full pl-4 pr-6 transition border rounded-full outline-none appearance-none cursor-pointer group-hover:border-green-500 focus:border-green-500"
-      type="input"
-      data-input
-      placeholder={placeholder}
-    />
+    <InputCore type="input" data-input placeholder={placeholder} />
     <IconContainer title="toggle" data-toggle>
       <FaCalendarAlt className="w-4 h-4" />
     </IconContainer>
@@ -92,8 +89,6 @@ const ControlComponent = ({
   )
 }
 
-const GuestButton = tw.button`appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-gray-500 text-gray-500 hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50`
-
 const OptionComponent = ({
   form,
   name,
@@ -101,41 +96,42 @@ const OptionComponent = ({
 }: {
   form: BookingFormType
   name: string
-  option: any
-}) => {
-  const onPlusClick = () => {
-    form.setGuestOptionValue(name, option, option.value + 1)
-  }
+  option: GuestOption
+}) => (
+  <OptionBase className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-bold text-gray-700 font-title">
+        {option.label}
+      </p>
+      <p className="text-sm text-gray-500">{option.description}</p>
+    </div>
+    <div className="flex items-center justify-center gap-x-2">
+      <GuestButton
+        onClick={form.onPlusClick(option, name)}
+        disabled={form.getIsOptionDisabled(option, "plus")}
+      >
+        <FaPlus className="w-3 h-3" />
+      </GuestButton>
+      <p className="text-sm font-bold text-gray-700 font-title">
+        {option.value}
+      </p>
+      <GuestButton
+        onClick={form.onMinusClick(option, name)}
+        disabled={form.getIsOptionDisabled(option, "minus")}
+      >
+        <FaMinus className="w-3 h-3" />
+      </GuestButton>
+    </div>
+  </OptionBase>
+)
 
-  const onMinusClick = () => {
-    form.setGuestOptionValue(name, option, option.value - 1)
-  }
-
-  return (
-    <OptionBase className="flex items-center justify-between">
-      <div>
-        <p className="text-sm font-bold text-gray-700 font-title">
-          {option.label}
-        </p>
-        <p className="text-sm text-gray-500">{option.description}</p>
-      </div>
-      <div className="flex items-center justify-center gap-x-2">
-        <GuestButton
-          onClick={onPlusClick}
-          disabled={option.value >= (option.max || 100)}
-        >
-          <FaPlus className="w-3 h-3" />
-        </GuestButton>
-        <p className="text-sm font-bold text-gray-700 font-title">
-          {option.value}
-        </p>
-        <GuestButton onClick={onMinusClick} disabled={option.value === 0}>
-          <FaMinus className="w-3 h-3" />
-        </GuestButton>
-      </div>
-    </OptionBase>
-  )
-}
+const GuestMenu = ({ open, form, name, options }) => (
+  <Menu open={open}>
+    {options.map((option) => (
+      <OptionComponent form={form} name={name} option={option} />
+    ))}
+  </Menu>
+)
 
 const DatePicker = (props) => (
   <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
@@ -156,7 +152,12 @@ const defaultLocationOptions: LocationOption[] = cities
   .map((city) => ({ value: city.toLowerCase(), label: city }))
 
 const formSchema: FormSchema = {
-  location: {
+  from: {
+    type: "location",
+    focusOnNext: "to",
+    options: { defaultLocationOptions, searchPlace },
+  },
+  to: {
     type: "location",
     focusOnNext: "checkIn",
     options: { defaultLocationOptions, searchPlace },
@@ -230,8 +231,6 @@ const ButtonComp = React.forwardRef<HTMLButtonElement, FancyButtonProps>(
   )
 )
 
-// const EmptyOption = () => <div>{"Nothing was found :("}</div>
-
 export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
 
@@ -242,7 +241,7 @@ export const BookingForm = () => {
   return (
     <Container>
       <InputContainer>
-        <Label>{"Location"}</Label>
+        <Label>{"From"}</Label>
         <LocationSelect
           form={form}
           menu={Menu}
@@ -250,13 +249,26 @@ export const BookingForm = () => {
           option={OptionContainer}
           button={ButtonComp}
           inputComponent={InputComponent}
-          name="location"
-          emptyOption={"Nothing was found :("}
-          // emptyOption="Nothing was found :("
+          name="from"
+          emptyOption="Nothing was found :("
           placeholder="Where are you going?"
         />
       </InputContainer>
-      {/* <InputContainer>
+      <InputContainer>
+        <Label>{"To"}</Label>
+        <LocationSelect
+          form={form}
+          menu={Menu}
+          menuContainer={MenuContainer}
+          option={OptionContainer}
+          button={ButtonComp}
+          inputComponent={InputComponent}
+          name="to"
+          emptyOption="Nothing was found :("
+          placeholder="Where are you going?"
+        />
+      </InputContainer>
+      <InputContainer>
         <Label>{"Check in"}</Label>
         <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
       </InputContainer>
@@ -266,12 +278,12 @@ export const BookingForm = () => {
       </InputContainer>
       <InputContainer>
         <Label>{"Guests"}</Label>
-        <GuestsSelect
+        <GuestSelect
           form={form}
           menuContainer={MenuContainer}
-          optionComponent={OptionComponent}
-          controlComponent={ControlComponent}
-          controlProps={{ placeholder: "Add guests" }}
+          menu={GuestMenu}
+          inputComponent={InputComponent}
+          placeholder="Add guests"
           name={"guests"}
         />
       </InputContainer>
@@ -280,7 +292,7 @@ export const BookingForm = () => {
           <FaSearch className="w-3 h-3 text-white" />
           <ButtonText>{"Search"}</ButtonText>
         </MainButton>
-      </InputContainer> */}
+      </InputContainer>
     </Container>
   )
 }

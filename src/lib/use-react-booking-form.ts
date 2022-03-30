@@ -52,7 +52,7 @@ export type BookingForm = {
   /**
    * Helper that sets the particular field state in the form.
    */
-  setFieldState: (key: string, state: any) => void
+  setFieldState: (key: string, fieldState: any) => void
   /**
    * An array of references to the form fields.
    * This can be used to focus on a particular field and do other relevant actions.
@@ -70,6 +70,21 @@ export type BookingForm = {
    * ```
    */
   setGuestOptionValue: (key: string, option: any, value: any) => void
+  /**
+   * A callback to pass to the guest minus button click event.
+   */
+  onMinusClick: (option: GuestOption, name: string) => () => void
+  /**
+   * A callback to pass to the guest plus button click event.
+   */
+  onPlusClick: (option: GuestOption, name: string) => () => void
+  /**
+   * A callback to pass to the guest buttons to determine if the buttons are disabled.
+   */
+  getIsOptionDisabled: (
+    option: GuestOption,
+    optionType: "plus" | "minus"
+  ) => boolean
 }
 
 export type RefsType = {
@@ -141,11 +156,11 @@ export const useReactBookingForm = ({
   )
 
   const setFieldValue = useCallback((key: string, value: any) => {
-    setState((field) => ({ ...field, [key]: { ...field[key], value } }))
+    setState((state) => ({ ...state, [key]: { ...state[key], value } }))
   }, [])
 
-  const setFieldState = useCallback((key: string, state: any) => {
-    setState((field) => ({ ...field, [key]: { ...field[key], ...state } }))
+  const setFieldState = useCallback((key: string, fieldState: any) => {
+    setState((state) => ({ ...state, [key]: { ...state[key], ...fieldState } }))
   }, [])
 
   const setGuestOptionValue = useCallback(
@@ -155,11 +170,34 @@ export const useReactBookingForm = ({
         (stateItemValue) => option.name === stateItemValue.name
       )
       newStateItemValue[optionIndex].value = value
+      console.log("a", getGuestTotalCount(newStateItemValue))
       setFieldState(key, {
         value: newStateItemValue,
         totalCount: getGuestTotalCount(newStateItemValue),
       })
     },
+    [state]
+  )
+
+  const onMinusClick = useCallback(
+    (option: GuestOption, name: string) => () => {
+      setGuestOptionValue(name, option, option.value - 1)
+    },
+    [setGuestOptionValue]
+  )
+
+  const onPlusClick = useCallback(
+    (option: GuestOption, name: string) => () => {
+      setGuestOptionValue(name, option, option.value + 1)
+    },
+    [setGuestOptionValue]
+  )
+
+  const getIsOptionDisabled = useCallback(
+    (option: GuestOption, optionButtonType: "plus" | "minus") =>
+      optionButtonType === "plus"
+        ? option.value >= (option.max || 100)
+        : option.value === 0,
     []
   )
 
@@ -173,8 +211,22 @@ export const useReactBookingForm = ({
       refs,
       focusOn,
       setGuestOptionValue,
+      onMinusClick,
+      onPlusClick,
+      getIsOptionDisabled,
     }),
-    [formSchema, state, setState, refs, setFieldValue, focusOn, setFieldState]
+    [
+      formSchema,
+      state,
+      setState,
+      refs,
+      setFieldValue,
+      focusOn,
+      setFieldState,
+      onMinusClick,
+      onPlusClick,
+      getIsOptionDisabled,
+    ]
   )
   return bookingForm
 }
