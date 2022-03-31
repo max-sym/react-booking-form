@@ -5,7 +5,7 @@ export type LocationOption = {
   value: string
 }
 
-export type FieldValue = LocationOption | GuestOption[] | string
+export type FieldValue = LocationOption | Date | GuestOption[] | string
 
 export type FieldType = "location" | "date" | "datetime" | "peopleCount"
 
@@ -85,11 +85,19 @@ export type BookingForm = {
     option: GuestOption,
     optionType: "plus" | "minus"
   ) => boolean
-
   /**
    * This can be used to swap the location fields.
    */
   swapLocations: (fieldKeys?: [string, string] | undefined) => void
+  /**
+   * Converts the form state to url query string.
+   * Use convertDate to convert dates to the desired format.
+   */
+  serializeToURLParams: ({
+    convertDate,
+  }: {
+    convertDate?: (dateValue: Date) => any
+  }) => string
 }
 
 export type RefsType = {
@@ -232,6 +240,34 @@ export const useReactBookingForm = ({
     [state]
   )
 
+  const serializeToURLParams = useCallback(
+    ({ convertDate }: { convertDate?: (dateValue: Date) => any }) => {
+      const params = {}
+      Object.keys(state).forEach((key) => {
+        const field = state[key]
+
+        let value = ""
+        if (field.type === "date") {
+          value = convertDate ? convertDate(field.value[0]) : field.value[0]
+        }
+        if (field.type === "peopleCount") {
+          // @ts-ignore
+          field.value.forEach((option) => {
+            params[`${key}-${option.name}`] = option.value
+          })
+          return
+        }
+        if (field.type === "location") {
+          // @ts-ignore
+          value = field.value.value
+        }
+        params[key] = value
+      })
+      return new URLSearchParams(params).toString()
+    },
+    [state]
+  )
+
   const bookingForm = useMemo<BookingForm>(
     () => ({
       formSchema,
@@ -246,6 +282,7 @@ export const useReactBookingForm = ({
       onPlusClick,
       getIsOptionDisabled,
       swapLocations,
+      serializeToURLParams,
     }),
     [
       formSchema,
@@ -259,6 +296,7 @@ export const useReactBookingForm = ({
       onPlusClick,
       getIsOptionDisabled,
       swapLocations,
+      serializeToURLParams,
     ]
   )
   return bookingForm

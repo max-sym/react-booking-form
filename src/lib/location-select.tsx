@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef } from "react"
 import { Combobox, Portal } from "@headlessui/react"
 import { BookingForm } from "./use-react-booking-form"
 import { useLocationData } from "./use-location-data"
 import { useSelectPopper } from "./use-select-popper"
-import { OffsetType, OptionType } from "./guest-select"
+import { OffsetType } from "./guest-select"
 
 export type SelectType = {
   formatResults?: any

@@ -9,6 +9,7 @@ import {
   LocationOption,
 } from "../lib"
 import tw from "tailwind-styled-components"
+import moment from "moment"
 import { FaMapMarkerAlt } from "@react-icons/all-files/fa/FaMapMarkerAlt"
 import { FaCalendarAlt } from "@react-icons/all-files/fa/FaCalendarAlt"
 import { FaSpinner } from "@react-icons/all-files/fa/FaSpinner"
@@ -187,7 +188,10 @@ export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
 
   const onBookButtonClick = () => {
-    alert(`⚡️ Booked! ${JSON.stringify(form.state, null, 2)}`)
+    const config = {
+      convertDate: (dateValue: Date) => moment(dateValue).format("DD-MM-YYYY"),
+    }
+    alert(form.serializeToURLParams(config))
   }
 
   return (

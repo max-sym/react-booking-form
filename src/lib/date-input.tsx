@@ -19,7 +19,7 @@ export const DateInput = ({
 }: DateInputType) => {
   const item = form.formSchema[name]
 
-  const onChange = (value) => {
+  const onChange = (value: Date) => {
     form.setFieldValue(name, value)
     form.focusOn(item.focusOnNext)
   }
