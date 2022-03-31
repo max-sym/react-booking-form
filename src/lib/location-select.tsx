@@ -12,7 +12,6 @@ export type SelectType = {
   name: string
   menuContainer: React.ElementType
   menu: React.ElementType
-  button: React.ElementType
   placeholder?: string
   inputComponent: React.ElementType<any & { isLoading?: boolean }>
   emptyOption?: any
@@ -62,7 +61,6 @@ const ExtendedOption = ({
 
 export const LocationSelect = ({
   form,
-  button: Button,
   menu: Menu,
   menuContainer: MenuContainer,
   option: Option,
@@ -87,7 +85,7 @@ export const LocationSelect = ({
     offset,
   })
 
-  const btn = useRef<HTMLDivElement | null>(null)
+  const btn = useRef<HTMLButtonElement | null>(null)
 
   const { loadOptions, isLoading, options } = useLocationData({
     debounceDelay,
@@ -130,15 +128,18 @@ export const LocationSelect = ({
     <Combobox value={formStateItem.value} onChange={onSelect}>
       {({ open }) => (
         <>
-          <Combobox.Button as={Button} isLoading={isLoading} ref={btn} />
+          <Combobox.Button style={{ display: "none" }} ref={btn} />
           <Combobox.Input
             onFocus={onFocus}
             displayValue={(v: any) => v.label}
             onChange={onChange}
             ref={setElement}
+            isLoading={isLoading}
             as={InputComponent}
             placeholder={placeholder}
             autoComplete={autoComplete}
+            name={name}
+            form={form}
           />
           <Portal>
             <Combobox.Options

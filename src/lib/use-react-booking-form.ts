@@ -85,6 +85,11 @@ export type BookingForm = {
     option: GuestOption,
     optionType: "plus" | "minus"
   ) => boolean
+
+  /**
+   * This can be used to swap the location fields.
+   */
+  swapLocations: (fieldKeys?: [string, string] | undefined) => void
 }
 
 export type RefsType = {
@@ -100,6 +105,19 @@ export type FormState = {
      */
     totalCount?: number
   }
+}
+
+const getFieldKeysToSwap = (formState: FormState) => {
+  const firstLocation = Object.keys(formState).find(
+    (key) => formState[key].type === "location"
+  )
+  const secondLocation = Object.keys(formState).find(
+    (key) => key !== firstLocation && formState[key].type === "location"
+  )
+
+  if (!firstLocation || !secondLocation) return null
+
+  return [firstLocation, secondLocation]
 }
 
 export const useReactBookingForm = ({
@@ -170,7 +188,6 @@ export const useReactBookingForm = ({
         (stateItemValue) => option.name === stateItemValue.name
       )
       newStateItemValue[optionIndex].value = value
-      console.log("a", getGuestTotalCount(newStateItemValue))
       setFieldState(key, {
         value: newStateItemValue,
         totalCount: getGuestTotalCount(newStateItemValue),
@@ -201,6 +218,20 @@ export const useReactBookingForm = ({
     []
   )
 
+  const swapLocations = useCallback(
+    (fieldKeys?: [string, string]) => {
+      const fieldKeysToSwap =
+        fieldKeys?.length === 2 ? fieldKeys : getFieldKeysToSwap(state)
+
+      if (!fieldKeysToSwap) return
+
+      // swap locations in state
+      setFieldState(fieldKeysToSwap[0], state[fieldKeysToSwap[1]])
+      setFieldState(fieldKeysToSwap[1], state[fieldKeysToSwap[0]])
+    },
+    [state]
+  )
+
   const bookingForm = useMemo<BookingForm>(
     () => ({
       formSchema,
@@ -214,6 +245,7 @@ export const useReactBookingForm = ({
       onMinusClick,
       onPlusClick,
       getIsOptionDisabled,
+      swapLocations,
     }),
     [
       formSchema,
@@ -226,6 +258,7 @@ export const useReactBookingForm = ({
       onMinusClick,
       onPlusClick,
       getIsOptionDisabled,
+      swapLocations,
     ]
   )
   return bookingForm

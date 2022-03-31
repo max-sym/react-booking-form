@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { Popover, Portal } from "@headlessui/react"
-import { BookingForm } from "./use-react-booking-form"
+import { BookingForm, GuestOption } from "./use-react-booking-form"
 import { useSelectPopper } from "./use-select-popper"
 
 export type OptionType = {
@@ -15,6 +15,7 @@ export type GuestSelectType = {
   name: string
   menu: React.ElementType
   menuContainer: React.ElementType
+  option: React.ElementType
   inputComponent: React.ElementType<any & { isLoading?: boolean }>
   placeholder?: string
   offset?: OffsetType
@@ -24,12 +25,14 @@ export const GuestSelect = ({
   form,
   name,
   menu: Menu,
+  option: OptionComponent,
   menuContainer: MenuContainer,
   inputComponent: InputComponent,
   placeholder,
   offset,
 }: GuestSelectType) => {
   const formStateItem = form?.state?.[name]
+  const options = formStateItem.value
   const {
     element,
     setElement,
@@ -63,6 +66,8 @@ export const GuestSelect = ({
             onFocus={onFocus}
             as={InputComponent}
             placeholder={placeholder}
+            name={name}
+            form={form}
             readOnly
           />
           <Portal>
@@ -73,12 +78,17 @@ export const GuestSelect = ({
               style={styles.popper}
               {...attributes.popper}
             >
-              <Menu
-                open={open}
-                options={formStateItem.value}
-                name={name}
-                form={form}
-              />
+              <Menu open={open}>
+                {/* @ts-ignore */}
+                {options.map((option: GuestOption) => (
+                  <OptionComponent
+                    key={option.name}
+                    form={form}
+                    name={name}
+                    option={option}
+                  />
+                ))}
+              </Menu>
             </Popover.Panel>
           </Portal>
         </>

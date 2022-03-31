@@ -9,34 +9,37 @@ import {
   LocationOption,
 } from "../lib"
 import tw from "tailwind-styled-components"
-import {
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-  FaSearch,
-  FaSpinner,
-  FaPlus,
-  FaMinus,
-  FaUser,
-} from "react-icons/fa"
+import { FaMapMarkerAlt } from "@react-icons/all-files/fa/FaMapMarkerAlt"
+import { FaCalendarAlt } from "@react-icons/all-files/fa/FaCalendarAlt"
+import { FaSearch } from "@react-icons/all-files/fa/FaSearch"
+import { FaSpinner } from "@react-icons/all-files/fa/FaSpinner"
+import { FaPlus } from "@react-icons/all-files/fa/FaPlus"
+import { FaMinus } from "@react-icons/all-files/fa/FaMinus"
+import { FaUser } from "@react-icons/all-files/fa/FaUser"
+import { IoMdSwap } from "@react-icons/all-files/io/IoMdSwap"
 import { cities } from "./dummy-data/cities"
 import React from "react"
 
 const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
-const InputCore = tw.input`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
-const ControlCore = tw.div`appearance-none border rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer flex items-center`
-const Placeholder = tw.div`text-gray-400 select-none`
+const InputCore = tw.input`relative peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const InputContainer = tw.div`relative w-full md:w-1/3 flex flex-col justify-center items-center pl-2`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
-const ButtonText = tw.div`ml-2`
-const MainButton = tw.button`appearance-none mt-5 border-0 w-full h-10 rounded-full flex justify-center items-center bg-green-500 text-white font-bold px-3`
-const IconContainer = tw.button`z-20 absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer text-gray-500 transition`
+const ButtonCore = tw.button`appearance-none w-full h-10 rounded-full flex justify-center items-center font-bold px-3`
+const SwapButton = tw(ButtonCore)`
+mt-5 border border-gray-300 hover:border-green-500 hover:text-green-500 focus:border-green-500 focus:text-green-500 transition outline-none`
+
+const MainButton = tw(ButtonCore)`
+mt-5 border-0 bg-green-500 text-white uppercase`
+const IconContainer = tw.a`z-20 absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer group-hover:text-green-500 peer-focus:text-green-500 text-gray-500 transition`
 
 const MenuContainer = tw.div`z-20`
 const Menu = tw.ul<{ open: boolean }>`
   w-64 max-h-[240px] border z-20 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden
   ${({ open }) => (open ? "" : "opacity-0 -translate-y-4 pointer-events-none")}
 `
+const Text = tw.p`text-sm font-bold text-gray-700 font-title`
+const SmallText = tw.p`text-sm text-gray-500`
 
 const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
 const OptionContainer = tw(OptionBase)<{
@@ -46,20 +49,36 @@ const OptionContainer = tw(OptionBase)<{
   $active || $selected ? "bg-green-100" : ""}`
 const GuestButton = tw.button`appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-gray-500 text-gray-500 hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50`
 
-const DatePickerInput = ({ placeholder, inputRef }) => (
-  <div className="relative flex w-full h-10 group" ref={inputRef}>
-    <InputCore type="input" data-input placeholder={placeholder} />
-    <IconContainer title="toggle" data-toggle>
-      <FaCalendarAlt className="w-4 h-4" />
-    </IconContainer>
-  </div>
+type InputProps = {
+  form?: BookingFormType
+  isLoading?: boolean
+  name?: string
+  containerRef?: React.RefObject<HTMLDivElement>
+}
+
+const iconsList = {
+  location: FaMapMarkerAlt,
+  date: FaCalendarAlt,
+  peopleCount: FaUser,
+}
+
+const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ isLoading, containerRef, form, name, ...props }, ref) => {
+    const itemType = name && form?.formSchema[name].type
+    const InputIcon = isLoading ? FaSpinner : iconsList[itemType || "location"]
+
+    return (
+      <div className="relative group" ref={containerRef}>
+        <InputCore data-input ref={ref} name={name} {...props} />
+        <IconContainer title="toggle" data-toggle>
+          <InputIcon className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+        </IconContainer>
+      </div>
+    )
+  }
 )
 
-const InputComponent = tw(
-  InputCore
-)`relative flex w-full h-10 outline-none focus:outline-none`
-
-const OptionComponent = ({
+const GuestOptionComponent = ({
   form,
   name,
   option,
@@ -70,10 +89,8 @@ const OptionComponent = ({
 }) => (
   <OptionBase className="flex items-center justify-between">
     <div>
-      <p className="text-sm font-bold text-gray-700 font-title">
-        {option.label}
-      </p>
-      <p className="text-sm text-gray-500">{option.description}</p>
+      <Text>{option.label}</Text>
+      <SmallText>{option.description}</SmallText>
     </div>
     <div className="flex items-center justify-center gap-x-2">
       <GuestButton
@@ -82,9 +99,7 @@ const OptionComponent = ({
       >
         <FaPlus className="w-3 h-3" />
       </GuestButton>
-      <p className="text-sm font-bold text-gray-700 font-title">
-        {option.value}
-      </p>
+      <Text>{option.value}</Text>
       <GuestButton
         onClick={form.onMinusClick(option, name)}
         disabled={form.getIsOptionDisabled(option, "minus")}
@@ -95,79 +110,48 @@ const OptionComponent = ({
   </OptionBase>
 )
 
-const GuestMenu = ({
-  open,
-  form,
-  name,
-  options,
-}: {
-  open: boolean
-  form: BookingFormType
-  name: string
-  options: GuestOption
-}) => (
-  <Menu open={open}>
-    {options.map((option: GuestOption) => (
-      <OptionComponent
-        key={option.name}
-        form={form}
-        name={name}
-        option={option}
-      />
-    ))}
-  </Menu>
-)
+const formattedCities = cities.map((city) => ({
+  value: city.toLowerCase(),
+  label: city,
+}))
 
-const DatePicker = (props) => (
-  <DateInput className="w-full" inputComponent={DatePickerInput} {...props} />
-)
+const filterAndMapCiies = (query: string) =>
+  formattedCities.filter((city) => city.value.includes(query.toLowerCase()))
 
-const filterAndMapCiies = (query) =>
-  cities
-    .filter((city) => city.toLowerCase().includes(query.toLowerCase()))
-    .map((city) => ({ value: city.toLowerCase(), label: city }))
-
-const searchPlace = async (query) =>
+const searchPlace = async (query: string) =>
   new Promise((resolve, _reject) => {
     setTimeout(() => resolve(filterAndMapCiies(query)), 600)
   })
 
-const defaultLocationOptions: LocationOption[] = cities
-  .slice(0, 5)
-  .map((city) => ({ value: city.toLowerCase(), label: city }))
+const defaultLocationOptions: LocationOption[] = formattedCities.slice(0, 5)
+
+const dateConfig = {
+  altInput: true,
+  altFormat: "M j, Y",
+  dateFormat: "Y-m-d",
+  wrap: true,
+}
 
 const formSchema: FormSchema = {
   from: {
     type: "location",
-    focusOnNext: "to",
     options: { defaultLocationOptions, searchPlace },
+    focusOnNext: "to",
   },
   to: {
     type: "location",
-    focusOnNext: "checkIn",
     options: { defaultLocationOptions, searchPlace },
+    focusOnNext: "checkIn",
   },
   checkIn: {
     type: "date",
     focusOnNext: "checkOut",
-    options: {
-      altInput: true,
-      altFormat: "M j, Y",
-      dateFormat: "Y-m-d",
-      minDate: "today",
-      wrap: true,
-    },
+    options: { ...dateConfig, minDate: "today" },
   },
   checkOut: {
     type: "date",
     focusOnNext: "guests",
-    options: {
-      minDateFrom: "checkIn",
-      altInput: true,
-      altFormat: "M j, Y",
-      dateFormat: "Y-m-d",
-      wrap: true,
-    },
+    options: { ...dateConfig, minDateFrom: "checkIn" },
   },
   guests: {
     type: "peopleCount",
@@ -200,22 +184,6 @@ const formSchema: FormSchema = {
   },
 }
 
-interface FancyButtonProps extends React.ComponentPropsWithoutRef<"button"> {
-  isLoading?: boolean
-}
-
-const ButtonComp = React.forwardRef<HTMLButtonElement, FancyButtonProps>(
-  ({ isLoading, ...props }, ref) => (
-    <IconContainer ref={ref} {...props}>
-      {isLoading ? (
-        <FaSpinner className="w-4 h-4 animate-spin" />
-      ) : (
-        <FaMapMarkerAlt className="w-4 h-4" />
-      )}
-    </IconContainer>
-  )
-)
-
 export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
 
@@ -232,12 +200,16 @@ export const BookingForm = () => {
           menu={Menu}
           menuContainer={MenuContainer}
           option={OptionContainer}
-          button={ButtonComp}
           inputComponent={InputComponent}
           name="from"
           emptyOption="Nothing was found :("
           placeholder="Where are you going?"
         />
+      </InputContainer>
+      <InputContainer style={{ width: "auto" }}>
+        <SwapButton onClick={() => form.swapLocations()}>
+          <IoMdSwap className="w-4 h-4" />
+        </SwapButton>
       </InputContainer>
       <InputContainer>
         <Label>{"To"}</Label>
@@ -246,7 +218,6 @@ export const BookingForm = () => {
           menu={Menu}
           menuContainer={MenuContainer}
           option={OptionContainer}
-          button={ButtonComp}
           inputComponent={InputComponent}
           name="to"
           emptyOption="Nothing was found :("
@@ -255,28 +226,36 @@ export const BookingForm = () => {
       </InputContainer>
       <InputContainer>
         <Label>{"Check in"}</Label>
-        <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
+        <DateInput
+          inputComponent={InputComponent}
+          placeholder="Add date"
+          form={form}
+          name="checkIn"
+        />
       </InputContainer>
       <InputContainer>
         <Label>{"Check out"}</Label>
-        <DatePicker placeholder="Add date" form={form} name={"checkOut"} />
+        <DateInput
+          inputComponent={InputComponent}
+          placeholder="Add date"
+          form={form}
+          name="checkOut"
+        />
       </InputContainer>
       <InputContainer>
         <Label>{"Guests"}</Label>
         <GuestSelect
           form={form}
           menuContainer={MenuContainer}
-          menu={GuestMenu}
+          menu={Menu}
           inputComponent={InputComponent}
+          option={GuestOptionComponent}
           placeholder="Add guests"
           name={"guests"}
         />
       </InputContainer>
       <InputContainer>
-        <MainButton onClick={onBookButtonClick}>
-          <FaSearch className="w-3 h-3 text-white" />
-          <ButtonText>{"Search"}</ButtonText>
-        </MainButton>
+        <MainButton onClick={onBookButtonClick}>{"Search"}</MainButton>
       </InputContainer>
     </Container>
   )

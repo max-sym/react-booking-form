@@ -35,7 +35,12 @@ export const DateInput = ({
 
   return (
     <Flatpickr className={className} onChange={onChange} options={options}>
-      <InputComponent placeholder={placeholder} inputRef={form.refs[name]} />
+      <InputComponent
+        placeholder={placeholder}
+        form={form}
+        name={name}
+        containerRef={form.refs[name]}
+      />
     </Flatpickr>
   )
 }
