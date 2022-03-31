@@ -24,6 +24,9 @@ export type SelectType = {
       $disabled?: boolean
     }
   >
+  /**
+   * Popup window position offset
+   */
   offset?: OffsetType
 }
 

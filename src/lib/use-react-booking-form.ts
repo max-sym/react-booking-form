@@ -104,15 +104,17 @@ export type RefsType = {
   [key: string]: React.RefObject<HTMLElement>
 }
 
+export type FormStateItem = {
+  type: FieldType
+  value: FieldValue
+  /**
+   * Stores total number of guests in guest selector.
+   */
+  totalCount?: number
+}
+
 export type FormState = {
-  [key: string]: {
-    type: FieldType
-    value: FieldValue
-    /**
-     * Used to know total number of guests in guest selector.
-     */
-    totalCount?: number
-  }
+  [key: string]: FormStateItem
 }
 
 const getFieldKeysToSwap = (formState: FormState) => {

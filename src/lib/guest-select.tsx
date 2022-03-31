@@ -1,6 +1,10 @@
 import React, { useEffect } from "react"
 import { Popover, Portal } from "@headlessui/react"
-import { BookingForm, GuestOption } from "./use-react-booking-form"
+import {
+  BookingForm,
+  FormStateItem,
+  GuestOption,
+} from "./use-react-booking-form"
 import { useSelectPopper } from "./use-select-popper"
 
 export type OptionType = {
@@ -8,6 +12,9 @@ export type OptionType = {
   value: any
 }
 
+/**
+ * Popup window position offset
+ */
 export type OffsetType = [number, number]
 
 export type GuestSelectType = {
@@ -20,7 +27,41 @@ export type GuestSelectType = {
   okText?: string
   inputComponent: React.ElementType<any & { isLoading?: boolean }>
   placeholder?: string
+  /**
+   * Popup window position offset
+   */
   offset?: OffsetType
+  /**
+   * The format of text to be displayed in the input component.
+   * - "all" would show the text 1 guest, 2 guests, ...
+   * - "each" would show `1 adults`, `2 adults | 2 children`, ...
+   */
+  countTextFormat?: CountTextFormat
+}
+
+type CountTextFormat = "all" | "each" | ((fieldItem?: FormStateItem) => string)
+
+const getCountDisplayText = (
+  fieldItem: FormStateItem,
+  mode: CountTextFormat
+) => {
+  if (mode === "all") {
+    const count = fieldItem?.totalCount
+    return count ? `${count} guest${count > 1 ? "s" : ""}` : ""
+  }
+  if (mode === "each") {
+    let result = ""
+
+    // @ts-ignore
+    fieldItem.value.forEach((value) => {
+      const separator = result ? " | " : ""
+      if (!value.value) return
+
+      result = result.concat(`${separator}${value.value} ${value.name}`)
+    })
+    return result
+  }
+  return mode?.(fieldItem)
 }
 
 export const GuestSelect = ({
@@ -34,6 +75,7 @@ export const GuestSelect = ({
   okText = "Ok",
   placeholder,
   offset,
+  countTextFormat = "all",
 }: GuestSelectType) => {
   const formStateItem = form?.state?.[name]
   const options = formStateItem.value
@@ -56,9 +98,7 @@ export const GuestSelect = ({
     element?.click()
   }
 
-  const count = form.state[name].totalCount
-
-  const val = count ? `${count} guest${count > 1 ? "s" : ""}` : ""
+  const value = getCountDisplayText(form.state[name], countTextFormat)
 
   const onOkButtonClick = () => {
     element?.click()
@@ -69,7 +109,7 @@ export const GuestSelect = ({
       {({ open }) => (
         <>
           <Popover.Button
-            value={val}
+            value={value}
             ref={setElement}
             onFocus={onFocus}
             as={InputComponent}

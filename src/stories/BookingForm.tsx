@@ -20,7 +20,7 @@ import { IoMdSwap } from "@react-icons/all-files/io/IoMdSwap"
 import { cities } from "./dummy-data/cities"
 import React from "react"
 
-const Container = tw.div`md:rounded-full rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
+const Container = tw.div`md:rounded-full rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2 border border-gray-300`
 const InputCore = tw.input`relative w-full peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const InputContainer = tw.div`relative w-full md:w-1/3 flex flex-col justify-center items-center pl-2`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
