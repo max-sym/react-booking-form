@@ -20,22 +20,24 @@ import { IoMdSwap } from "@react-icons/all-files/io/IoMdSwap"
 import { cities } from "./dummy-data/cities"
 import React from "react"
 
-const Container = tw.div`rounded-full bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
-const InputCore = tw.input`relative peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full w-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
+const Container = tw.div`md:rounded-full rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2`
+const InputCore = tw.input`relative w-full peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const InputContainer = tw.div`relative w-full md:w-1/3 flex flex-col justify-center items-center pl-2`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
-const ButtonCore = tw.button`appearance-none w-full h-10 rounded-full flex justify-center items-center font-bold px-3`
+const ButtonCore = tw.button`appearance-none h-10 rounded-full flex justify-center items-center font-bold px-3`
 const SwapButton = tw(ButtonCore)`
-mt-5 border border-gray-300 hover:border-green-500 hover:text-green-500 focus:border-green-500 focus:text-green-500 transition outline-none`
+md:mt-5 border md:w-full border-gray-300 hover:border-green-500 hover:text-green-500 focus:border-green-500 focus:text-green-500 transition outline-none`
 
-const MainButton = tw(ButtonCore)`
-mt-5 border-0 bg-green-500 text-white uppercase`
+const PrimaryButton = tw(ButtonCore)`
+border-0 bg-green-500 text-white uppercase`
+const GuestOkButton = tw(PrimaryButton)`mx-auto w-5/6 mb-2`
+const SearchButton = tw(PrimaryButton)`w-full mt-5`
 const IconContainer = tw.a`z-20 absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer group-hover:text-green-500 peer-focus:text-green-500 text-gray-500 transition`
 
 const MenuContainer = tw.div`z-20`
 const Menu = tw.ul<{ open: boolean }>`
-  w-64 max-h-[240px] border z-20 transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden
+  w-64 max-h-[240px] border z-20 shadow-lg transform transition ease-in-out bg-white rounded-3xl overflow-y-auto overflow-x-hidden
   ${({ open }) => (open ? "" : "opacity-0 -translate-y-4 pointer-events-none")}
 `
 const Text = tw.p`text-sm font-bold text-gray-700 font-title`
@@ -68,7 +70,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
     const InputIcon = isLoading ? FaSpinner : iconsList[itemType || "location"]
 
     return (
-      <div className="relative group" ref={containerRef}>
+      <div className="relative w-full group" ref={containerRef}>
         <InputCore data-input ref={ref} name={name} {...props} />
         <IconContainer title="toggle" data-toggle>
           <InputIcon className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
@@ -235,6 +237,7 @@ export const BookingForm = () => {
         <Label>{"Check in"}</Label>
         <DateInput
           inputComponent={InputComponent}
+          className="w-full"
           placeholder="Add date"
           form={form}
           name="checkIn"
@@ -244,6 +247,7 @@ export const BookingForm = () => {
         <Label>{"Check out"}</Label>
         <DateInput
           inputComponent={InputComponent}
+          className="w-full"
           placeholder="Add date"
           form={form}
           name="checkOut"
@@ -257,12 +261,14 @@ export const BookingForm = () => {
           menu={Menu}
           inputComponent={InputComponent}
           option={GuestOptionComponent}
+          okButton={GuestOkButton}
+          okText="Ok!"
           placeholder="Add guests"
           name={"guests"}
         />
       </InputContainer>
       <InputContainer>
-        <MainButton onClick={onBookButtonClick}>{"Search"}</MainButton>
+        <SearchButton onClick={onBookButtonClick}>{"Search"}</SearchButton>
       </InputContainer>
     </Container>
   )

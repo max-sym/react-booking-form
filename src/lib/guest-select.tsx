@@ -16,6 +16,8 @@ export type GuestSelectType = {
   menu: React.ElementType
   menuContainer: React.ElementType
   option: React.ElementType
+  okButton?: React.ElementType
+  okText?: string
   inputComponent: React.ElementType<any & { isLoading?: boolean }>
   placeholder?: string
   offset?: OffsetType
@@ -28,6 +30,8 @@ export const GuestSelect = ({
   option: OptionComponent,
   menuContainer: MenuContainer,
   inputComponent: InputComponent,
+  okButton: OkButton,
+  okText = "Ok",
   placeholder,
   offset,
 }: GuestSelectType) => {
@@ -56,8 +60,12 @@ export const GuestSelect = ({
 
   const val = count ? `${count} guest${count > 1 ? "s" : ""}` : ""
 
+  const onOkButtonClick = () => {
+    element?.click()
+  }
+
   return (
-    <Popover>
+    <Popover as={React.Fragment}>
       {({ open }) => (
         <>
           <Popover.Button
@@ -75,7 +83,7 @@ export const GuestSelect = ({
               as={MenuContainer}
               ref={setPopper}
               static
-              style={styles.popper}
+              style={{ ...styles.popper, pointerEvents: open ? "" : "none" }}
               {...attributes.popper}
             >
               <Menu open={open}>
@@ -88,6 +96,9 @@ export const GuestSelect = ({
                     option={option}
                   />
                 ))}
+                {!!OkButton && (
+                  <OkButton onClick={onOkButtonClick}>{okText}</OkButton>
+                )}
               </Menu>
             </Popover.Panel>
           </Portal>

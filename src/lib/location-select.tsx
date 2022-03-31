@@ -146,7 +146,7 @@ export const LocationSelect = ({
               as={MenuContainer}
               ref={setPopper}
               static
-              style={styles.popper}
+              style={{ ...styles.popper, pointerEvents: open ? "" : "none" }}
               {...attributes.popper}
             >
               <Menu open={open}>
