@@ -11,7 +11,6 @@ import {
 import tw from "tailwind-styled-components"
 import { FaMapMarkerAlt } from "@react-icons/all-files/fa/FaMapMarkerAlt"
 import { FaCalendarAlt } from "@react-icons/all-files/fa/FaCalendarAlt"
-import { FaSearch } from "@react-icons/all-files/fa/FaSearch"
 import { FaSpinner } from "@react-icons/all-files/fa/FaSpinner"
 import { FaPlus } from "@react-icons/all-files/fa/FaPlus"
 import { FaMinus } from "@react-icons/all-files/fa/FaMinus"
@@ -207,7 +206,11 @@ export const BookingForm = () => {
         />
       </InputContainer>
       <InputContainer style={{ width: "auto" }}>
-        <SwapButton onClick={() => form.swapLocations()}>
+        <SwapButton
+          title="Swap Locations"
+          aria-label="Swap Locations"
+          onClick={() => form.swapLocations()}
+        >
           <IoMdSwap className="w-4 h-4" />
         </SwapButton>
       </InputContainer>
