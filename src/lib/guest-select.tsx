@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import { Popover, Portal } from "@headlessui/react"
 import { BookingForm } from "./use-react-booking-form"
 import { useSelectPopper } from "./use-select-popper"
-import { mergeRefs } from "./utils"
 
 export type OptionType = {
   name: string
@@ -31,17 +30,23 @@ export const GuestSelect = ({
   offset,
 }: GuestSelectType) => {
   const formStateItem = form?.state?.[name]
-  const { button, setButton, setPopper, styles, attributes } = useSelectPopper({
+  const {
+    element,
+    setElement,
+    setPopper,
+    styles,
+    attributes,
+  } = useSelectPopper({
     offset,
   })
 
   useEffect(() => {
     //@ts-ignore
-    form.refs[name].current = button
-  }, [button])
+    form.refs[name].current = element
+  }, [element])
 
   const onFocus = () => {
-    button?.click()
+    element?.click()
   }
 
   const count = form.state[name].totalCount
@@ -49,37 +54,35 @@ export const GuestSelect = ({
   const val = count ? `${count} guest${count > 1 ? "s" : ""}` : ""
 
   return (
-    <div className="relative">
-      <Popover>
-        {({ open }) => (
-          <>
-            <Popover.Button
-              value={val}
-              ref={setButton}
-              onFocus={onFocus}
-              as={InputComponent}
-              placeholder={placeholder}
-              readOnly
-            />
-            <Portal>
-              <Popover.Panel
-                as={MenuContainer}
-                ref={setPopper}
-                static
-                style={styles.popper}
-                {...attributes.popper}
-              >
-                <Menu
-                  open={open}
-                  options={formStateItem.value}
-                  name={name}
-                  form={form}
-                />
-              </Popover.Panel>
-            </Portal>
-          </>
-        )}
-      </Popover>
-    </div>
+    <Popover>
+      {({ open }) => (
+        <>
+          <Popover.Button
+            value={val}
+            ref={setElement}
+            onFocus={onFocus}
+            as={InputComponent}
+            placeholder={placeholder}
+            readOnly
+          />
+          <Portal>
+            <Popover.Panel
+              as={MenuContainer}
+              ref={setPopper}
+              static
+              style={styles.popper}
+              {...attributes.popper}
+            >
+              <Menu
+                open={open}
+                options={formStateItem.value}
+                name={name}
+                form={form}
+              />
+            </Popover.Panel>
+          </Portal>
+        </>
+      )}
+    </Popover>
   )
 }

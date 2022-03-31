@@ -59,36 +59,6 @@ const InputComponent = tw(
   InputCore
 )`relative flex w-full h-10 outline-none focus:outline-none`
 
-const ControlComponent = ({
-  form,
-  name,
-  placeholder,
-  ...props
-}: {
-  form: BookingFormType
-  name: string
-  placeholder?: string
-}) => {
-  const count = form.state[name].totalCount
-
-  return (
-    <div className="relative flex w-full h-10 group">
-      <ControlCore
-        className="outline-none focus:outline-none"
-        ref={form.refs[name] as any}
-        tabIndex={-1}
-        {...props}
-      >
-        <p>{count ? `${count} guest${count > 1 ? "s" : ""}` : ""} </p>
-        <Placeholder>{count ? "" : placeholder}</Placeholder>
-      </ControlCore>
-      <IconContainer>
-        <FaUser className="w-4 h-4" />
-      </IconContainer>
-    </div>
-  )
-}
-
 const OptionComponent = ({
   form,
   name,
@@ -125,10 +95,25 @@ const OptionComponent = ({
   </OptionBase>
 )
 
-const GuestMenu = ({ open, form, name, options }) => (
+const GuestMenu = ({
+  open,
+  form,
+  name,
+  options,
+}: {
+  open: boolean
+  form: BookingFormType
+  name: string
+  options: GuestOption
+}) => (
   <Menu open={open}>
-    {options.map((option) => (
-      <OptionComponent form={form} name={name} option={option} />
+    {options.map((option: GuestOption) => (
+      <OptionComponent
+        key={option.name}
+        form={form}
+        name={name}
+        option={option}
+      />
     ))}
   </Menu>
 )
