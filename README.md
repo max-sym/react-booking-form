@@ -374,11 +374,12 @@ const GuestOptionComponent = ({
 </details>
   
 <details>
-  <summary> 👉 Documentation</summary>
+
+<summary> 👉 Documentation</summary>
 
 ## Basic
 
-Here's the form schema object. This is our main configuration:
+Here's the form schema object. This is the main library configuration:
 
 ```js
 const formSchema: FormSchema = {
@@ -454,44 +455,87 @@ And later the form can be passed down to the form as:
 ```jsx
 export const BookingForm = () => {
   const form = useReactBookingForm({ formSchema })
+	
+  const onBookButtonClick = () => {
+    const config = {
+      convertDate: (dateValue: Date) => moment(dateValue).format("DD-MM-YYYY"),
+    }
+    alert(form.serializeToURLParams(config))
+  }
 
   return (
     <Container>
       <InputContainer>
-        <Label>{"Location"}</Label>
+        <Label>{"From"}</Label>
         <LocationSelect
           form={form}
+          menu={Menu}
           menuContainer={MenuContainer}
-          optionContainer={OptionContainer}
+          option={OptionContainer}
           inputComponent={InputComponent}
-          name="location"
-          inputProps={{ placeholder: "Where are you going?" }}
+          name="from"
+          emptyOption="Nothing was found :("
+          placeholder="Where are you going?"
+        />
+      </InputContainer>
+      <InputContainer style={{ width: "auto" }}>
+        <SwapButton
+          title="Swap Locations"
+          aria-label="Swap Locations"
+          onClick={() => form.swapLocations()}
+        >
+          <IoMdSwap className="w-4 h-4" />
+        </SwapButton>
+      </InputContainer>
+      <InputContainer>
+        <Label>{"To"}</Label>
+        <LocationSelect
+          form={form}
+          menu={Menu}
+          menuContainer={MenuContainer}
+          option={OptionContainer}
+          inputComponent={InputComponent}
+          name="to"
+          emptyOption="Nothing was found :("
+          placeholder="Where are you going?"
         />
       </InputContainer>
       <InputContainer>
         <Label>{"Check in"}</Label>
-        <DatePicker placeholder="Add date" form={form} name={"checkIn"} />
+        <DateInput
+          inputComponent={InputComponent}
+          className="w-full"
+          placeholder="Add date"
+          form={form}
+          name="checkIn"
+        />
       </InputContainer>
       <InputContainer>
         <Label>{"Check out"}</Label>
-        <DatePicker placeholder="Add date" form={form} name={"checkOut"} />
+        <DateInput
+          inputComponent={InputComponent}
+          className="w-full"
+          placeholder="Add date"
+          form={form}
+          name="checkOut"
+        />
       </InputContainer>
       <InputContainer>
         <Label>{"Guests"}</Label>
-        <GuestsSelect
+        <GuestSelect
           form={form}
           menuContainer={MenuContainer}
-          optionComponent={OptionComponent}
-          controlComponent={ControlComponent}
-          controlProps={{ placeholder: "Add guests" }}
+          menu={Menu}
+          inputComponent={InputComponent}
+          option={GuestOptionComponent}
+          okButton={GuestOkButton}
+          okText="Ok!"
+          placeholder="Add guests"
           name={"guests"}
         />
       </InputContainer>
       <InputContainer>
-        <MainButton>
-          <FaSearch className="text-white w-3 h-3" />
-          <ButtonText>{"Search"}</ButtonText>
-        </MainButton>
+        <SearchButton onClick={onBookButtonClick}>{"Search"}</SearchButton>
       </InputContainer>
     </Container>
   )
@@ -541,6 +585,34 @@ export type BookingForm = {
    * ```
    */
   setGuestOptionValue: (key: string, option: any, value: any) => void
+  /**
+   * A callback to pass to the guest minus button click event.
+   */
+  onMinusClick: (option: GuestOption, name: string) => () => void
+  /**
+   * A callback to pass to the guest plus button click event.
+   */
+  onPlusClick: (option: GuestOption, name: string) => () => void
+  /**
+   * A callback to pass to the guest buttons to determine if the buttons are disabled.
+   */
+  getIsOptionDisabled: (
+    option: GuestOption,
+    optionType: "plus" | "minus"
+  ) => boolean
+  /**
+   * This can be used to swap the location fields.
+   */
+  swapLocations: (fieldKeys?: [string, string] | undefined) => void
+  /**
+   * Converts the form state to url query string.
+   * Use convertDate to convert dates to the desired format.
+   */
+  serializeToURLParams: ({
+    convertDate,
+  }: {
+    convertDate?: (dateValue: Date) => any
+  }) => string
 }
 ```
 
