@@ -8,8 +8,7 @@
 Lightweight, flexible library for quickly creating booking forms for websites with purposes such as hotel, restaurant, transport services booking and similar.\
 Includes location, calendar, and guest selectors logic (style agnostic) and much more.
 
-<img src="https://i.imgur.com/JsZdqht.gif" width="100%" />
-<img src="https://i.imgur.com/GGwYIiu.gif" width="100%" />
+<img src="https://i.imgur.com/9JBUX53.gif" width="100%" />
 
 ## Live example
 - [CodeSandbox playground](https://codesandbox.io/s/react-booking-form-example-9z489)
