@@ -12,7 +12,7 @@ Includes location, calendar, and guest selectors logic (style agnostic) and much
 
 ## Live example
 - [CodeSandbox playground](https://codesandbox.io/s/react-booking-form-example-9z489)
-- [Storybook example](https://611f9e606d0396003a654e41-zxstavlflj.chromatic.com/?path=/story/example-bookingform--basic)
+- [Storybook example](https://611f9e606d0396003a654e41-sfznirawpt.chromatic.com/?path=/story/booking-form--basic)
 
 ## Features included
 Main:
