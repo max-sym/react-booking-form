@@ -5,7 +5,7 @@ export type LocationOption = {
   value: string
 }
 
-export type FieldValue = LocationOption | GuestOption[] | string
+export type FieldValue = LocationOption | Date | GuestOption[] | string
 
 export type FieldType = "location" | "date" | "datetime" | "peopleCount"
 
@@ -52,7 +52,7 @@ export type BookingForm = {
   /**
    * Helper that sets the particular field state in the form.
    */
-  setFieldState: (key: string, state: any) => void
+  setFieldState: (key: string, fieldState: any) => void
   /**
    * An array of references to the form fields.
    * This can be used to focus on a particular field and do other relevant actions.
@@ -70,25 +70,64 @@ export type BookingForm = {
    * ```
    */
   setGuestOptionValue: (key: string, option: any, value: any) => void
+  /**
+   * A callback to pass to the guest minus button click event.
+   */
+  onMinusClick: (option: GuestOption, name: string) => () => void
+  /**
+   * A callback to pass to the guest plus button click event.
+   */
+  onPlusClick: (option: GuestOption, name: string) => () => void
+  /**
+   * A callback to pass to the guest buttons to determine if the buttons are disabled.
+   */
+  getIsOptionDisabled: (
+    option: GuestOption,
+    optionType: "plus" | "minus"
+  ) => boolean
+  /**
+   * This can be used to swap the location fields.
+   */
+  swapLocations: (fieldKeys?: [string, string] | undefined) => void
+  /**
+   * Converts the form state to url query string.
+   * Use convertDate to convert dates to the desired format.
+   */
+  serializeToURLParams: ({
+    convertDate,
+  }: {
+    convertDate?: (dateValue: Date) => any
+  }) => string
 }
 
 export type RefsType = {
   [key: string]: React.RefObject<HTMLElement>
 }
 
+export type FormStateItem = {
+  type: FieldType
+  value: FieldValue
+  /**
+   * Stores total number of guests in guest selector.
+   */
+  totalCount?: number
+}
+
 export type FormState = {
-  [key: string]: {
-    type: FieldType
-    value: FieldValue
-    /**
-     * Used for menus in location and guest selector.
-     */
-    isOpen?: boolean
-    /**
-     * Used to know total number of guests in guest selector.
-     */
-    totalCount?: number
-  }
+  [key: string]: FormStateItem
+}
+
+const getFieldKeysToSwap = (formState: FormState) => {
+  const firstLocation = Object.keys(formState).find(
+    (key) => formState[key].type === "location"
+  )
+  const secondLocation = Object.keys(formState).find(
+    (key) => key !== firstLocation && formState[key].type === "location"
+  )
+
+  if (!firstLocation || !secondLocation) return null
+
+  return [firstLocation, secondLocation]
 }
 
 export const useReactBookingForm = ({
@@ -145,11 +184,11 @@ export const useReactBookingForm = ({
   )
 
   const setFieldValue = useCallback((key: string, value: any) => {
-    setState((field) => ({ ...field, [key]: { ...field[key], value } }))
+    setState((state) => ({ ...state, [key]: { ...state[key], value } }))
   }, [])
 
-  const setFieldState = useCallback((key: string, state: any) => {
-    setState((field) => ({ ...field, [key]: { ...field[key], ...state } }))
+  const setFieldState = useCallback((key: string, fieldState: any) => {
+    setState((state) => ({ ...state, [key]: { ...state[key], ...fieldState } }))
   }, [])
 
   const setGuestOptionValue = useCallback(
@@ -164,7 +203,71 @@ export const useReactBookingForm = ({
         totalCount: getGuestTotalCount(newStateItemValue),
       })
     },
+    [state]
+  )
+
+  const onMinusClick = useCallback(
+    (option: GuestOption, name: string) => () => {
+      setGuestOptionValue(name, option, option.value - 1)
+    },
+    [setGuestOptionValue]
+  )
+
+  const onPlusClick = useCallback(
+    (option: GuestOption, name: string) => () => {
+      setGuestOptionValue(name, option, option.value + 1)
+    },
+    [setGuestOptionValue]
+  )
+
+  const getIsOptionDisabled = useCallback(
+    (option: GuestOption, optionButtonType: "plus" | "minus") =>
+      optionButtonType === "plus"
+        ? option.value >= (option.max || 100)
+        : option.value === 0,
     []
+  )
+
+  const swapLocations = useCallback(
+    (fieldKeys?: [string, string]) => {
+      const fieldKeysToSwap =
+        fieldKeys?.length === 2 ? fieldKeys : getFieldKeysToSwap(state)
+
+      if (!fieldKeysToSwap) return
+
+      // swap locations in state
+      setFieldState(fieldKeysToSwap[0], state[fieldKeysToSwap[1]])
+      setFieldState(fieldKeysToSwap[1], state[fieldKeysToSwap[0]])
+    },
+    [state]
+  )
+
+  const serializeToURLParams = useCallback(
+    ({ convertDate }: { convertDate?: (dateValue: Date) => any }) => {
+      const params = {}
+      Object.keys(state).forEach((key) => {
+        const field = state[key]
+
+        let value = ""
+        if (field.type === "date") {
+          value = convertDate ? convertDate(field.value[0]) : field.value[0]
+        }
+        if (field.type === "peopleCount") {
+          // @ts-ignore
+          field.value.forEach((option) => {
+            params[`${key}-${option.name}`] = option.value
+          })
+          return
+        }
+        if (field.type === "location") {
+          // @ts-ignore
+          value = field.value.value
+        }
+        params[key] = value
+      })
+      return new URLSearchParams(params).toString()
+    },
+    [state]
   )
 
   const bookingForm = useMemo<BookingForm>(
@@ -177,8 +280,26 @@ export const useReactBookingForm = ({
       refs,
       focusOn,
       setGuestOptionValue,
+      onMinusClick,
+      onPlusClick,
+      getIsOptionDisabled,
+      swapLocations,
+      serializeToURLParams,
     }),
-    [formSchema, state, setState, refs, setFieldValue, focusOn, setFieldState]
+    [
+      formSchema,
+      state,
+      setState,
+      refs,
+      setFieldValue,
+      focusOn,
+      setFieldState,
+      onMinusClick,
+      onPlusClick,
+      getIsOptionDisabled,
+      swapLocations,
+      serializeToURLParams,
+    ]
   )
   return bookingForm
 }
