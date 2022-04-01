@@ -16,19 +16,22 @@ Includes location, calendar, and guest selectors logic (style agnostic) and much
 - [Storybook example](https://611f9e606d0396003a654e41-zxstavlflj.chromatic.com/?path=/story/example-bookingform--basic)
 
 ## Features included
+Main:
+
 ✅ Style agnostic: style your components however you want. Logic is taken care of by the library\
-✅ Accessible\
-✅ Responsible\
 ✅ Debounced location search\
 ✅ Focus on the next form fields after selections\
 ✅ Date calendar with time selector [flatpickr](https://github.com/flatpickr/flatpickr)\
-✅ Make a datetime field not allow to select date prior to another's datetime field value (e.g., so users can't specify check-in date before the check-out date) with just one configuration\
+✅ Ability to set check-out minimum date depending on the selected check-in date value.
+✅ Allows human readable datetime format + localization (configuration options provided by [flatpickr](https://github.com/flatpickr/flatpickr))\
 ✅ Little size\
 ✅ Guest count selection by person group\
-✅ Allows human readable datetime format (configuration option provided by [flatpickr](https://github.com/flatpickr/flatpickr))\
-✅ Flexible form schema\
-✅ Popups position is relative to window position and size (i.e., it would try to make the popups visible even if not enough height)
+
+Layout & DOM:
+✅ Popups' position is relative to the browser window's position and size (i.e., it would try to make the popups visible even if not enough height)
 ✅ Uses portal under the hood 🎩
+✅ Accessible\
+✅ Responsive\
 
 ### Notes
 - The library styling is very flexible, however the calendar component styling requires including a theme css file from [flatpickr](https://github.com/flatpickr/flatpickr). We made it so you can fully control it by including it yourself or creating your own theme;
