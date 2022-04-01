@@ -1,6 +1,6 @@
 {
   "name": "react-booking-form",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "main": "dist/index.js",
   "repository": "git@github.com:max-sym/react-booking-form.git",
   "author": "Maksym Chuchmai <mymaksym@gmail.com>",
