@@ -1,6 +1,6 @@
 {
   "name": "react-booking-form",
-  "version": "alpha-1.0.0",
+  "version": "2.0.0-alpha.0",
   "main": "dist/index.js",
   "repository": "git@github.com:max-sym/react-booking-form.git",
   "author": "Maksym Chuchmai <mymaksym@gmail.com>",
@@ -47,7 +47,7 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-import": "^1.13.3",
-    "chromatic": "^5.9.2",
+    "chromatic": "^6.5.3",
     "css-loader": "^6.2.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^6.11.0",
