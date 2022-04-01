@@ -19,16 +19,17 @@ Main:
 
 ✅ Style agnostic: style your components however you want. Logic is taken care of by the library\
 ✅ Debounced location search\
-✅ Focus on the next form fields after selections\
+✅ Swap locations\
+✅ Focus on the next form fields right after selections\
 ✅ Date calendar with time selector [flatpickr](https://github.com/flatpickr/flatpickr)\
-✅ Ability to set check-out minimum date depending on the selected check-in date value.
+✅ Ability to set check-out minimum date depending on the selected check-in date value.\
 ✅ Allows human readable datetime format + localization (configuration options provided by [flatpickr](https://github.com/flatpickr/flatpickr))\
 ✅ Little size\
 ✅ Guest count selection by person group\
 
 Layout & DOM:
-✅ Popups' position is relative to the browser window's position and size (i.e., it would try to make the popups visible even if not enough height)
-✅ Uses portal under the hood 🎩
+✅ Popups' position is relative to the browser window's position and size (i.e., it would try to make the popups visible even if not enough height)\
+✅ Uses [React Portal](https://reactjs.org/docs/portals.html) under the hood 🎩\
 ✅ Accessible\
 ✅ Responsive\
 
