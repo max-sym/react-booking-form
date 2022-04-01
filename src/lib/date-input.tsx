@@ -21,7 +21,14 @@ export const DateInput = ({
 
   const onChange = (value: Date) => {
     form.setFieldValue(name, value)
-    form.focusOn(item.focusOnNext)
+
+    // If the user presses Enter key to change the date in the current date selector
+    // and the focusOnNext field happens to be another date field then it would
+    // set that date field to the same value as the former and skip to the next
+    // field in the line. This timeout seems to solve this issue
+    setTimeout(() => {
+      form.focusOn(item.focusOnNext)
+    }, 0)
   }
 
   const options = useMemo(() => {
