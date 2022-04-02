@@ -681,11 +681,12 @@ export const BookingForm = () => {
 ## Contribution Guide
 - Clone the repository to your local machine;
 - Run `yarn` in the root
-- Run `tw:dev` (to construct TailwindCSS CSS file)
 - Run `yarn storybook`
-- Develop 🚀
+- Go to `localhost:6006` and see magic happen 🚀
 
 Whenever finished, create a PR on a separate branch for review.
+
+Contributions are very welcome!
 
 ## License
 MIT
