@@ -94,10 +94,6 @@ export const GuestSelect = ({
     form.refs[name].current = element
   }, [element])
 
-  const onFocus = () => {
-    element?.click()
-  }
-
   const value = getCountDisplayText(form.state[name], countTextFormat)
 
   const onOkButtonClick = () => {
@@ -111,7 +107,6 @@ export const GuestSelect = ({
           <Popover.Button
             value={value}
             ref={setElement}
-            onFocus={onFocus}
             as={InputComponent}
             placeholder={placeholder}
             name={name}

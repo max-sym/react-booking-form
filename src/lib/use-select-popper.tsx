@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { usePopper } from "react-popper"
 import { OffsetType } from "./guest-select"
 

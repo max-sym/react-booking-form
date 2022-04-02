@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, RefObject, createRef } from "react"
 
 export type LocationOption = {
   label: string
@@ -101,7 +101,7 @@ export type BookingForm = {
 }
 
 export type RefsType = {
-  [key: string]: React.RefObject<HTMLElement>
+  [key: string]: RefObject<HTMLElement>
 }
 
 export type FormStateItem = {
@@ -153,7 +153,7 @@ export const useReactBookingForm = ({
 
   const refs: RefsType = useMemo(() => {
     return Object.keys(formSchema).reduce((acc, key) => {
-      acc[key] = React.createRef<any>()
+      acc[key] = createRef<any>()
       return acc
     }, {})
   }, [])
@@ -162,7 +162,9 @@ export const useReactBookingForm = ({
     (name?: string) => {
       if (!name) return
 
-      if (state[name].type === "date") {
+      const itemType = state[name].type
+
+      if (itemType === "date") {
         let child = refs[name].current?.querySelector("[data-input]")
         /**
          * This is created to avoid not focusing on the input when the datepicker has altInput + altFormat prop
@@ -177,8 +179,12 @@ export const useReactBookingForm = ({
         return
       }
 
-      if (!refs[name].current?.focus) return
-      refs[name].current?.focus?.()
+      if (itemType === "location") {
+        return refs[name].current?.focus?.()
+      }
+      // The guest field needs to be clicked instead of focusing because if not, it would
+      // open AND close when the user clicks on it instead of only opening.
+      refs[name].current?.click?.()
     },
     [refs]
   )
@@ -235,7 +241,6 @@ export const useReactBookingForm = ({
 
       if (!fieldKeysToSwap) return
 
-      // swap locations in state
       setFieldState(fieldKeysToSwap[0], state[fieldKeysToSwap[1]])
       setFieldState(fieldKeysToSwap[1], state[fieldKeysToSwap[0]])
     },
@@ -250,7 +255,8 @@ export const useReactBookingForm = ({
 
         let value = ""
         if (field.type === "date") {
-          value = convertDate ? convertDate(field.value[0]) : field.value[0]
+          const newValue = field.value?.[0]
+          value = convertDate ? convertDate(newValue) : newValue
         }
         if (field.type === "peopleCount") {
           // @ts-ignore
@@ -261,7 +267,7 @@ export const useReactBookingForm = ({
         }
         if (field.type === "location") {
           // @ts-ignore
-          value = field.value.value
+          value = field.value?.value
         }
         params[key] = value
       })

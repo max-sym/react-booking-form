@@ -1,5 +1,5 @@
 import { BookingForm } from "lib"
-import React, { useMemo, useRef } from "react"
+import { useMemo, useRef } from "react"
 
 export const useMenuInteractions = ({
   form,
