@@ -15,7 +15,7 @@ Includes location, calendar, and guest selectors logic (style agnostic) and much
 - [Storybook example](https://611f9e606d0396003a654e41-sfznirawpt.chromatic.com/?path=/story/booking-form--basic)
 
 ## Features included
-Main:
+### Main:
 
 ✅ Style agnostic: style your components however you want. Logic is taken care of by the library\
 ✅ Debounced location search\
@@ -25,13 +25,15 @@ Main:
 ✅ Ability to set check-out minimum date depending on the selected check-in date value.\
 ✅ Allows human readable datetime format + localization (configuration options provided by [flatpickr](https://github.com/flatpickr/flatpickr))\
 ✅ Little size\
-✅ Guest count selection by person group\
+✅ Guest count selection by person group
 
-Layout & DOM:
+### Layout & DOM:
+
 ✅ Popups' position is relative to the browser window's position and size (i.e., it would try to make the popups visible even if not enough height)\
 ✅ Uses [React Portal](https://reactjs.org/docs/portals.html) under the hood 🎩\
 ✅ Accessible\
-✅ Responsive\
+✅ Responsive
+
 
 ### Notes
 - The library styling is very flexible, however the calendar component styling requires including a theme css file from [flatpickr](https://github.com/flatpickr/flatpickr). We made it so you can fully control it by including it yourself or creating your own theme;
