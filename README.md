@@ -477,7 +477,7 @@ It should be used by `useReactBookingForm` as:
 const form = useReactBookingForm({ formSchema })
 ```
 
-And later the form can be passed down to the form as:
+And later the `form` can be passed down to the `BookingForm` as:
 
 ```jsx
 export const BookingForm = () => {
@@ -651,37 +651,11 @@ export type FormState = {
     type: FieldType
     value: FieldValue
     /**
-     * Used for menus in location and guest selector.
-     */
-    isOpen?: boolean
-    /**
      * Used to know total number of guests in guest selector.
      */
     totalCount?: number
   }
 }
-```
-
-The form state object can be used to extract relevant data from the form when submitting the form.\
-For example:
-
-```jsx
-
-export const BookingForm = () => {
-  const form = useReactBookingForm({ formSchema })
-
-  const onSubmit = () => {
-    submitToAPI(form.state)
-  }
-
-  return (
-    <Container>
-      {/*... Here are your form input fields nicely styled ...*/}
-      <SubmitButton onClick={onSubmit}>{"Search"}</SubmitButton>
-    </Container>
-  )
-}
-
 ```
 	
 ## Schema object
