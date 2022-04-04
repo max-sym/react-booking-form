@@ -1,7 +1,8 @@
-![GitHub last commit](https://img.shields.io/github/last-commit/MaxChu23/react-booking-form)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-booking-form@2.0.0-alpha.1)
-![npm bundle size](https://img.shields.io/bundlephobia/min/react-booking-form@2.0.0-alpha.1)
-![GitHub](https://img.shields.io/github/license/MaxChu23/react-booking-form)
+![npm](https://img.shields.io/npm/dm/react-booking-form?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/MaxChu23/react-booking-form?style=flat-square)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-booking-form@2.0.0-alpha.1?style=flat-square)
+![npm bundle size](https://img.shields.io/bundlephobia/min/react-booking-form@2.0.0-alpha.1?style=flat-square)
+![GitHub](https://img.shields.io/github/license/MaxChu23/react-booking-form?style=flat-square)
 
 # React Booking Form 🔥
 
