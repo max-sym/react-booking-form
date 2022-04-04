@@ -10,9 +10,9 @@ Includes location, calendar, and guest selectors logic (style agnostic) and much
 
 <img src="https://i.imgur.com/9JBUX53.gif" width="100%" />
 
-## Live example
-- [CodeSandbox playground](https://codesandbox.io/s/react-booking-form-example-9z489)
-- [Storybook example](https://611f9e606d0396003a654e41-sfznirawpt.chromatic.com/?path=/story/booking-form--basic)
+## Live examples
+- [CodeSandbox](https://codesandbox.io/s/react-booking-form-example-9z489)
+- [Storybook](https://611f9e606d0396003a654e41-sfznirawpt.chromatic.com/?path=/story/booking-form--basic)
 
 ## Features included
 ### Main:
@@ -49,21 +49,22 @@ yarn:
 
 ## Usage
 
-To quickly catch up go to the CodeSandbox playground first.\
-Then read the example below + configuration docs. Good luck 🚀
+To quickly catch up go to the CodeSandbox Playground first.\
+Then read the example below + configuration docs.
 
 <details>
 <summary> 👉 TypeScript + TailwindCSS example (with <a href="https://github.com/MathiasGilson/Tailwind-Styled-Component">tailwind-styled-components</a>)</summary>
 	
 ### Install
-	
+
 ```bash
 yarn add react-booking-form moment @react-icons/all-files tailwind-styled-components
 ```
 
-### Import the library:
+### Import the libraries:
 
 ```js
+import React from "react"
 import {
   DateInput,
   FormSchema,
@@ -76,15 +77,26 @@ import {
 } from "react-booking-form"
 import tw from "tailwind-styled-components"
 import moment from "moment"
-import React from "react"
 ```
 
 ### Prepare some helper functions:
 
-Here's some helpers that represent something similar to how we would fetch city data in a real-world application for the location selector:
+Here's some helpers that represent something similar to how we would fetch the city data in a real-world application for the location selector:
+
+Create a file called `cities.ts`:
 
 ```js
-// cities is just an array of strings such as ["New York", "Alabama", ...]
+export const cities = [
+	"New York",
+	"Alabama",
+	"Los Angeles",
+	// ... Add more cities if you want 
+]
+```
+
+Then import `cities` and add some helper functions:	
+
+```js
 import { cities } from "./cities"
 
 // This is mocking a call to API that would return location search results
