@@ -281,6 +281,8 @@ export const BookingForm = () => {
 	
 Below are our own custom components (styled by tailwind-styled-components, but you can use anything for styling).
 
+Import the icons right away:
+
 ```jsx
 import { FaMapMarkerAlt } from "@react-icons/all-files/fa/FaMapMarkerAlt"
 import { FaCalendarAlt } from "@react-icons/all-files/fa/FaCalendarAlt"
@@ -289,20 +291,24 @@ import { FaPlus } from "@react-icons/all-files/fa/FaPlus"
 import { FaMinus } from "@react-icons/all-files/fa/FaMinus"
 import { FaUser } from "@react-icons/all-files/fa/FaUser"
 import { IoMdSwap } from "@react-icons/all-files/io/IoMdSwap"
+```
+	
+Now start styling with `tw` from `tailwind-styled-components` package.
 
+```jsx
 const Container = tw.div`md:rounded-full rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2 border border-gray-300`
-const InputCore = tw.input`relative w-full peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const InputContainer = tw.div`relative w-full md:w-1/3 flex flex-col justify-center items-center pl-2`
+const InputCore = tw.input`relative w-full peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
 const Label = tw.div`text-sm w-full font-bold mb-1 text-gray-500`
 
 const ButtonCore = tw.button`appearance-none h-10 rounded-full flex justify-center items-center font-bold px-3`
 const SwapButton = tw(ButtonCore)`
 md:mt-5 border md:w-full border-gray-300 hover:border-green-500 hover:text-green-500 focus:border-green-500 focus:text-green-500 transition outline-none`
-
 const PrimaryButton = tw(ButtonCore)`
 border-0 bg-green-500 text-white uppercase`
 const GuestOkButton = tw(PrimaryButton)`mx-auto w-5/6 mb-2`
 const SearchButton = tw(PrimaryButton)`w-full mt-5`
+
 const IconContainer = tw.a`z-20 absolute top-0 right-0 bottom-0 h-full flex items-center pr-2 cursor-pointer group-hover:text-green-500 peer-focus:text-green-500 text-gray-500 transition`
 
 const MenuContainer = tw.div`z-20`
@@ -319,11 +325,14 @@ const OptionContainer = tw(OptionBase)<{
   $selected?: boolean
 }>`cursor-pointer transition ${({ $active, $selected }) =>
   $active || $selected ? "bg-green-100" : ""}`
+
 const GuestButton = tw.button`appearance-none rounded-full p-2 flex items-center justify-center h-full overflow-hidden border border-gray-500 text-gray-500 hover:text-white hover:bg-green-500 hover:border-transparent transition ease-in-out disabled:opacity-50`
 ```
 
-And finally add 2 more components:
-```js
+And finally add 2 more components.
+
+The first one would be `InputComponent` used as an `input` in the main form:
+```jsx
 type InputProps = {
   form?: BookingFormType
   isLoading?: boolean
@@ -352,7 +361,11 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
+```
 
+And `GuestOptionComponent` to be used in our guest selector menu:
+
+```jsx
 const GuestOptionComponent = ({
   form,
   name,
