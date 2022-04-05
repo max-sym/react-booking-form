@@ -15,6 +15,11 @@ Includes location, calendar, and guest selectors logic (style agnostic) and much
 - [CodeSandbox](https://codesandbox.io/s/react-booking-form-example-9z489)
 - [Storybook](https://611f9e606d0396003a654e41-sfznirawpt.chromatic.com/?path=/story/booking-form--basic)
 
+
+## Installation
+npm: `npm i react-booking-form`\
+yarn: `yarn add react-booking-form`
+
 ## Features included
 ### Main:
 
@@ -38,15 +43,6 @@ Includes location, calendar, and guest selectors logic (style agnostic) and much
 
 ### Notes
 - The library styling is very flexible, however the calendar component styling requires including a theme css file from [flatpickr](https://github.com/flatpickr/flatpickr). We made it so you can fully control it by including it yourself or creating your own theme;
-
-## Installation
-npm:
-
-`npm i react-booking-form` 
-
-yarn:
-
-`yarn add react-booking-form`
 
 ## Usage
 
