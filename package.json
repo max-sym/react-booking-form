@@ -18,9 +18,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "yarn type-check -- --watch",
-    "build": "yarn build:types && yarn build:js",
-    "build:types": "tsc --project tsconfig.build.json --outDir dist",
-    "build:js": "babel src/lib --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
+    "build": "./scripts/build.sh --external:react --external:react-dom",
     "lint": "eslint .",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
@@ -49,6 +47,7 @@
     "babel-plugin-import": "^1.13.3",
     "chromatic": "^6.5.3",
     "css-loader": "^6.2.0",
+    "esbuild": "^0.14.36",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
