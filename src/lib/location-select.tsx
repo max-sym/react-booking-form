@@ -28,6 +28,13 @@ export type SelectType = {
    * Popup window position offset
    */
   offset?: OffsetType
+  /**
+   * This is a hack: when the selector is used in Gatsby inside of a @headlessui/react Dialog
+   * then if Portal isn't passed externally and used here from @headlessui/react
+   * then it would create a bug where the Dialog would close whenever user clicks on the Option
+   * and not select anything. This prop allows to ensure intended behavior.
+   */
+  portal?: React.ElementType
 }
 
 const ExtendedOption = ({
@@ -76,6 +83,7 @@ export const LocationSelect = ({
   autoComplete = "off",
   placeholder,
   offset,
+  portal: PortalInput,
 }: SelectType) => {
   const formStateItem = form?.state?.[name]
   const {
@@ -127,6 +135,8 @@ export const LocationSelect = ({
     form.refs[name].current = element
   }, [element])
 
+  const PortalComponent = PortalInput || Portal
+
   return (
     <Combobox value={formStateItem.value} onChange={onSelect}>
       {({ open }) => (
@@ -144,7 +154,7 @@ export const LocationSelect = ({
             name={name}
             form={form}
           />
-          <Portal>
+          <PortalComponent>
             <Combobox.Options
               as={MenuContainer}
               ref={setPopper}
@@ -182,7 +192,7 @@ export const LocationSelect = ({
                 ))}
               </Menu>
             </Combobox.Options>
-          </Portal>
+          </PortalComponent>
         </>
       )}
     </Combobox>

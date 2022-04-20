@@ -37,6 +37,13 @@ export type GuestSelectType = {
    * - "each" would show `1 adults`, `2 adults | 2 children`, ...
    */
   countTextFormat?: CountTextFormat
+  /**
+   * This is a hack: when the selector is used in Gatsby inside of a @headlessui/react Dialog
+   * then if Portal isn't passed externally and used here from @headlessui/react
+   * then it would create a bug where the Dialog would close whenever user clicks on the Option
+   * and not select anything. This prop allows to ensure intended behavior.
+   */
+  portal?: React.ElementType
 }
 
 type CountTextFormat = "all" | "each" | ((fieldItem?: FormStateItem) => string)
@@ -76,6 +83,7 @@ export const GuestSelect = ({
   placeholder,
   offset,
   countTextFormat = "all",
+  portal: PortalInput,
 }: GuestSelectType) => {
   const formStateItem = form?.state?.[name]
   const options = formStateItem.value
@@ -100,6 +108,8 @@ export const GuestSelect = ({
     element?.click()
   }
 
+  const PortalComponent = PortalInput || Portal
+
   return (
     <Popover as={React.Fragment}>
       {({ open }) => (
@@ -113,7 +123,7 @@ export const GuestSelect = ({
             form={form}
             readOnly
           />
-          <Portal>
+          <PortalComponent>
             <Popover.Panel
               as={MenuContainer}
               ref={setPopper}
@@ -136,7 +146,7 @@ export const GuestSelect = ({
                 )}
               </Menu>
             </Popover.Panel>
-          </Portal>
+          </PortalComponent>
         </>
       )}
     </Popover>
