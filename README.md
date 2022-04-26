@@ -677,7 +677,7 @@ export type FormState = {
 ## Contribution Guide
 - Clone the repository to your local machine;
 - Run `yarn` in the root
-- Run `yarn storybook`
+- Run `yarn start`
 - Go to `localhost:6006` and see magic happen 🚀
 
 Whenever finished, create a PR on a separate branch for review.

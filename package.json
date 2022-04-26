@@ -20,7 +20,7 @@
     "type-check:watch": "yarn type-check -- --watch",
     "build": "./scripts/build.sh --external:react --external:react-dom",
     "lint": "eslint .",
-    "storybook": "start-storybook -p 6006",
+    "start": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "tw:dev": "postcss src/stories/styles/tailwind.css -o src/stories/styles/index.css",
     "chromatic": "npx chromatic"
@@ -73,6 +73,7 @@
     "@headlessui/react": "^1.5.0",
     "debounce-promise": "^3.1.2",
     "react-flatpickr": "^3.10.6",
-    "react-popper": "^2.2.5"
+    "react-popper": "^2.2.5",
+    "@popperjs/core": "^2.11.5"
   }
 }

@@ -144,7 +144,7 @@ export const LocationSelect = ({
           <Combobox.Button style={{ display: "none" }} ref={btn} />
           <Combobox.Input
             onFocus={onFocus}
-            displayValue={(v: any) => v.label}
+            displayValue={(v: any) => v?.label}
             onChange={onChange}
             ref={setElement}
             isLoading={isLoading}

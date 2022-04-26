@@ -1,3 +1,4 @@
+import React from "react"
 import {
   DateInput,
   FormSchema,
@@ -18,7 +19,6 @@ import { FaMinus } from "@react-icons/all-files/fa/FaMinus"
 import { FaUser } from "@react-icons/all-files/fa/FaUser"
 import { IoMdSwap } from "@react-icons/all-files/io/IoMdSwap"
 import { cities } from "./dummy-data/cities"
-import React from "react"
 
 const Container = tw.div`md:rounded-full rounded-xl bg-white p-6 shadow-xl flex justify-between flex-col md:flex-row md:space-x-2 md:space-y-0 space-y-2 border border-gray-300`
 const InputCore = tw.input`relative w-full peer flex h-10 focus:outline-none appearance-none border border-gray-300 rounded-full outline-none transition pl-4 pr-6 group-hover:border-green-500 focus:border-green-500 cursor-pointer`
