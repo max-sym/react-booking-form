@@ -37,43 +37,39 @@ export type SelectType = {
   portal?: React.ElementType
 }
 
-const ExtendedOption = React.forwardRef<HTMLInputElement, any>(
-  (
-    {
-      active,
-      selected,
-      Option,
-      onClick = undefined,
-      form,
-      element,
-      name,
-      option,
-      ...props
-    },
-    ref
-  ) => {
-    const realOnClick = () => {
-      form.setFieldState(name, { value: option })
-      element?.focus?.()
-      setTimeout(() => {
-        const focusOnNext = form.formSchema[name].focusOnNext
-        form.focusOn(focusOnNext)
-      }, 100)
-    }
-
-    return (
-      <Option
-        $active={active}
-        $selected={selected}
-        onClick={realOnClick}
-        ref={ref}
-        {...props}
-      >
-        {option.label}
-      </Option>
-    )
+const ExtendedOption = ({
+  active,
+  selected,
+  Option,
+  onClick = undefined,
+  form,
+  element,
+  name,
+  option,
+  ...props
+}) => {
+  const realOnClick = () => {
+    form.setFieldState(name, { value: option })
+    element?.focus?.()
+    setTimeout(() => {
+      const focusOnNext = form.formSchema[name].focusOnNext
+      form.focusOn(focusOnNext)
+    }, 100)
   }
-)
+
+  console.log("props", props)
+
+  return (
+    <Option
+      $active={active}
+      $selected={selected}
+      onClick={realOnClick}
+      {...props}
+    >
+      {option.label}
+    </Option>
+  )
+}
 
 export const LocationSelect = ({
   form,
