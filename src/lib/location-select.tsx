@@ -37,7 +37,7 @@ export type SelectType = {
   portal?: React.ElementType
 }
 
-const ExtendedOption = React.forwardRef(
+const ExtendedOption = React.forwardRef<any, any>(
   (
     {
       active,
