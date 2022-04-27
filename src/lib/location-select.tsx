@@ -37,7 +37,7 @@ export type SelectType = {
   portal?: React.ElementType
 }
 
-const ExtendedOption = React.forwardRef<any, any>(
+const ExtendedOption = React.forwardRef<HTMLElement, any>(
   (
     {
       active,
@@ -60,8 +60,6 @@ const ExtendedOption = React.forwardRef<any, any>(
         form.focusOn(focusOnNext)
       }, 100)
     }
-
-    console.log("ref", ref)
 
     return (
       <Option
