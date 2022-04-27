@@ -74,6 +74,7 @@ import {
 } from "react-booking-form"
 import tw from "tailwind-styled-components"
 import moment from "moment"
+import "flatpickr/dist/themes/material_green.css"
 ```
 
 ### Prepare some helper functions:
