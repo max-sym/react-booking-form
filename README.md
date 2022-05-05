@@ -686,5 +686,5 @@ Whenever finished, create a PR on a separate branch for review.
 Contributions are very welcome!
 
 ## License
-MIT
+[MIT](https://github.com/max-sym/react-booking-form/blob/main/LICENSE) 
 
